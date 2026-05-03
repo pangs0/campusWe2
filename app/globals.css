@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700;1,800&family=Inter:wght@300;400;500&family=Geist+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --cream: #F5F0E8;
+  --ink: #1a1a18;
+  --brand: #C4500A;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-brand text-cream px-5 py-2.5 rounded text-sm font-medium transition-colors hover:bg-brand-dark;
+  }
+
+  .btn-secondary {
+    @apply bg-transparent text-ink border border-neutral-200 px-5 py-2.5 rounded text-sm transition-colors hover:border-neutral-400;
+  }
+
+  .card {
+    @apply bg-white border border-neutral-200 rounded-xl p-6;
+  }
+
+  .input {
+    @apply w-full bg-white border border-neutral-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-orange-600 transition-colors;
+  }
+
+  .label {
+    @apply text-xs text-neutral-400 font-mono tracking-widest uppercase mb-1.5 block;
+  }
+
+  .serif {
+    font-family: 'Playfair Display', serif;
+  }
+
+  .mono {
+    font-family: 'Geist Mono', monospace;
+  }
+}
