@@ -8,6 +8,9 @@ const nextConfig = {
       },
     ],
   },
+  experimental: {
+    optimisticClientCache: true,
+  },
 }
 
 module.exports = nextConfig

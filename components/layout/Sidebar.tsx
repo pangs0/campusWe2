@@ -55,6 +55,7 @@ export default function Sidebar({ user }: SidebarProps) {
               <Link
                 key={item.href}
                 href={item.href}
+                prefetch={true}
                 className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors ${
                   active
                     ? 'bg-brand/10 text-brand font-medium'
