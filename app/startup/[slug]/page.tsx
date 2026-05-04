@@ -53,10 +53,12 @@ export default async function StartupPage({ params }: { params: { slug: string }
     return `${days} gün önce`
   }
 
-  return (
-    <AppLayout user={null}>
-      
+  const STAGES = ['fikir', 'mvp', 'traction', 'büyüme']
+  const stageIndex = STAGES.indexOf(startup.stage)
+  const stageProgress = Math.round(((stageIndex + 1) / STAGES.length) * 100)
 
+  return (
+    <AppLayout user={user}>
       <main className="px-8 py-10">
         <Link
           href="/dashboard"
@@ -98,6 +100,22 @@ export default async function StartupPage({ params }: { params: { slug: string }
                   {startup.description}
                 </p>
               )}
+
+              {/* İlerleme çubuğu */}
+              <div className="mt-4 pt-4 border-t border-neutral-100">
+                <div className="flex items-center justify-between mb-2">
+                  <p className="mono text-xs text-ink/35 tracking-widest">STARTUP AŞAMASI</p>
+                  <span className="mono text-xs text-brand font-medium">{stageProgress}%</span>
+                </div>
+                <div className="h-1.5 bg-neutral-100 rounded-full overflow-hidden mb-2">
+                  <div className="h-full bg-brand rounded-full transition-all" style={{ width: `${stageProgress}%` }} />
+                </div>
+                <div className="flex justify-between">
+                  {STAGES.map((s, i) => (
+                    <span key={s} className={`mono text-xs ${i <= stageIndex ? 'text-brand font-medium' : 'text-ink/25'}`}>{s}</span>
+                  ))}
+                </div>
+              </div>
 
               <div className="mt-4 pt-4 border-t border-ink/8 flex items-center gap-2">
                 <div className="w-6 h-6 rounded-full bg-brand/15 flex items-center justify-center text-xs font-bold text-brand">

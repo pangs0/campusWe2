@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import AppLayout from '@/components/layout/AppLayout'
 import Link from 'next/link'
-import { Search, TrendingUp } from 'lucide-react'
+import { Search, TrendingUp, Plus } from 'lucide-react'
 import type { Startup } from '@/types'
 
 const SECTORS = ['Tümü', 'EdTech', 'FinTech', 'HealthTech', 'AgriTech', 'CleanTech', 'E-ticaret', 'SaaS', 'Yapay Zeka', 'Oyun', 'Diğer']
@@ -42,8 +42,6 @@ export default async function KesfetPage({
 
   return (
     <AppLayout user={user}>
-      
-
       <main className="px-8 py-10">
         <div className="mb-8">
           <p className="mono text-xs text-ink/35 tracking-widest mb-1">TOPLULUK</p>
@@ -150,12 +148,15 @@ export default async function KesfetPage({
             ))}
           </div>
         ) : (
-          <div className="text-center py-20">
-            <TrendingUp size={40} className="text-ink/15 mx-auto mb-4" />
-            <p className="text-ink/40 font-serif text-xl mb-2">Henüz startup yok.</p>
-            <p className="text-sm text-ink/30 mb-6">İlk startup'ı sen oluştur.</p>
-            <Link href="/startup/new" className="btn-primary inline-flex text-xs">
-              Startup oluştur →
+          <div className="py-20 text-center" style={{ background: '#faf9f6', borderRadius: 16, border: '1.5px dashed rgba(26,26,24,.12)' }}>
+            <TrendingUp size={40} className="text-brand/25 mx-auto mb-4" />
+            <p className="font-serif text-2xl font-bold text-ink mb-2">İlk startup buraya gelecek.</p>
+            <p className="text-sm text-ink/45 mb-6 max-w-sm mx-auto leading-relaxed">
+              Henüz kimse startup oluşturmamış. İlk adımı sen at, topluluk seni görsün.
+            </p>
+            <Link href="/startup/new" className="btn-primary inline-flex items-center gap-1.5 text-sm">
+              <Plus size={14} />
+              Startup oluştur
             </Link>
           </div>
         )}
