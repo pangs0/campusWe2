@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import Navbar from '@/components/layout/Navbar'
+import AppLayout from '@/components/layout/AppLayout'
 import { BookOpen, Play, Pause, RotateCcw, Users } from 'lucide-react'
 
 const SOUNDS = [
@@ -67,10 +67,8 @@ export default function KutuphhanePage() {
   const progress = ((selectedTime * 60 - timeLeft) / (selectedTime * 60)) * 100
 
   return (
-    <div className="min-h-screen bg-cream">
-      <Navbar />
-
-      <main className="max-w-3xl mx-auto px-6 py-16">
+    <AppLayout user={null}>
+      <main className="px-8 py-16">
         <div className="text-center mb-10">
           <div className="w-14 h-14 rounded-full bg-ink/5 flex items-center justify-center mx-auto mb-4">
             <BookOpen size={24} className="text-ink/40" />
@@ -185,6 +183,6 @@ export default function KutuphhanePage() {
           ))}
         </div>
       </main>
-    </div>
+    </AppLayout>
   )
 }

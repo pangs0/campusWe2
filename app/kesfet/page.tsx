@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import Navbar from '@/components/layout/Navbar'
+import AppLayout from '@/components/layout/AppLayout'
 import Link from 'next/link'
 import { Search, TrendingUp } from 'lucide-react'
 import type { Startup } from '@/types'
@@ -41,10 +41,10 @@ export default async function KesfetPage({
   const { data: startups } = await query
 
   return (
-    <div className="min-h-screen bg-cream">
-      <Navbar user={user} />
+    <AppLayout user={user}>
+      
 
-      <main className="max-w-6xl mx-auto px-6 py-10">
+      <main className="px-8 py-10">
         <div className="mb-8">
           <p className="mono text-xs text-ink/35 tracking-widest mb-1">TOPLULUK</p>
           <h1 className="font-serif text-3xl font-bold text-ink">Startupları keşfet.</h1>
@@ -160,6 +160,6 @@ export default async function KesfetPage({
           </div>
         )}
       </main>
-    </div>
+    </AppLayout>
   )
 }

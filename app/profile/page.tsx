@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import Navbar from '@/components/layout/Navbar'
+import AppLayout from '@/components/layout/AppLayout'
 import Link from 'next/link'
 import { Zap, Edit, TrendingUp } from 'lucide-react'
 import type { Startup } from '@/types'
@@ -29,10 +29,10 @@ export default async function ProfilePage() {
     .order('created_at', { ascending: false })
 
   return (
-    <div className="min-h-screen bg-cream">
-      <Navbar user={user} />
+    <AppLayout user={user}>
+      
 
-      <main className="max-w-4xl mx-auto px-6 py-10">
+      <main className="px-8 py-10">
         <div className="grid grid-cols-3 gap-6">
           <div className="col-span-1">
             <div className="card text-center mb-4">
@@ -145,6 +145,6 @@ export default async function ProfilePage() {
           </div>
         </div>
       </main>
-    </div>
+    </AppLayout>
   )
 }

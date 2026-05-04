@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
-import Navbar from '@/components/layout/Navbar'
+import AppLayout from '@/components/layout/AppLayout'
 import Link from 'next/link'
 import { ArrowLeft, Plus, Users, Zap } from 'lucide-react'
 import AddUpdateForm from './AddUpdateForm'
@@ -54,10 +54,10 @@ export default async function StartupPage({ params }: { params: { slug: string }
   }
 
   return (
-    <div className="min-h-screen bg-cream">
-      <Navbar user={user} />
+    <AppLayout user={null}>
+      
 
-      <main className="max-w-5xl mx-auto px-6 py-10">
+      <main className="px-8 py-10">
         <Link
           href="/dashboard"
           className="flex items-center gap-1.5 text-sm text-ink/45 hover:text-ink mb-8 transition-colors"
@@ -181,6 +181,6 @@ export default async function StartupPage({ params }: { params: { slug: string }
           </div>
         </div>
       </main>
-    </div>
+    </AppLayout>
   )
 }

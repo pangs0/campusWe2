@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import Navbar from '@/components/layout/Navbar'
+import AppLayout from '@/components/layout/AppLayout'
 import { createClient } from '@/lib/supabase/client'
 
 export default function HaritaPage() {
@@ -20,12 +20,10 @@ export default function HaritaPage() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) { router.push('/auth/login'); return }
       setUser(user)
-
       const { data: profiles } = await supabase
         .from('profiles')
         .select('id, full_name, username, university, city, karma_tokens, user_skills(skill_name)')
         .order('karma_tokens', { ascending: false })
-
       if (profiles) {
         setUsers(profiles)
         setTotalTR(profiles.length)
@@ -37,14 +35,12 @@ export default function HaritaPage() {
 
   useEffect(() => {
     if (loading) return
-
     function loadScript(src: string, onload: () => void) {
       const s = document.createElement('script')
       s.src = src
       s.onload = onload
       document.head.appendChild(s)
     }
-
     loadScript('https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js', () => {
       loadScript('https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js', drawMap)
     })
@@ -54,17 +50,13 @@ export default function HaritaPage() {
     const d3 = (window as any).d3
     const topojson = (window as any).topojson
     if (!d3 || !topojson || !svgRef.current) return
-
     const svg = d3.select(svgRef.current)
     svg.selectAll('*').remove()
-
     const projection = d3.geoNaturalEarth1().scale(145).translate([450, 230])
     const pathGen = d3.geoPath(projection)
     const TR_ID = '792'
-
     d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then((world: any) => {
       const countries = topojson.feature(world, world.objects.countries).features
-
       svg.selectAll('path')
         .data(countries)
         .join('path')
@@ -84,7 +76,6 @@ export default function HaritaPage() {
         })
 
       const trCenter = projection([35.2433, 38.9637])
-
       ;[0, 1, 2].forEach(i => {
         const c = svg.append('circle')
           .attr('cx', trCenter[0]).attr('cy', trCenter[1])
@@ -118,8 +109,6 @@ export default function HaritaPage() {
         { coords: [-46.63, -23.55] as [number, number] },
         { coords: [72.88, 19.07] as [number, number] },
         { coords: [3.38, 6.45] as [number, number] },
-        { coords: [116.38, 39.90] as [number, number] },
-        { coords: [151.20, -33.86] as [number, number] },
       ]
       others.forEach(c => {
         const pos = projection(c.coords)
@@ -133,10 +122,8 @@ export default function HaritaPage() {
   }
 
   return (
-    <div className="min-h-screen bg-cream">
-      <Navbar user={user} />
-
-      <main className="max-w-6xl mx-auto px-6 py-10">
+    <AppLayout user={user}>
+      <main className="px-8 py-10">
         <div className="mb-6">
           <p className="mono text-xs text-ink/35 tracking-widest mb-1">GLOBAL AĞ</p>
           <h1 className="font-serif text-3xl font-bold text-ink">Dünyadaki girişimciler.</h1>
@@ -186,64 +173,64 @@ export default function HaritaPage() {
             </span>
           </div>
         </div>
-      </main>
 
-      {panelOpen && (
-        <div
-          style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.55)', zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}
-          onClick={() => setPanelOpen(false)}
-        >
+        {panelOpen && (
           <div
-            style={{ background: '#F5F0E8', borderRadius: 16, maxWidth: 580, width: '100%', maxHeight: '80vh', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}
-            onClick={e => e.stopPropagation()}
+            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.55)', zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}
+            onClick={() => setPanelOpen(false)}
           >
-            <div style={{ padding: '18px 24px', borderBottom: '1px solid rgba(26,26,24,.1)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                <span style={{ fontSize: 22 }}>🇹🇷</span>
-                <div>
-                  <h2 style={{ fontFamily: 'Georgia, serif', fontSize: 18, fontWeight: 700, color: '#1a1a18', margin: 0 }}>Türkiye Girişimcileri</h2>
-                  <p style={{ fontFamily: 'monospace', fontSize: 11, color: 'rgba(26,26,24,.4)', margin: 0 }}>{totalTR} aktif kurucu</p>
+            <div
+              style={{ background: '#F5F0E8', borderRadius: 16, maxWidth: 580, width: '100%', maxHeight: '80vh', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}
+              onClick={e => e.stopPropagation()}
+            >
+              <div style={{ padding: '18px 24px', borderBottom: '1px solid rgba(26,26,24,.1)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <span style={{ fontSize: 22 }}>🇹🇷</span>
+                  <div>
+                    <h2 style={{ fontFamily: 'Georgia, serif', fontSize: 18, fontWeight: 700, color: '#1a1a18', margin: 0 }}>Türkiye Girişimcileri</h2>
+                    <p style={{ fontFamily: 'monospace', fontSize: 11, color: 'rgba(26,26,24,.4)', margin: 0 }}>{totalTR} aktif kurucu</p>
+                  </div>
                 </div>
+                <button onClick={() => setPanelOpen(false)} style={{ background: 'none', border: 'none', fontSize: 18, color: 'rgba(26,26,24,.3)', cursor: 'pointer' }}>✕</button>
               </div>
-              <button onClick={() => setPanelOpen(false)} style={{ background: 'none', border: 'none', fontSize: 18, color: 'rgba(26,26,24,.3)', cursor: 'pointer' }}>✕</button>
-            </div>
 
-            <div style={{ overflowY: 'auto', paddingBottom: 12 }}>
-              {users.length > 0 ? users.map((u: any) => (
-                <div key={u.id} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 24px', borderBottom: '1px solid rgba(26,26,24,.06)' }}>
-                  <div style={{ width: 34, height: 34, borderRadius: '50%', background: 'rgba(196,80,10,.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700, color: '#C4500A', flexShrink: 0 }}>
-                    {u.full_name?.[0]}
-                  </div>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <p style={{ fontSize: 13, fontWeight: 500, color: '#1a1a18', margin: 0 }}>{u.full_name}</p>
-                    <p style={{ fontFamily: 'monospace', fontSize: 11, color: 'rgba(26,26,24,.4)', margin: 0 }}>
-                      {u.city || 'Türkiye'}{u.university && ` · ${u.university}`}
-                    </p>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
-                    {u.user_skills?.slice(0, 2).map((s: any, i: number) => (
-                      <span key={i} style={{ fontFamily: 'monospace', fontSize: 10, background: 'rgba(26,26,24,.06)', color: 'rgba(26,26,24,.5)', border: '0.5px solid rgba(26,26,24,.1)', borderRadius: 4, padding: '2px 6px' }}>
-                        {s.skill_name}
+              <div style={{ overflowY: 'auto', paddingBottom: 12 }}>
+                {users.length > 0 ? users.map((u: any) => (
+                  <div key={u.id} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 24px', borderBottom: '1px solid rgba(26,26,24,.06)' }}>
+                    <div style={{ width: 34, height: 34, borderRadius: '50%', background: 'rgba(196,80,10,.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700, color: '#C4500A', flexShrink: 0 }}>
+                      {u.full_name?.[0]}
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <p style={{ fontSize: 13, fontWeight: 500, color: '#1a1a18', margin: 0 }}>{u.full_name}</p>
+                      <p style={{ fontFamily: 'monospace', fontSize: 11, color: 'rgba(26,26,24,.4)', margin: 0 }}>
+                        {u.city || 'Türkiye'}{u.university && ` · ${u.university}`}
+                      </p>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+                      {u.user_skills?.slice(0, 2).map((s: any, i: number) => (
+                        <span key={i} style={{ fontFamily: 'monospace', fontSize: 10, background: 'rgba(26,26,24,.06)', color: 'rgba(26,26,24,.5)', border: '0.5px solid rgba(26,26,24,.1)', borderRadius: 4, padding: '2px 6px' }}>
+                          {s.skill_name}
+                        </span>
+                      ))}
+                      <span style={{ fontFamily: 'monospace', fontSize: 11, color: '#C4500A', fontWeight: 500 }}>
+                        {u.karma_tokens} ⚡
                       </span>
-                    ))}
-                    <span style={{ fontFamily: 'monospace', fontSize: 11, color: '#C4500A', fontWeight: 500 }}>
-                      {u.karma_tokens} ⚡
-                    </span>
+                    </div>
                   </div>
-                </div>
-              )) : (
-                <div style={{ textAlign: 'center', padding: '40px 24px' }}>
-                  <p style={{ color: 'rgba(26,26,24,.4)', fontSize: 14 }}>Henüz kayıtlı kullanıcı yok.</p>
-                </div>
-              )}
+                )) : (
+                  <div style={{ textAlign: 'center', padding: '40px 24px' }}>
+                    <p style={{ color: 'rgba(26,26,24,.4)', fontSize: 14 }}>Henüz kayıtlı kullanıcı yok.</p>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      <style>{`
-        @keyframes spin { to { transform: rotate(360deg); } }
-      `}</style>
-    </div>
+        <style>{`
+          @keyframes spin { to { transform: rotate(360deg); } }
+        `}</style>
+      </main>
+    </AppLayout>
   )
 }

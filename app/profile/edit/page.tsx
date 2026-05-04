@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
-import Navbar from '@/components/layout/Navbar'
+import AppLayout from '@/components/layout/AppLayout'
 import { ArrowLeft, X, Plus } from 'lucide-react'
 
 const SKILL_CATEGORIES = ['Teknik', 'Tasarım', 'Pazarlama', 'İş Geliştirme', 'Finans', 'Hukuk', 'Diğer']
@@ -78,9 +78,9 @@ export default function ProfileEditPage() {
   }
 
   return (
-    <div className="min-h-screen bg-cream">
-      <Navbar user={user} />
-      <main className="max-w-2xl mx-auto px-6 py-10">
+    <AppLayout user={null}>
+      
+      <main className="px-8 py-10 max-w-2xl">
         <Link href="/profile" className="flex items-center gap-1.5 text-sm text-ink/45 hover:text-ink mb-8 transition-colors">
           <ArrowLeft size={14} />Profile dön
         </Link>
@@ -174,6 +174,6 @@ export default function ProfileEditPage() {
           </div>
         </div>
       </main>
-    </div>
+    </AppLayout>
   )
 }

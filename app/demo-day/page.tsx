@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import Navbar from '@/components/layout/Navbar'
+import AppLayout from '@/components/layout/AppLayout'
 import Link from 'next/link'
 import { Star, Calendar, TrendingUp, Plus } from 'lucide-react'
 
@@ -41,10 +41,10 @@ export default async function DemoDayPage() {
   }
 
   return (
-    <div className="min-h-screen bg-cream">
-      <Navbar user={user} />
+    <AppLayout user={user}>
+      
 
-      <main className="max-w-5xl mx-auto px-6 py-10">
+      <main className="px-8 py-10">
         <div className="flex items-start justify-between mb-10">
           <div>
             <p className="mono text-xs text-ink/35 tracking-widest mb-1">DEMO DAY</p>
@@ -137,6 +137,6 @@ export default async function DemoDayPage() {
           )}
         </div>
       </main>
-    </div>
+    </AppLayout>
   )
 }

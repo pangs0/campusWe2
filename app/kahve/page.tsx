@@ -1,169 +1,140 @@
-'use client'
+import { createClient } from '@/lib/supabase/server'
+import AppLayout from '@/components/layout/AppLayout'
+import Link from 'next/link'
+import { Plus, Zap, ArrowLeftRight } from 'lucide-react'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import Navbar from '@/components/layout/Navbar'
-import { createClient } from '@/lib/supabase/client'
-import { Coffee, RefreshCw, MessageCircle, X } from 'lucide-react'
-
-export default function KahveMolasi() {
+export default async function TakasPage() {
   const supabase = createClient()
-  const [loading, setLoading] = useState(false)
-  const [match, setMatch] = useState<any>(null)
-  const [declined, setDeclined] = useState(false)
-  const [user, setUser] = useState<any>(null)
+  const { data: { user } } = await supabase.auth.getUser()
 
-  async function findMatch() {
-    setLoading(true)
-    setMatch(null)
-    setDeclined(false)
+  const { data: offers } = await supabase
+    .from('takas_offers')
+    .select('*, owner:profiles(full_name, username, university, karma_tokens)')
+    .eq('status', 'acik')
+    .order('created_at', { ascending: false })
 
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) return
-    setUser(user)
+  const { data: myProfile } = user ? await supabase
+    .from('profiles')
+    .select('karma_tokens')
+    .eq('id', user.id)
+    .single() : { data: null }
 
-    const { data: profiles } = await supabase
-      .from('profiles')
-      .select('*, user_skills(*)')
-      .neq('id', user.id)
-      .limit(50)
-
-    if (!profiles || profiles.length === 0) {
-      setLoading(false)
-      return
-    }
-
-    const random = profiles[Math.floor(Math.random() * profiles.length)]
-    setMatch(random)
-    setLoading(false)
-  }
-
-  function handleDecline() {
-    setDeclined(true)
-    setMatch(null)
+  const typeColors: Record<string, string> = {
+    sunum: 'bg-purple-50 text-purple-700 border-purple-200',
+    tasarim: 'bg-blue-50 text-blue-700 border-blue-200',
+    kod: 'bg-green-50 text-green-700 border-green-200',
+    pazarlama: 'bg-amber-50 text-amber-700 border-amber-200',
+    diger: 'bg-neutral-50 text-neutral-600 border-neutral-200',
   }
 
   return (
-    <div className="min-h-screen bg-cream">
-      <Navbar user={user} />
+    <AppLayout user={user}>
+      
 
-      <main className="max-w-2xl mx-auto px-6 py-16 text-center">
-        <div className="mb-10">
-          <div className="w-16 h-16 rounded-full bg-brand/10 flex items-center justify-center mx-auto mb-4">
-            <Coffee size={28} className="text-brand" />
+      <main className="px-8 py-10">
+        <div className="flex items-start justify-between mb-10">
+          <div>
+            <p className="mono text-xs text-ink/35 tracking-widest mb-1">KARMA TOKEN TAKASI</p>
+            <h1 className="font-serif text-3xl font-bold text-ink">Yeteneğini takas et.</h1>
+            <p className="text-sm text-ink/45 mt-1">Para gerekmez. Karma Token ile yetenek al, ver.</p>
           </div>
-          <p className="mono text-xs text-ink/35 tracking-widest mb-2">DİJİTAL KAHVE MOLASI</p>
-          <h1 className="font-serif text-3xl font-bold text-ink mb-3">
-            Rastgele biriyle tanış.
-          </h1>
-          <p className="text-sm text-ink/45 max-w-sm mx-auto leading-relaxed">
-            Algoritma seni benzer ilgi alanlarına sahip başka bir girişimciyle 5 dakikaya bağlar. Hazır mısın?
-          </p>
+          <div className="flex items-center gap-3">
+            {user && myProfile && (
+              <div className="flex items-center gap-1.5 bg-white border border-neutral-200 rounded-lg px-4 py-2">
+                <Zap size={13} className="text-brand" />
+                <span className="mono text-sm font-medium text-ink">{myProfile.karma_tokens} Karma</span>
+              </div>
+            )}
+            {user && (
+              <Link href="/takas/yeni" className="btn-primary flex items-center gap-1.5 text-xs">
+                <Plus size={13} />
+                Teklif oluştur
+              </Link>
+            )}
+          </div>
         </div>
 
-        {!match && !loading && (
-          <button
-            onClick={findMatch}
-            className="btn-primary inline-flex items-center gap-2 text-sm px-8 py-3"
-          >
-            <Coffee size={16} />
-            Eşleştir
-          </button>
-        )}
-
-        {loading && (
-          <div className="flex flex-col items-center gap-3">
-            <div className="w-10 h-10 border-2 border-brand border-t-transparent rounded-full animate-spin" />
-            <p className="text-sm text-ink/45">Sana uygun biri aranıyor...</p>
-          </div>
-        )}
-
-        {match && (
-          <div className="card max-w-sm mx-auto text-left">
-            <div className="text-center mb-6">
-              <div className="w-16 h-16 rounded-full bg-brand/15 flex items-center justify-center text-2xl font-bold text-brand font-serif mx-auto mb-3">
-                {match.full_name?.[0]}
-              </div>
-              <h2 className="font-serif text-xl font-bold text-ink">{match.full_name}</h2>
-              <p className="mono text-xs text-ink/40 mt-1">@{match.username}</p>
-              {match.university && (
-                <p className="text-xs text-ink/45 mt-1">{match.university}</p>
-              )}
-              {match.department && (
-                <p className="text-xs text-ink/35">{match.department}</p>
-              )}
-            </div>
-
-            {match.bio && (
-              <p className="text-sm text-ink/55 leading-relaxed text-center mb-4 border-t border-neutral-100 pt-4">
-                {match.bio}
-              </p>
-            )}
-
-            {match.user_skills && match.user_skills.length > 0 && (
-              <div className="mb-5">
-                <p className="mono text-xs text-ink/35 tracking-widest mb-2">YETENEKLERİ</p>
-                <div className="flex flex-wrap gap-1.5">
-                  {match.user_skills.slice(0, 5).map((s: any) => (
-                    <span key={s.id} className="mono text-xs bg-neutral-100 text-ink/60 border border-neutral-200 rounded px-2 py-0.5">
-                      {s.skill_name}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            <div className="flex gap-2 pt-4 border-t border-neutral-100">
-              <button
-                onClick={handleDecline}
-                className="btn-secondary flex-1 flex items-center justify-center gap-1.5 text-sm py-2.5"
-              >
-                <X size={14} />
-                Geç
-              </button>
-              <button
-                onClick={findMatch}
-                className="btn-secondary flex items-center justify-center gap-1.5 text-sm py-2.5 px-3"
-              >
-                <RefreshCw size={14} />
-              </button>
-              <a
-                href={`mailto:?subject=CampusWe Kahve Molası&body=Merhaba! CampusWe üzerinden seninle tanışmak istedim.`}
-                className="btn-primary flex-1 flex items-center justify-center gap-1.5 text-sm py-2.5"
-              >
-                <MessageCircle size={14} />
-                Bağlan
-              </a>
-            </div>
-          </div>
-        )}
-
-        {declined && (
-          <div className="mt-6">
-            <p className="text-sm text-ink/40 mb-4">Başka biriyle eşleşmek ister misin?</p>
-            <button
-              onClick={findMatch}
-              className="btn-primary inline-flex items-center gap-2 text-sm px-6 py-2.5"
-            >
-              <RefreshCw size={14} />
-              Tekrar dene
-            </button>
-          </div>
-        )}
-
-        <div className="mt-16 grid grid-cols-3 gap-4 text-center">
+        <div className="grid grid-cols-3 gap-4 mb-10">
           {[
-            { n: '5 dk', l: 'Tanışma süresi' },
-            { n: 'Rastgele', l: 'Eşleştirme' },
-            { n: 'Ücretsiz', l: 'Her zaman' },
+            { n: offers?.length || 0, l: 'Açık teklif' },
+            { n: '100', l: 'Başlangıç Karma' },
+            { n: 'Sınırsız', l: 'Takas imkanı' },
           ].map((s, i) => (
-            <div key={i} className="card py-4">
-              <div className="font-serif text-lg font-bold text-ink">{s.n}</div>
+            <div key={i} className="card text-center py-4">
+              <div className="font-serif text-2xl font-bold text-ink">{s.n}</div>
               <div className="mono text-xs text-ink/35 mt-1">{s.l}</div>
             </div>
           ))}
         </div>
+
+        {offers && offers.length > 0 ? (
+          <div className="grid grid-cols-2 gap-4">
+            {offers.map((offer: any) => (
+              <div key={offer.id} className="card hover:border-brand/30 transition-colors">
+                <div className="flex items-start justify-between mb-3">
+                  <span className={`mono text-xs border rounded px-2 py-0.5 ${typeColors[offer.skill_category] || typeColors.diger}`}>
+                    {offer.skill_category}
+                  </span>
+                  <div className="flex items-center gap-1.5 bg-brand/8 rounded px-2 py-0.5">
+                    <Zap size={11} className="text-brand" />
+                    <span className="mono text-xs font-medium text-brand">{offer.karma_amount} Karma</span>
+                  </div>
+                </div>
+
+                <h2 className="font-serif text-lg font-bold text-ink mb-1">{offer.title}</h2>
+                {offer.description && (
+                  <p className="text-sm text-ink/50 line-clamp-2 leading-relaxed mb-3">
+                    {offer.description}
+                  </p>
+                )}
+
+                <div className="flex items-center justify-between pt-3 border-t border-neutral-100">
+                  <div className="flex items-center gap-2">
+                    <div className="w-5 h-5 rounded-full bg-brand/15 flex items-center justify-center text-xs font-bold text-brand">
+                      {offer.owner?.full_name?.[0]}
+                    </div>
+                    <span className="text-xs text-ink/40">{offer.owner?.full_name}</span>
+                  </div>
+                  {user && user.id !== offer.owner_id && (
+                    <TakasButton offerId={offer.id} offerOwnerId={offer.owner_id} karmaAmount={offer.karma_amount} userId={user.id} myKarma={myProfile?.karma_tokens || 0} />
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-20">
+            <ArrowLeftRight size={40} className="text-ink/15 mx-auto mb-4" />
+            <p className="text-ink/40 font-serif text-xl mb-2">Henüz teklif yok.</p>
+            <p className="text-sm text-ink/30 mb-6">İlk teklifi sen oluştur.</p>
+            {user && (
+              <Link href="/takas/yeni" className="btn-primary inline-flex items-center gap-1.5 text-xs">
+                <Plus size={13} />
+                Teklif oluştur
+              </Link>
+            )}
+          </div>
+        )}
       </main>
-    </div>
+    </AppLayout>
+  )
+}
+
+function TakasButton({ offerId, offerOwnerId, karmaAmount, userId, myKarma }: any) {
+  const canAfford = myKarma >= karmaAmount
+  return (
+    <form action="/api/takas/kabul" method="POST">
+      <input type="hidden" name="offer_id" value={offerId} />
+      <input type="hidden" name="offer_owner_id" value={offerOwnerId} />
+      <input type="hidden" name="karma_amount" value={karmaAmount} />
+      <button
+        type="submit"
+        disabled={!canAfford}
+        className="btn-primary py-1.5 px-3 text-xs disabled:opacity-40 disabled:cursor-not-allowed"
+        title={!canAfford ? 'Yeterli Karma Token yok' : ''}
+      >
+        {canAfford ? 'Kabul et' : 'Karma yetersiz'}
+      </button>
+    </form>
   )
 }

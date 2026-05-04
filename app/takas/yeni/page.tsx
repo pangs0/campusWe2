@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
-import Navbar from '@/components/layout/Navbar'
+import AppLayout from '@/components/layout/AppLayout'
 import { ArrowLeft } from 'lucide-react'
 
 const CATEGORIES = ['kod', 'tasarim', 'pazarlama', 'sunum', 'diger']
@@ -57,9 +57,9 @@ export default function YeniTakasPage() {
   }
 
   return (
-    <div className="min-h-screen bg-cream">
-      <Navbar />
-      <main className="max-w-2xl mx-auto px-6 py-10">
+    <AppLayout user={null}>
+      
+      <main className="px-8 py-10 max-w-2xl">
         <Link href="/takas" className="flex items-center gap-1.5 text-sm text-ink/45 hover:text-ink mb-8 transition-colors">
           <ArrowLeft size={14} />
           Takasa dön
@@ -140,6 +140,6 @@ export default function YeniTakasPage() {
           </button>
         </form>
       </main>
-    </div>
+    </AppLayout>
   )
 }

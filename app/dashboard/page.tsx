@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import Navbar from '@/components/layout/Navbar'
+import AppLayout from '@/components/layout/AppLayout'
 import { Plus, Zap, Users, TrendingUp } from 'lucide-react'
 import type { Startup, StartupUpdate } from '@/types'
 
@@ -30,10 +30,8 @@ export default async function DashboardPage() {
     .limit(10)
 
   return (
-    <div className="min-h-screen bg-cream">
-      <Navbar user={user} />
-
-      <main className="max-w-6xl mx-auto px-6 py-10">
+    <AppLayout user={user}>
+      <main className="px-8 py-10">
         <div className="flex items-start justify-between mb-10">
           <div>
             <p className="mono text-xs text-ink/35 tracking-widest mb-1">HOŞ GELDİN</p>
@@ -141,6 +139,6 @@ export default async function DashboardPage() {
           </div>
         </div>
       </main>
-    </div>
+    </AppLayout>
   )
 }
