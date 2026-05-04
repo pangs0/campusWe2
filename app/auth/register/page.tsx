@@ -14,6 +14,7 @@ export default function RegisterPage() {
     full_name: '',
     username: '',
     university: '',
+    city: '',
   })
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -51,6 +52,7 @@ export default function RegisterPage() {
         full_name: form.full_name,
         username: form.username,
         university: form.university,
+        city: form.city,
         karma_tokens: 100,
       })
     }
@@ -106,6 +108,18 @@ export default function RegisterPage() {
               className="input"
               placeholder="ODTÜ"
               value={form.university}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div>
+            <label className="label">Şehir</label>
+            <input
+              name="city"
+              type="text"
+              className="input"
+              placeholder="İstanbul, Ankara, İzmir..."
+              value={form.city}
               onChange={handleChange}
             />
           </div>
