@@ -52,7 +52,19 @@ export default function Navbar({ user }: NavbarProps) {
                 href="/kahve"
                 className="flex items-center gap-1.5 text-sm text-ink/60 hover:text-ink transition-colors"
               >
-                Kahve Molası
+                Kahve
+              </Link>
+              <Link
+                href="/office-hours"
+                className="flex items-center gap-1.5 text-sm text-ink/60 hover:text-ink transition-colors"
+              >
+                Mentorlar
+              </Link>
+              <Link
+                href="/demo-day"
+                className="flex items-center gap-1.5 text-sm text-ink/60 hover:text-ink transition-colors"
+              >
+                Demo Day
               </Link>
               <Link
                 href="/profile"
