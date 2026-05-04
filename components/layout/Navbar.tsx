@@ -55,6 +55,12 @@ export default function Navbar({ user }: NavbarProps) {
                 Kahve
               </Link>
               <Link
+                href="/takas"
+                className="flex items-center gap-1.5 text-sm text-ink/60 hover:text-ink transition-colors"
+              >
+                Takas
+              </Link>
+              <Link
                 href="/office-hours"
                 className="flex items-center gap-1.5 text-sm text-ink/60 hover:text-ink transition-colors"
               >
@@ -65,6 +71,12 @@ export default function Navbar({ user }: NavbarProps) {
                 className="flex items-center gap-1.5 text-sm text-ink/60 hover:text-ink transition-colors"
               >
                 Demo Day
+              </Link>
+              <Link
+                href="/kutuphane"
+                className="flex items-center gap-1.5 text-sm text-ink/60 hover:text-ink transition-colors"
+              >
+                Kütüphane
               </Link>
               <Link
                 href="/profile"
