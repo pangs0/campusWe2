@@ -1,7 +1,9 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import { useRouter } from 'next/navigation'
 import AppLayout from '@/components/layout/AppLayout'
+import { createClient } from '@/lib/supabase/client'
 import { BookOpen, Play, Pause, RotateCcw, Users } from 'lucide-react'
 
 const SOUNDS = [
@@ -13,6 +15,9 @@ const SOUNDS = [
 const FOCUS_TIMES = [25, 45, 60, 90]
 
 export default function KutuphhanePage() {
+  const router = useRouter()
+  const supabase = createClient()
+  const [user, setUser] = useState<any>(null)
   const [isRunning, setIsRunning] = useState(false)
   const [selectedTime, setSelectedTime] = useState(25)
   const [timeLeft, setTimeLeft] = useState(25 * 60)
@@ -21,6 +26,15 @@ export default function KutuphhanePage() {
   const [activeUsers] = useState(Math.floor(Math.random() * 40) + 12)
   const [completed, setCompleted] = useState(false)
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
+
+  useEffect(() => {
+    async function loadUser() {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) { router.push('/auth/login'); return }
+      setUser(user)
+    }
+    loadUser()
+  }, [])
 
   useEffect(() => {
     if (isRunning && timeLeft > 0) {
@@ -67,8 +81,8 @@ export default function KutuphhanePage() {
   const progress = ((selectedTime * 60 - timeLeft) / (selectedTime * 60)) * 100
 
   return (
-    <AppLayout user={null}>
-      <main className="px-8 py-16">
+    <AppLayout user={user}>
+      <main className="px-8 py-16 max-w-3xl mx-auto">
         <div className="text-center mb-10">
           <div className="w-14 h-14 rounded-full bg-ink/5 flex items-center justify-center mx-auto mb-4">
             <BookOpen size={24} className="text-ink/40" />

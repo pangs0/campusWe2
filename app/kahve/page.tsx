@@ -1,17 +1,27 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import AppLayout from '@/components/layout/AppLayout'
 import { createClient } from '@/lib/supabase/client'
 import { Coffee, RefreshCw, MessageCircle, X } from 'lucide-react'
 
 export default function KahveMolasi() {
+  const router = useRouter()
   const supabase = createClient()
   const [loading, setLoading] = useState(false)
   const [match, setMatch] = useState<any>(null)
   const [declined, setDeclined] = useState(false)
   const [user, setUser] = useState<any>(null)
+
+  useEffect(() => {
+    async function loadUser() {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) { router.push('/auth/login'); return }
+      setUser(user)
+    }
+    loadUser()
+  }, [])
 
   async function findMatch() {
     setLoading(true)
@@ -44,10 +54,8 @@ export default function KahveMolasi() {
   }
 
   return (
-    <AppLayout user={null}>
-      
-
-      <main className="max-w-2xl mx-auto px-6 py-16 text-center">
+    <AppLayout user={user}>
+      <main className="px-8 py-16 max-w-2xl mx-auto text-center">
         <div className="mb-10">
           <div className="w-16 h-16 rounded-full bg-brand/10 flex items-center justify-center mx-auto mb-4">
             <Coffee size={28} className="text-brand" />
