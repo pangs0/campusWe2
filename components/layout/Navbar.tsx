@@ -37,6 +37,12 @@ export default function Navbar({ user }: NavbarProps) {
                 Dashboard
               </Link>
               <Link
+                href="/kesfet"
+                className="flex items-center gap-1.5 text-sm text-ink/60 hover:text-ink transition-colors"
+              >
+                Keşfet
+              </Link>
+              <Link
                 href="/profile"
                 className="flex items-center gap-1.5 text-sm text-ink/60 hover:text-ink transition-colors"
               >
