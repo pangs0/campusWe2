@@ -43,6 +43,18 @@ export default function Navbar({ user }: NavbarProps) {
                 Keşfet
               </Link>
               <Link
+                href="/garaj"
+                className="flex items-center gap-1.5 text-sm text-ink/60 hover:text-ink transition-colors"
+              >
+                Garaj
+              </Link>
+              <Link
+                href="/kahve"
+                className="flex items-center gap-1.5 text-sm text-ink/60 hover:text-ink transition-colors"
+              >
+                Kahve Molası
+              </Link>
+              <Link
                 href="/profile"
                 className="flex items-center gap-1.5 text-sm text-ink/60 hover:text-ink transition-colors"
               >
