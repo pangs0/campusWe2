@@ -5,7 +5,7 @@ import { useRouter, usePathname } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import {
   LayoutDashboard, Globe, Compass, Home, Coffee,
-  ArrowLeftRight, Clock, Star, BookOpen, User, LogOut, Zap
+  ArrowLeftRight, Clock, Star, BookOpen, User, LogOut, Zap, Rss
 } from 'lucide-react'
 
 type SidebarProps = {
@@ -14,6 +14,7 @@ type SidebarProps = {
 
 const NAV_ITEMS = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/feed', label: 'Akış', icon: Rss },
   { href: '/harita', label: 'Harita', icon: Globe },
   { href: '/kesfet', label: 'Keşfet', icon: Compass },
   { href: '/garaj', label: 'Garaj', icon: Home },
