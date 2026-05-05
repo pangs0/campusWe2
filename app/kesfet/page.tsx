@@ -22,6 +22,10 @@ export default async function KesfetPage({
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
+  const { data: userProfile } = user ? await supabase
+    .from('profiles').select('id, full_name, avatar_url, role, karma_tokens').eq('id', user.id).single()
+    : { data: null }
+
   let query = supabase
     .from('startups')
     .select('*, founder:profiles(full_name, username, university)')

@@ -14,6 +14,10 @@ export default async function GarajPage() {
     .eq('is_public', true)
     .order('event_date', { ascending: true })
 
+  const { data: userProfile } = user ? await supabase
+    .from('profiles').select('id, full_name, avatar_url, role, karma_tokens').eq('id', user.id).single()
+    : { data: null }
+
   function timeLeft(date: string) {
     const diff = new Date(date).getTime() - Date.now()
     if (diff < 0) return 'Sona erdi'

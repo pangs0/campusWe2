@@ -7,6 +7,10 @@ export default async function OfficeHoursPage() {
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
+  const { data: userProfile } = user ? await supabase
+    .from('profiles').select('id, full_name, avatar_url, role, karma_tokens').eq('id', user.id).single()
+    : { data: null }
+
   const { data: sessions } = await supabase
     .from('office_hours')
     .select('*, mentor:profiles(full_name, username, university, department, bio, user_skills(skill_name))')
