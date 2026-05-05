@@ -18,6 +18,8 @@ export default async function HomePage() {
           Campus<em style={{ color: '#C4500A', fontStyle: 'normal' }}>We</em>
         </span>
         <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+          <a href="/fiyatlandirma" style={{ fontSize: 13, color: 'rgba(26,26,24,.5)', textDecoration: 'none' }}>Fiyatlandırma</a>
+          <a href="/kurumsal" style={{ fontSize: 13, color: 'rgba(26,26,24,.5)', textDecoration: 'none' }}>Kurumsal</a>
           {user ? (
             <Link href="/dashboard" style={btnPrimary}>Dashboard →</Link>
           ) : (
