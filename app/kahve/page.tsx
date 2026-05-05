@@ -13,12 +13,15 @@ export default function KahveMolasi() {
   const [match, setMatch] = useState<any>(null)
   const [declined, setDeclined] = useState(false)
   const [user, setUser] = useState<any>(null)
+  const [profile, setProfile] = useState<any>(null)
 
   useEffect(() => {
     async function loadUser() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) { router.push('/auth/login'); return }
       setUser(user)
+      const { data: prof } = await supabase.from('profiles').select('id, full_name, avatar_url, role, karma_tokens').eq('id', user.id).single()
+      if (prof) setProfile(prof)
     }
     loadUser()
   }, [])
@@ -31,6 +34,8 @@ export default function KahveMolasi() {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return
     setUser(user)
+      const { data: prof } = await supabase.from('profiles').select('id, full_name, avatar_url, role, karma_tokens').eq('id', user.id).single()
+      if (prof) setProfile(prof)
 
     const { data: profiles } = await supabase
       .from('profiles')
@@ -54,7 +59,7 @@ export default function KahveMolasi() {
   }
 
   return (
-    <AppLayout user={user}>
+    <AppLayout user={user} profile={profile}>
       <main className="px-8 py-16 max-w-2xl mx-auto text-center">
         <div className="mb-10">
           <div className="w-16 h-16 rounded-full bg-brand/10 flex items-center justify-center mx-auto mb-4">

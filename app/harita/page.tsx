@@ -10,6 +10,7 @@ export default function HaritaPage() {
   const supabase = createClient()
   const svgRef = useRef<SVGSVGElement>(null)
   const [user, setUser] = useState<any>(null)
+  const [profile, setProfile] = useState<any>(null)
   const [users, setUsers] = useState<any[]>([])
   const [totalTR, setTotalTR] = useState(0)
   const [panelOpen, setPanelOpen] = useState(false)
@@ -20,6 +21,8 @@ export default function HaritaPage() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) { router.push('/auth/login'); return }
       setUser(user)
+      const { data: prof } = await supabase.from('profiles').select('id, full_name, avatar_url, role, karma_tokens').eq('id', user.id).single()
+      if (prof) setProfile(prof)
       const { data: profiles } = await supabase
         .from('profiles')
         .select('id, full_name, username, university, city, karma_tokens, user_skills(skill_name)')
@@ -122,7 +125,7 @@ export default function HaritaPage() {
   }
 
   return (
-    <AppLayout user={user}>
+    <AppLayout user={user} profile={profile}>
       <main className="px-8 py-10">
         <div className="mb-6">
           <p className="mono text-xs text-ink/35 tracking-widest mb-1">GLOBAL AĞ</p>

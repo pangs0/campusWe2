@@ -21,6 +21,7 @@ export default function KutuphhanePage() {
   const supabase = createClient()
   const [user, setUser] = useState<any>(null)
   const [profile, setProfile] = useState<any>(null)
+  const [profile, setProfile] = useState<any>(null)
 
   // Timer
   const [isRunning, setIsRunning] = useState(false)
@@ -57,6 +58,8 @@ export default function KutuphhanePage() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) { router.push('/auth/login'); return }
       setUser(user)
+      const { data: prof } = await supabase.from('profiles').select('id, full_name, avatar_url, role, karma_tokens').eq('id', user.id).single()
+      if (prof) setProfile(prof)
 
       const { data: prof } = await supabase.from('profiles').select('*').eq('id', user.id).single()
       setProfile(prof)
@@ -195,7 +198,7 @@ export default function KutuphhanePage() {
   const doneGoals = goals.filter(g => g.is_done).length
 
   return (
-    <AppLayout user={user}>
+    <AppLayout user={user} profile={profile}>
       <main className="px-8 py-10">
         <div className="mb-6">
           <p className="mono text-xs text-ink/35 tracking-widest mb-1">SANAL KÜTÜPHANE</p>

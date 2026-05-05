@@ -18,7 +18,7 @@ export default async function JobListingsPage() {
     .order('created_at', { ascending: false })
 
   return (
-    <AppLayout user={user}>
+    <AppLayout user={user} profile={profile}>
       <main className="px-8 py-10">
         <JobListingsClient userId={user.id} initialJobs={jobs || []} />
       </main>

@@ -18,7 +18,7 @@ export default async function CompanyEventsPage() {
     .order('event_date', { ascending: false })
 
   return (
-    <AppLayout user={user}>
+    <AppLayout user={user} profile={profile}>
       <main className="px-8 py-10">
         <CompanyEventsClient userId={user.id} initialEvents={events || []} />
       </main>

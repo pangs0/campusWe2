@@ -21,7 +21,7 @@ export default async function MessagesPage() {
     .order('full_name')
 
   return (
-    <AppLayout user={user}>
+    <AppLayout user={user} profile={profile}>
       <MessagesClient
         currentUserId={user!.id}
         initialConversations={conversations || []}

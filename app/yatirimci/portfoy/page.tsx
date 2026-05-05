@@ -18,7 +18,7 @@ export default async function PortfolioPage() {
     .order('year', { ascending: false })
 
   return (
-    <AppLayout user={user}>
+    <AppLayout user={user} profile={profile}>
       <main className="px-8 py-10">
         <PortfolioClient userId={user.id} initialPortfolio={portfolio || []} />
       </main>

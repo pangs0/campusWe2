@@ -32,7 +32,7 @@ export default async function GarajPage() {
   }
 
   return (
-    <AppLayout user={user}>
+    <AppLayout user={user} profile={userProfile}>
       
 
       <main className="px-8 py-10">
