@@ -21,7 +21,6 @@ export default function KutuphhanePage() {
   const supabase = createClient()
   const [user, setUser] = useState<any>(null)
   const [profile, setProfile] = useState<any>(null)
-  const [profile, setProfile] = useState<any>(null)
 
   // Timer
   const [isRunning, setIsRunning] = useState(false)
