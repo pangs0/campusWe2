@@ -3,9 +3,8 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import AppLayout from '@/components/layout/AppLayout'
 import Link from 'next/link'
-import { Check, ArrowLeft, Star } from 'lucide-react'
+import { Check, ArrowLeft, Star, Zap } from 'lucide-react'
 
 export default function ProUpgradePage() {
   const router = useRouter()
@@ -33,82 +32,108 @@ export default function ProUpgradePage() {
 
     setSuccess(true)
     setLoading(false)
-    setTimeout(() => router.push('/dashboard'), 2000)
+    setTimeout(() => router.push('/dashboard'), 2500)
   }
 
-  if (success) return (
-    <AppLayout user={null}>
-      <main className="px-8 py-20 text-center max-w-lg mx-auto">
-        <div className="text-6xl mb-4">🎉</div>
-        <h1 className="font-serif text-3xl font-bold text-ink mb-2">Pro'ya hoş geldin!</h1>
-        <p className="text-ink/45">Dashboard'a yönlendiriliyorsun...</p>
-      </main>
-    </AppLayout>
-  )
+  const proFeatures = [
+    'Sınırsız takas teklifi',
+    'Öncelikli Demo Day başvurusu',
+    'Gelişmiş co-founder eşleştirme',
+    'Pro rozeti profilde',
+    'Yatırımcılarla direkt mesaj',
+    'Çalışma alanı — sınırsız dosya',
+    'Haftalık girişim raporu',
+    'Öncelikli destek',
+  ]
 
   return (
-    <AppLayout user={null}>
-      <main className="px-8 py-10 max-w-lg mx-auto">
-        <Link href="/fiyatlandirma" className="flex items-center gap-1.5 text-sm text-ink/45 hover:text-ink mb-8 transition-colors">
-          <ArrowLeft size={14} />
-          Fiyatlandırmaya dön
+    <div style={{ background: '#F5F0E8', minHeight: '100vh', fontFamily: 'Inter, sans-serif' }}>
+
+      {/* Nav */}
+      <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.2rem 3rem', borderBottom: '1px solid rgba(26,26,24,.1)', background: '#F5F0E8', position: 'sticky', top: 0, zIndex: 100 }}>
+        <Link href="/" style={{ fontFamily: 'Georgia, serif', fontSize: 18, fontWeight: 800, color: '#1a1a18', textDecoration: 'none' }}>
+          Campus<em style={{ color: '#C4500A', fontStyle: 'normal' }}>We</em>
         </Link>
+        <Link href="/fiyatlandirma" style={{ fontSize: 13, color: 'rgba(26,26,24,.5)', textDecoration: 'none' }}>← Fiyatlandırma</Link>
+      </nav>
 
-        <div className="text-center mb-8">
-          <div className="w-14 h-14 rounded-full bg-brand/10 flex items-center justify-center mx-auto mb-3">
-            <Star size={24} className="text-brand" />
+      <main style={{ maxWidth: 520, margin: '0 auto', padding: '4rem 2rem' }}>
+        {success ? (
+          <div style={{ textAlign: 'center', padding: '3rem 0' }}>
+            <div style={{ fontSize: 64, marginBottom: 16 }}>🎉</div>
+            <h1 style={{ fontFamily: 'Georgia, serif', fontSize: 32, fontWeight: 800, color: '#1a1a18', margin: '0 0 12px' }}>
+              Pro'ya hoş geldin!
+            </h1>
+            <p style={{ fontSize: 15, color: 'rgba(26,26,24,.5)' }}>Dashboard'a yönlendiriliyorsun...</p>
           </div>
-          <h1 className="font-serif text-3xl font-bold text-ink">Pro'ya geç</h1>
-          <p className="text-sm text-ink/45 mt-1">Tüm özelliklere sınırsız erişim.</p>
-        </div>
-
-        {/* Plan seçimi */}
-        <div className="grid grid-cols-2 gap-3 mb-6">
-          {[
-            { key: 'monthly', label: 'Aylık', price: '₺99', sub: 'ay' },
-            { key: 'yearly', label: 'Yıllık', price: '₺899', sub: 'yıl · 2 ay ücretsiz', badge: 'İNDİRİM' },
-          ].map(p => (
-            <button key={p.key} onClick={() => setPlan(p.key as any)}
-              className={`card text-center transition-colors relative ${plan === p.key ? 'border-brand bg-brand/3' : 'hover:border-brand/30'}`}
-            >
-              {p.badge && (
-                <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-brand text-white text-xs font-mono px-2 py-0.5 rounded-full">
-                  {p.badge}
-                </span>
-              )}
-              <p className="font-medium text-ink text-sm mb-1">{p.label}</p>
-              <p className="font-serif text-2xl font-bold text-ink">{p.price}</p>
-              <p className="mono text-xs text-ink/35">/{p.sub}</p>
-            </button>
-          ))}
-        </div>
-
-        {/* Özellikler özeti */}
-        <div className="card mb-6">
-          <p className="mono text-xs text-ink/35 tracking-widest mb-3">PRO'DA NE VAR</p>
-          <div className="grid grid-cols-2 gap-2">
-            {[
-              'Sınırsız takas', 'Öncelikli Demo Day',
-              'Pro rozeti', 'Yatırımcı mesajı',
-              'Gelişmiş eşleştirme', 'Haftalık rapor',
-            ].map(f => (
-              <div key={f} className="flex items-center gap-1.5">
-                <Check size={12} className="text-green-500 flex-shrink-0" />
-                <span className="text-xs text-ink/65">{f}</span>
+        ) : (
+          <>
+            <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+              <div style={{ width: 60, height: 60, borderRadius: '50%', background: 'rgba(196,80,10,.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+                <Star size={26} color="#C4500A" />
               </div>
-            ))}
-          </div>
-        </div>
+              <h1 style={{ fontFamily: 'Georgia, serif', fontSize: 36, fontWeight: 800, color: '#1a1a18', letterSpacing: -1.5, margin: '0 0 8px' }}>
+                Pro'ya geç
+              </h1>
+              <p style={{ fontSize: 15, color: 'rgba(26,26,24,.45)', margin: 0 }}>
+                Tüm özelliklere sınırsız erişim.
+              </p>
+            </div>
 
-        <button onClick={handleUpgrade} disabled={loading}
-          className="btn-primary w-full justify-center text-base py-3 disabled:opacity-60">
-          {loading ? 'İşleniyor...' : `${plan === 'monthly' ? '₺99/ay' : '₺899/yıl'} ile Pro'ya geç →`}
-        </button>
+            {/* Plan seçimi */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 24 }}>
+              {[
+                { key: 'monthly', label: 'Aylık', price: '₺99', sub: '/ay' },
+                { key: 'yearly', label: 'Yıllık', price: '₺899', sub: '/yıl', badge: '2 ay ücretsiz' },
+              ].map(p => (
+                <button key={p.key} onClick={() => setPlan(p.key as any)}
+                  style={{
+                    background: plan === p.key ? 'rgba(196,80,10,.06)' : 'white',
+                    border: plan === p.key ? '2px solid #C4500A' : '1px solid rgba(26,26,24,.12)',
+                    borderRadius: 12, padding: '1.25rem', cursor: 'pointer', textAlign: 'center', position: 'relative'
+                  }}>
+                  {p.badge && (
+                    <span style={{ position: 'absolute', top: -10, left: '50%', transform: 'translateX(-50%)', background: '#C4500A', color: 'white', fontSize: 10, fontFamily: 'monospace', padding: '3px 10px', borderRadius: 999, whiteSpace: 'nowrap' }}>
+                      {p.badge}
+                    </span>
+                  )}
+                  <p style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(26,26,24,.4)', letterSpacing: 2, textTransform: 'uppercase', margin: '0 0 6px' }}>{p.label}</p>
+                  <p style={{ fontFamily: 'Georgia, serif', fontSize: 30, fontWeight: 800, color: '#1a1a18', margin: 0 }}>{p.price}</p>
+                  <p style={{ fontSize: 12, color: 'rgba(26,26,24,.35)', margin: '2px 0 0' }}>{p.sub}</p>
+                </button>
+              ))}
+            </div>
 
-        <p className="text-xs text-ink/35 text-center mt-3">
-          İstediğin zaman iptal edebilirsin. SSL ile güvenli ödeme.
-        </p>
+            {/* Özellikler */}
+            <div style={{ background: 'white', border: '1px solid rgba(26,26,24,.1)', borderRadius: 12, padding: '1.5rem', marginBottom: 20 }}>
+              <p style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(26,26,24,.35)', letterSpacing: 2, textTransform: 'uppercase', margin: '0 0 14px' }}>PRO'DA NE VAR</p>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px 16px' }}>
+                {proFeatures.map(f => (
+                  <div key={f} style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+                    <Check size={13} color="#22c55e" style={{ flexShrink: 0 }} />
+                    <span style={{ fontSize: 13, color: 'rgba(26,26,24,.65)' }}>{f}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <button onClick={handleUpgrade} disabled={loading}
+              style={{
+                width: '100%', background: '#C4500A', color: 'white', padding: '14px',
+                borderRadius: 10, border: 'none', fontSize: 15, fontWeight: 600,
+                cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.6 : 1,
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8
+              }}>
+              <Zap size={16} />
+              {loading ? 'İşleniyor...' : `${plan === 'monthly' ? '₺99/ay' : '₺899/yıl'} ile Pro'ya geç`}
+            </button>
+
+            <p style={{ textAlign: 'center', fontSize: 12, color: 'rgba(26,26,24,.3)', marginTop: 12 }}>
+              İstediğin zaman iptal edebilirsin. SSL ile güvenli.
+            </p>
+          </>
+        )}
       </main>
-    </AppLayout>
+    </div>
   )
 }
