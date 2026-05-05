@@ -34,8 +34,6 @@ export default function KahveMolasi() {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return
     setUser(user)
-      const { data: prof } = await supabase.from('profiles').select('id, full_name, avatar_url, role, karma_tokens').eq('id', user.id).single()
-      if (prof) setProfile(prof)
 
     const { data: profiles } = await supabase
       .from('profiles')

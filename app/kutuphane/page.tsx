@@ -61,9 +61,6 @@ export default function KutuphhanePage() {
       const { data: prof } = await supabase.from('profiles').select('id, full_name, avatar_url, role, karma_tokens').eq('id', user.id).single()
       if (prof) setProfile(prof)
 
-      const { data: prof } = await supabase.from('profiles').select('*').eq('id', user.id).single()
-      setProfile(prof)
-
       // Günlük hedefler
       const today = new Date().toISOString().split('T')[0]
       const { data: goalData } = await supabase.from('daily_goals').select('*').eq('user_id', user.id).eq('date', today).order('created_at')
