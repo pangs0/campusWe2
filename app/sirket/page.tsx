@@ -9,7 +9,7 @@ export default async function SirketPage() {
   if (!user) redirect('/auth/login')
 
   const { data: profile } = await supabase
-    .from('profiles').select('*').eq('id', user.id).single()
+    .from('profiles').select('id, full_name, avatar_url, role, karma_tokens').eq('id', user.id).single()
 
   let { data: companyProfile } = await supabase
     .from('company_profiles').select('*').eq('id', user.id).single()
@@ -41,7 +41,7 @@ export default async function SirketPage() {
   const watchlistIds = new Set(watchlist?.map(w => w.startup_id) || [])
 
   return (
-    <AppLayout user={user}>
+    <AppLayout user={user} profile={profile}>
       <main className="px-8 py-10">
         <CompanyClient
           userId={user.id}

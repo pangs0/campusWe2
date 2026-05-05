@@ -12,9 +12,10 @@ type Props = {
   university: string | null
   department: string | null
   karmaTokens: number
+  role?: string
 }
 
-export default function ProfileClient({ userId, avatarUrl, fullName, username, university, department, karmaTokens }: Props) {
+export default function ProfileClient({ userId, avatarUrl, fullName, username, university, department, karmaTokens, role }: Props) {
   const supabase = createClient()
   const [preview, setPreview] = useState<string | null>(avatarUrl)
   const [uploading, setUploading] = useState(false)
@@ -58,6 +59,11 @@ export default function ProfileClient({ userId, avatarUrl, fullName, username, u
 
       <h1 className="font-serif text-xl font-bold text-ink">{fullName}</h1>
       <p className="mono text-xs text-ink/40 mt-0.5">@{username}</p>
+      {role && role !== 'founder' && (
+        <span className={`mono text-xs px-2 py-0.5 rounded-full mt-1.5 inline-block ${role === 'investor' ? 'bg-amber-50 text-amber-700' : 'bg-blue-50 text-blue-700'}`}>
+          {role === 'investor' ? '💼 Yatırımcı' : '🏢 Şirket'}
+        </span>
+      )}
       {university && <p className="text-xs text-ink/45 mt-1">{university}</p>}
       {department && <p className="text-xs text-ink/35">{department}</p>}
 

@@ -28,7 +28,7 @@ export default async function TakasPage() {
   }
 
   return (
-    <AppLayout user={user}>
+    <AppLayout user={user} profile={profile}>
       
 
       <main className="px-8 py-10">

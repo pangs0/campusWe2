@@ -42,7 +42,7 @@ export default async function DashboardPage() {
   const isNew = (myStartups?.length || 0) === 0 && (skills?.length || 0) === 0
 
   return (
-    <AppLayout user={user}>
+    <AppLayout user={user} profile={profile}>
       <main className="px-8 py-10">
 
         <div className="flex items-start justify-between mb-8">

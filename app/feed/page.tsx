@@ -71,7 +71,7 @@ export default async function FeedPage() {
   }
 
   return (
-    <AppLayout user={user}>
+    <AppLayout user={user} profile={profile}>
       <main className="px-8 py-10">
         <div className="grid grid-cols-3 gap-6">
 
