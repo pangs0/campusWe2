@@ -3,9 +3,8 @@ import { redirect } from 'next/navigation'
 import AppLayout from '@/components/layout/AppLayout'
 import Link from 'next/link'
 import { Edit, Zap, TrendingUp, ArrowRight } from 'lucide-react'
-import AvatarUpload from '@/components/profile/AvatarUpload'
-import NewPostForm from '@/components/profile/NewPostForm'
-import PostCard from '@/components/profile/PostCard'
+import ProfileClient from '@/app/profile/ProfileClient'
+import ProfilePosts from '@/app/profile/ProfilePosts'
 import type { Startup } from '@/types'
 
 export default async function ProfilePage() {
@@ -41,40 +40,22 @@ export default async function ProfilePage() {
 
           {/* Sol kolon — profil bilgileri */}
           <div className="col-span-1 space-y-4">
-
-            {/* Profil kartı */}
             <div className="card">
-              <div className="flex flex-col items-center text-center mb-4">
-                <div className="mb-3">
-                  <AvatarUpload
-                    userId={user.id}
-                    currentUrl={profile?.avatar_url || null}
-                    fullName={profile?.full_name || '?'}
-                    onUpload={() => {}}
-                  />
-                </div>
-                <h1 className="font-serif text-xl font-bold text-ink">{profile?.full_name}</h1>
-                <p className="mono text-xs text-ink/40 mt-1">@{profile?.username}</p>
-                {profile?.university && (
-                  <p className="text-xs text-ink/45 mt-1">{profile.university}</p>
-                )}
-                {profile?.department && (
-                  <p className="text-xs text-ink/35">{profile.department}</p>
-                )}
-
-                <div className="flex items-center gap-1.5 mt-3 bg-brand/8 rounded-lg px-3 py-1.5">
-                  <Zap size={12} className="text-brand" />
-                  <span className="mono text-sm font-medium text-brand">{profile?.karma_tokens || 0} Karma</span>
-                </div>
-              </div>
-
-              <Link href="/profile/edit" className="btn-secondary w-full flex items-center justify-center gap-1.5 text-xs py-2">
+              <ProfileClient
+                userId={user.id}
+                avatarUrl={profile?.avatar_url || null}
+                fullName={profile?.full_name || '?'}
+                username={profile?.username || ''}
+                university={profile?.university || null}
+                department={profile?.department || null}
+                karmaTokens={profile?.karma_tokens || 0}
+              />
+              <Link href="/profile/edit" className="btn-secondary w-full flex items-center justify-center gap-1.5 text-xs py-2 mt-3">
                 <Edit size={12} />
                 Profili düzenle
               </Link>
             </div>
 
-            {/* Hakkında */}
             {profile?.bio && (
               <div className="card">
                 <p className="mono text-xs text-ink/35 tracking-widest mb-2">HAKKINDA</p>
@@ -82,7 +63,6 @@ export default async function ProfilePage() {
               </div>
             )}
 
-            {/* Yetenekler */}
             <div className="card">
               <p className="mono text-xs text-ink/35 tracking-widest mb-3">YETENEKLERİM</p>
               {skills && skills.length > 0 ? (
@@ -101,7 +81,6 @@ export default async function ProfilePage() {
               </Link>
             </div>
 
-            {/* Startuplar */}
             <div className="card">
               <div className="flex items-center justify-between mb-3">
                 <p className="mono text-xs text-ink/35 tracking-widest">STARTUPLARIM</p>
@@ -138,29 +117,13 @@ export default async function ProfilePage() {
               <span className="mono text-xs text-ink/35">{posts?.length || 0} paylaşım</span>
             </div>
 
-            <NewPostForm
+            <ProfilePosts
               userId={user.id}
               avatarUrl={profile?.avatar_url || null}
               fullName={profile?.full_name || '?'}
               startups={startups?.map(s => ({ id: s.id, name: s.name })) || []}
+              initialPosts={posts || []}
             />
-
-            {posts && posts.length > 0 ? (
-              posts.map((post: any) => (
-                <PostCard
-                  key={post.id}
-                  post={post}
-                  currentUserId={user.id}
-                />
-              ))
-            ) : (
-              <div className="py-16 text-center" style={{ background: '#faf9f6', borderRadius: 12, border: '1.5px dashed rgba(26,26,24,.12)' }}>
-                <p className="font-serif text-lg font-bold text-ink mb-1">Henüz paylaşım yok.</p>
-                <p className="text-sm text-ink/45 leading-relaxed max-w-xs mx-auto">
-                  Girişim yolculuğundan bir şey paylaş. Topluluk seni dinliyor.
-                </p>
-              </div>
-            )}
           </div>
         </div>
       </main>

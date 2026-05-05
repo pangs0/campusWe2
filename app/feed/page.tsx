@@ -1,9 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import AppLayout from '@/components/layout/AppLayout'
-import PostCard from '@/components/profile/PostCard'
-import NewPostForm from '@/components/profile/NewPostForm'
-import { Users } from 'lucide-react'
+import FeedClient from '@/app/feed/FeedClient'
 
 export default async function FeedPage() {
   const supabase = createClient()
@@ -37,26 +35,13 @@ export default async function FeedPage() {
           <p className="text-sm text-ink/45 mt-1">Topluluktan son paylaşımlar.</p>
         </div>
 
-        <NewPostForm
+        <FeedClient
           userId={user.id}
           avatarUrl={profile?.avatar_url || null}
           fullName={profile?.full_name || '?'}
           startups={startups?.map(s => ({ id: s.id, name: s.name })) || []}
+          initialPosts={posts || []}
         />
-
-        {posts && posts.length > 0 ? (
-          posts.map((post: any) => (
-            <PostCard key={post.id} post={post} currentUserId={user.id} />
-          ))
-        ) : (
-          <div className="py-16 text-center" style={{ background: '#faf9f6', borderRadius: 12, border: '1.5px dashed rgba(26,26,24,.12)' }}>
-            <Users size={36} className="text-brand/25 mx-auto mb-3" />
-            <p className="font-serif text-xl font-bold text-ink mb-1">Akış henüz boş.</p>
-            <p className="text-sm text-ink/45 leading-relaxed">
-              İlk paylaşımı yapan sen ol. Topluluk seni dinliyor.
-            </p>
-          </div>
-        )}
       </main>
     </AppLayout>
   )
