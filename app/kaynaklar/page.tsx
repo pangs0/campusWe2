@@ -31,9 +31,6 @@ export default async function KaynakPage() {
   const { data: userProfile } = await supabase
     .from('profiles').select('id, full_name, avatar_url, role, karma_tokens').eq('id', user.id).single()
 
-  const { data: userProfile } = await supabase
-    .from('profiles').select('id, full_name, avatar_url, role, karma_tokens').eq('id', user.id).single()
-
   const { data: resources } = await supabase
     .from('resources')
     .select('*, added_by_profile:profiles(full_name)')

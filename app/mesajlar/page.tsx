@@ -20,6 +20,9 @@ export default async function MessagesPage() {
     .neq('id', user!.id)
     .order('full_name')
 
+  const { data: profile } = await supabase
+    .from('profiles').select('id, full_name, avatar_url, role, karma_tokens').eq('id', user!.id).single()
+
   return (
     <AppLayout user={user} profile={profile}>
       <MessagesClient
