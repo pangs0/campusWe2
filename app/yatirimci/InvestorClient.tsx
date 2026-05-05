@@ -59,7 +59,7 @@ export default function InvestorClient({ userId, profile, investorProfile, start
       setFavorites(prev => prev.filter(f => f.startup_id !== startupId))
     } else {
       await supabase.from('investor_favorites').insert({ investor_id: userId, startup_id: startupId })
-      setFavoriteIds(prev => new Set([...prev, startupId]))
+      setFavoriteIds(prev => new Set(Array.from(prev).concat(startupId)))
       const startup = startups.find(s => s.id === startupId)
       if (startup) setFavorites(prev => [...prev, { startup_id: startupId, startup }])
     }
