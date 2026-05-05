@@ -6,7 +6,7 @@ import { createClient } from '@/lib/supabase/client'
 import {
   LayoutDashboard, Globe, Compass, Home, Coffee,
   ArrowLeftRight, Clock, Star, BookOpen, User, LogOut,
-  Rss, MessageCircle, Users, Library
+  Rss, MessageCircle, Users, Library, Settings
 } from 'lucide-react'
 import NotificationBell from '@/components/layout/NotificationBell'
 
@@ -109,6 +109,15 @@ export default function Sidebar({ user }: SidebarProps) {
         >
           <User size={15} className="text-ink/40" />
           Profil
+        </Link>
+        <Link
+          href="/ayarlar"
+          className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors ${
+            pathname === '/ayarlar' ? 'bg-brand/10 text-brand font-medium' : 'text-ink/55 hover:bg-neutral-100 hover:text-ink'
+          }`}
+        >
+          <Settings size={15} className="text-ink/40" />
+          Ayarlar
         </Link>
         <button
           onClick={handleSignOut}
