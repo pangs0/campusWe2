@@ -56,7 +56,7 @@ export default function CompanyClient({ userId, profile, companyProfile, talents
       setWatchlist(prev => prev.filter(w => w.startup_id !== startupId))
     } else {
       await supabase.from('company_watchlist').insert({ company_id: userId, startup_id: startupId, status: 'izleniyor' })
-      setWatchlistIds(prev => new Set([...prev, startupId]))
+      setWatchlistIds(prev => new Set(Array.from(prev).concat(startupId)))
       const startup = startups.find(s => s.id === startupId)
       if (startup) setWatchlist(prev => [...prev, { startup_id: startupId, startup, status: 'izleniyor' }])
     }
