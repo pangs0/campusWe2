@@ -2,8 +2,8 @@ import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import AppLayout from '@/components/layout/AppLayout'
 import Link from 'next/link'
-import { ArrowLeft, Plus, Users, Zap } from 'lucide-react'
-import AddUpdateForm from './AddUpdateForm'
+import { ArrowLeft, Plus, Users, Zap, Layout } from 'lucide-react'
+import AddUpdateForm from '@/app/startup/[slug]/AddUpdateForm'
 import type { StartupUpdate, StartupMember } from '@/types'
 
 export default async function StartupPage({ params }: { params: { slug: string } }) {
@@ -86,12 +86,21 @@ export default async function StartupPage({ params }: { params: { slug: string }
                   </div>
                 </div>
                 {isFounder && (
-                  <Link
-                    href={`/startup/${startup.slug}/edit`}
-                    className="btn-secondary py-1.5 px-3 text-xs"
-                  >
-                    Düzenle
-                  </Link>
+                  <div className="flex items-center gap-2">
+                    <Link
+                      href={`/workspace/${startup.slug}`}
+                      className="flex items-center gap-1.5 btn-secondary py-1.5 px-3 text-xs"
+                    >
+                      <Layout size={12} />
+                      Çalışma alanı
+                    </Link>
+                    <Link
+                      href={`/startup/${startup.slug}/edit`}
+                      className="btn-secondary py-1.5 px-3 text-xs"
+                    >
+                      Düzenle
+                    </Link>
+                  </div>
                 )}
               </div>
 
