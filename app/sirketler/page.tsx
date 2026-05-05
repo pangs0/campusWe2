@@ -82,14 +82,14 @@ export default async function SirketlerPage() {
                       )}
 
                       <div className="flex gap-2">
-                        {jobs?.filter(j => j.company_id === comp.id).length > 0 && (
+                        {(jobs || []).filter(j => j.company_id === comp.id).length > 0 && (
                           <span className="mono text-xs bg-green-50 text-green-700 border border-green-200 rounded px-2 py-0.5">
-                            {jobs.filter(j => j.company_id === comp.id).length} açık ilan
+                            {(jobs || []).filter(j => j.company_id === comp.id).length} açık ilan
                           </span>
                         )}
-                        {events?.filter(e => e.company_id === comp.id).length > 0 && (
+                        {(events || []).filter(e => e.company_id === comp.id).length > 0 && (
                           <span className="mono text-xs bg-purple-50 text-purple-700 border border-purple-200 rounded px-2 py-0.5">
-                            {events.filter(e => e.company_id === comp.id).length} etkinlik
+                            {(events || []).filter(e => e.company_id === comp.id).length} etkinlik
                           </span>
                         )}
                       </div>
