@@ -1,21 +1,47 @@
 import { createClient } from '@/lib/supabase/server'
 import AppLayout from '@/components/layout/AppLayout'
 import Link from 'next/link'
-import { Clock, Plus, Star } from 'lucide-react'
+import { Star, Calendar, TrendingUp, Plus } from 'lucide-react'
 
-export default async function OfficeHoursPage() {
+export default async function DemoDayPage() {
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  const { data: sessions } = await supabase
-    .from('office_hours')
-    .select('*, mentor:profiles(full_name, username, university, department, bio, user_skills(skill_name))')
-    .eq('is_active', true)
+  const { data: applications } = await supabase
+    .from('demo_day_applications')
+    .select('*, startup:startups(name, slug, description, stage, sector, founder:profiles(full_name, university))')
+    .eq('status', 'kabul')
     .order('created_at', { ascending: false })
 
-  const dayNames: Record<string, string> = {
-    pazartesi: 'Pazartesi', sali: 'Salı', carsamba: 'Çarşamba',
-    persembe: 'Perşembe', cuma: 'Cuma', cumartesi: 'Cumartesi', pazar: 'Pazar'
+  const { data: myApplication } = user ? await supabase
+    .from('demo_day_applications')
+    .select('*')
+    .eq('applicant_id', user.id)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .single() : { data: null }
+
+  const { data: userProfile } = user ? await supabase
+    .from('profiles').select('id, full_name, avatar_url, role, karma_tokens').eq('id', user.id).single()
+    : { data: null }
+
+  const stageColors: Record<string, string> = {
+    fikir: 'bg-amber-50 text-amber-700 border-amber-200',
+    mvp: 'bg-blue-50 text-blue-700 border-blue-200',
+    traction: 'bg-purple-50 text-purple-700 border-purple-200',
+    büyüme: 'bg-green-50 text-green-700 border-green-200',
+  }
+
+  const statusLabels: Record<string, string> = {
+    beklemede: 'İnceleniyor',
+    kabul: 'Kabul edildi',
+    red: 'Reddedildi',
+  }
+
+  const statusColors: Record<string, string> = {
+    beklemede: 'bg-amber-50 text-amber-700 border-amber-200',
+    kabul: 'bg-green-50 text-green-700 border-green-200',
+    red: 'bg-red-50 text-red-600 border-red-200',
   }
 
   return (
@@ -25,104 +51,95 @@ export default async function OfficeHoursPage() {
       <main className="px-8 py-10">
         <div className="flex items-start justify-between mb-10">
           <div>
-            <p className="mono text-xs text-ink/35 tracking-widest mb-1">OFFICE HOURS</p>
-            <h1 className="font-serif text-3xl font-bold text-ink">Mentorlarla tanış.</h1>
+            <p className="mono text-xs text-ink/35 tracking-widest mb-1">DEMO DAY</p>
+            <h1 className="font-serif text-3xl font-bold text-ink">Yatırımcılara pitch yap.</h1>
             <p className="text-sm text-ink/45 mt-1">
-              Sektör profesyonelleri haftada 1 saat gönüllü mentorluk yapıyor.
+              Ayda bir kez gerçek yatırımcılar önünde sunum yap.
             </p>
           </div>
-          {user && (
-            <Link href="/office-hours/yeni" className="btn-primary flex items-center gap-1.5 text-xs">
+          {user && !myApplication && (
+            <Link href="/demo-day/basvur" className="btn-primary flex items-center gap-1.5 text-xs">
               <Plus size={13} />
-              Mentor ol
+              Başvur
             </Link>
           )}
         </div>
 
+        {myApplication && (
+          <div className="card mb-6 flex items-center justify-between">
+            <div>
+              <p className="mono text-xs text-ink/35 tracking-widest mb-1">BAŞVURUN</p>
+              <p className="font-medium text-ink">Demo Day başvurun mevcut</p>
+            </div>
+            <span className={`mono text-xs border rounded px-3 py-1 ${statusColors[myApplication.status] || ''}`}>
+              {statusLabels[myApplication.status] || myApplication.status}
+            </span>
+          </div>
+        )}
+
         <div className="grid grid-cols-3 gap-4 mb-10">
           {[
-            { n: sessions?.length || 0, l: 'Aktif mentor' },
-            { n: 'Ücretsiz', l: 'Her zaman' },
-            { n: '1 saat', l: 'Haftalık süre' },
+            { icon: Star, n: applications?.length || 0, l: 'Kabul edilen startup' },
+            { icon: Calendar, n: 'Ayda bir', l: 'Demo Day' },
+            { icon: TrendingUp, n: 'Gerçek', l: 'Yatırımcılar' },
           ].map((s, i) => (
-            <div key={i} className="card text-center py-4">
-              <div className="font-serif text-2xl font-bold text-ink">{s.n}</div>
-              <div className="mono text-xs text-ink/35 mt-1">{s.l}</div>
+            <div key={i} className="card flex items-center gap-3 py-4">
+              <div className="w-8 h-8 rounded-lg bg-brand/10 flex items-center justify-center">
+                <s.icon size={15} className="text-brand" />
+              </div>
+              <div>
+                <div className="font-serif text-xl font-bold text-ink">{s.n}</div>
+                <div className="mono text-xs text-ink/35">{s.l}</div>
+              </div>
             </div>
           ))}
         </div>
 
-        {sessions && sessions.length > 0 ? (
-          <div className="grid grid-cols-2 gap-4">
-            {sessions.map((session: any) => (
-              <div key={session.id} className="card hover:border-brand/30 transition-colors">
-                <div className="flex items-start gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-full bg-brand/15 flex items-center justify-center text-lg font-bold text-brand font-serif flex-shrink-0">
-                    {session.mentor?.full_name?.[0]}
-                  </div>
-                  <div className="flex-1">
-                    <h2 className="font-serif font-bold text-ink">{session.mentor?.full_name}</h2>
-                    <p className="text-xs text-ink/45">
-                      {session.mentor?.university}
-                      {session.mentor?.department && ` · ${session.mentor.department}`}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Star size={11} className="text-amber-500 fill-amber-500" />
-                    <span className="mono text-xs text-ink/40">Mentor</span>
-                  </div>
-                </div>
+        <div className="mb-6">
+          <h2 className="font-serif text-xl font-bold text-ink mb-4">Kabul edilen startuplar</h2>
 
-                {session.title && (
-                  <h3 className="font-medium text-ink text-sm mb-1">{session.title}</h3>
-                )}
-
-                {session.description && (
-                  <p className="text-xs text-ink/50 leading-relaxed mb-3 line-clamp-2">
-                    {session.description}
-                  </p>
-                )}
-
-                {session.mentor?.user_skills?.length > 0 && (
-                  <div className="flex flex-wrap gap-1.5 mb-3">
-                    {session.mentor.user_skills.slice(0, 4).map((s: any, i: number) => (
-                      <span key={i} className="mono text-xs bg-neutral-100 text-ink/55 border border-neutral-200 rounded px-2 py-0.5">
-                        {s.skill_name}
-                      </span>
-                    ))}
-                  </div>
-                )}
-
-                <div className="flex items-center justify-between pt-3 border-t border-neutral-100">
-                  <div className="flex items-center gap-1.5 text-xs text-ink/40">
-                    <Clock size={11} />
-                    <span>
-                      {dayNames[session.day_of_week] || session.day_of_week} · {session.time_slot}
+          {applications && applications.length > 0 ? (
+            <div className="grid grid-cols-2 gap-4">
+              {applications.map((app: any) => (
+                <Link
+                  key={app.id}
+                  href={`/startup/${app.startup?.slug}`}
+                  className="card block hover:border-brand/30 transition-colors group"
+                >
+                  <div className="flex items-start justify-between mb-2">
+                    <h3 className="font-serif font-bold text-ink group-hover:text-brand transition-colors">
+                      {app.startup?.name}
+                    </h3>
+                    <span className={`mono text-xs border rounded px-2 py-0.5 ml-2 whitespace-nowrap ${stageColors[app.startup?.stage] || ''}`}>
+                      {app.startup?.stage}
                     </span>
                   </div>
-                  <a
-                    href={`mailto:?subject=Office Hours - ${session.mentor?.full_name}&body=Merhaba! CampusWe Office Hours üzerinden seninle görüşmek istiyorum.`}
-                    className="btn-primary py-1.5 px-3 text-xs"
-                  >
-                    Randevu al
-                  </a>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-20">
-            <Clock size={40} className="text-ink/15 mx-auto mb-4" />
-            <p className="text-ink/40 font-serif text-xl mb-2">Henüz mentor yok.</p>
-            <p className="text-sm text-ink/30 mb-6">İlk mentor sen ol.</p>
-            {user && (
-              <Link href="/office-hours/yeni" className="btn-primary inline-flex items-center gap-1.5 text-xs">
-                <Plus size={13} />
-                Mentor ol
-              </Link>
-            )}
-          </div>
-        )}
+                  {app.startup?.description && (
+                    <p className="text-sm text-ink/50 line-clamp-2 mb-3">{app.startup.description}</p>
+                  )}
+                  <div className="flex items-center justify-between pt-3 border-t border-neutral-100">
+                    <span className="text-xs text-ink/40">{app.startup?.founder?.full_name}</span>
+                    {app.startup?.sector && (
+                      <span className="mono text-xs text-ink/30">{app.startup.sector}</span>
+                    )}
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-16">
+              <Star size={40} className="text-ink/15 mx-auto mb-4" />
+              <p className="text-ink/40 font-serif text-xl mb-2">Henüz kabul edilen startup yok.</p>
+              <p className="text-sm text-ink/30 mb-6">İlk başvuran sen ol.</p>
+              {user && (
+                <Link href="/demo-day/basvur" className="btn-primary inline-flex items-center gap-1.5 text-xs">
+                  <Plus size={13} />
+                  Başvur
+                </Link>
+              )}
+            </div>
+          )}
+        </div>
       </main>
     </AppLayout>
   )
