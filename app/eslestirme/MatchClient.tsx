@@ -14,7 +14,7 @@ type Props = {
 
 export default function MatchClient({ currentUser, candidates, startups, sentIds, receivedRequests }: Props) {
   const supabase = createClient()
-  const [sent, setSent] = useState<Set<string>>(new Set(sentIds))
+  const [sent, setSent] = useState<Set<string>>(new Set(Array.from(sentIds)))
   const [requests, setRequests] = useState<any[]>(receivedRequests)
   const [selectedCandidate, setSelectedCandidate] = useState<any>(null)
   const [selectedStartup, setSelectedStartup] = useState('')
@@ -41,7 +41,7 @@ export default function MatchClient({ currentUser, candidates, startups, sentIds
       link: '/eslestirme',
     })
 
-    setSent(prev => new Set([...prev, selectedCandidate.id]))
+    setSent(prev => new Set(Array.from(prev).concat(selectedCandidate.id)))
     setSelectedCandidate(null)
     setMessage('')
     setSending(false)
