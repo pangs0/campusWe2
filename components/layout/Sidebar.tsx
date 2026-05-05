@@ -6,7 +6,7 @@ import { createClient } from '@/lib/supabase/client'
 import {
   LayoutDashboard, Globe, Compass, Home, Coffee,
   ArrowLeftRight, Clock, Star, BookOpen, User, LogOut,
-  Rss, MessageCircle, Users, Library, Settings
+  Rss, MessageCircle, Users, Library, Settings, TrendingUp, Building2
 } from 'lucide-react'
 import NotificationBell from '@/components/layout/NotificationBell'
 
@@ -46,6 +46,8 @@ const NAV_GROUPS = [
       { href: '/demo-day', label: 'Demo Day', icon: Star },
       { href: '/kaynaklar', label: 'Kaynaklar', icon: Library },
       { href: '/kutuphane', label: 'Kütüphane', icon: BookOpen },
+      { href: '/yatirimci', label: 'Yatırımcı', icon: TrendingUp },
+      { href: '/sirket', label: 'Şirket', icon: Building2 },
     ]
   },
 ]
