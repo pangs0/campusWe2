@@ -63,6 +63,7 @@ export default function RegisterPage() {
   const [role, setRole] = useState<'founder' | 'investor' | 'company'>('founder')
   const [form, setForm] = useState({ email: '', password: '', full_name: '', username: '', university: '', city: '', company_name: '', firm_name: '' })
   const [error, setError] = useState('')
+  const [agreed, setAgreed] = useState(false)
   const [loading, setLoading] = useState(false)
   const [visible, setVisible] = useState(false)
 
@@ -290,7 +291,16 @@ export default function RegisterPage() {
               </div>
             )}
 
-            <button type="submit" disabled={loading}
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+              <input type="checkbox" id="agreed" checked={agreed} onChange={e => setAgreed(e.target.checked)}
+                style={{ marginTop: 2, accentColor: '#C4500A', width: 15, height: 15, flexShrink: 0 }} />
+              <label htmlFor="agreed" style={{ fontSize: 12, color: 'rgba(26,26,24,.55)', lineHeight: 1.6, cursor: 'pointer' }}>
+                <a href="/kullanim-kosullari" target="_blank" style={{ color: '#C4500A', textDecoration: 'none' }}>Kullanım Koşulları</a>'nı ve{' '}
+                <a href="/gizlilik" target="_blank" style={{ color: '#C4500A', textDecoration: 'none' }}>Gizlilik Politikası</a>'nı okudum, kabul ediyorum.
+              </label>
+            </div>
+
+            <button type="submit" disabled={loading || !agreed}
               style={{ padding: '13px', background: '#1a1a18', color: 'white', border: 'none', borderRadius: 8, fontSize: 14, fontWeight: 600, cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1, transition: 'all 0.2s', fontFamily: 'Inter, sans-serif' }}
               onMouseEnter={e => { if (!loading) e.currentTarget.style.background = '#C4500A' }}
               onMouseLeave={e => { e.currentTarget.style.background = '#1a1a18' }}>

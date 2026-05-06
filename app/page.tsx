@@ -485,12 +485,12 @@ export default function HomePage() {
       </div>
 
       {/* Footer */}
-      <div style={{ borderTop: '1px solid rgba(26,26,24,.08)', padding: '2rem 3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
+      <div style={{ borderTop: '1px solid rgba(26,26,24,.08)', padding: '2rem 4rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
         <span style={{ fontFamily: 'Georgia, serif', fontSize: 16, fontWeight: 800, color: 'rgba(26,26,24,.4)' }}>
           Campus<em style={{ color: '#C4500A', fontStyle: 'normal' }}>We</em>
         </span>
-        <div style={{ display: 'flex', gap: 24 }}>
-          {[['Kurslar', '/kurslar'], ['Fiyatlandırma', '/fiyatlandirma'], ['Kurumsal', '/kurumsal'], ['Kayıt ol', '/auth/register']].map(([label, href]) => (
+        <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap' }}>
+          {[['Kurslar', '/kurslar'], ['Fiyatlandırma', '/fiyatlandirma'], ['Kurumsal', '/kurumsal'], ['Kayıt ol', '/auth/register'], ['Gizlilik', '/gizlilik'], ['Kullanım Koşulları', '/kullanim-kosullari'], ['Çerez', '/cerez']].map(([label, href]) => (
             <a key={href} href={href} style={{ fontSize: 13, color: 'rgba(26,26,24,.35)', textDecoration: 'none' }}>{label}</a>
           ))}
         </div>
