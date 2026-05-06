@@ -8,6 +8,9 @@ export default async function NewMessagePage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/auth/login')
 
+  const { data: profile } = await supabase
+    .from('profiles').select('id, full_name, avatar_url, role, karma_tokens').eq('id', user.id).single()
+
   const { data: profiles } = await supabase
     .from('profiles')
     .select('id, full_name, username, avatar_url, university')
@@ -15,7 +18,7 @@ export default async function NewMessagePage() {
     .order('full_name')
 
   return (
-    <AppLayout user={user}>
+    <AppLayout user={user} profile={profile}>
       <main className="px-8 py-10 max-w-xl">
         <div className="mb-6">
           <p className="mono text-xs text-ink/35 tracking-widest mb-1">YENİ MESAJ</p>

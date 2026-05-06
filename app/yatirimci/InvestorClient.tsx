@@ -181,7 +181,7 @@ export default function InvestorClient({ userId, profile, investorProfile, start
                     </div>
                     <div className="flex items-center gap-1.5">
                       <span className="mono text-xs text-ink/30">{startup.startup_updates?.length || 0} güncelleme</span>
-                      <Link href={`/mesajlar/yeni`} className="text-ink/25 hover:text-brand transition-colors">
+                      <Link href="/mesajlar" className="text-ink/25 hover:text-brand transition-colors">
                         <MessageCircle size={13} />
                       </Link>
                     </div>
@@ -221,7 +221,7 @@ export default function InvestorClient({ userId, profile, investorProfile, start
                   )}
                   <div className="flex items-center gap-2">
                     <span className={`mono text-xs border rounded px-1.5 py-0.5 ${stageColors[fav.startup?.stage] || ''}`}>{fav.startup?.stage}</span>
-                    <Link href="/mesajlar/yeni" className="ml-auto text-xs text-brand hover:underline flex items-center gap-1">
+                    <Link href="/mesajlar" className="ml-auto text-xs text-brand hover:underline flex items-center gap-1">
                       <MessageCircle size={11} /> İletişime geç
                     </Link>
                   </div>

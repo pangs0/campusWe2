@@ -171,7 +171,7 @@ export default function CompanyClient({ userId, profile, companyProfile, talents
                     className="flex-1 text-xs text-center py-1.5 border border-neutral-200 rounded-lg hover:border-brand/30 hover:bg-brand/3 transition-colors text-ink/55">
                     {pipeline.find(p => p.id === talent.id) ? '✓ Pipeline\'da' : '+ Pipeline'}
                   </button>
-                  <Link href="/mesajlar/yeni" className="flex items-center justify-center gap-1 px-3 py-1.5 border border-neutral-200 rounded-lg hover:border-brand/30 transition-colors text-ink/40 hover:text-brand">
+                  <Link href="/mesajlar" className="flex items-center justify-center gap-1 px-3 py-1.5 border border-neutral-200 rounded-lg hover:border-brand/30 transition-colors text-ink/40 hover:text-brand">
                     <MessageCircle size={12} />
                   </Link>
                 </div>
