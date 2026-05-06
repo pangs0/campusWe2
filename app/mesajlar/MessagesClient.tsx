@@ -52,6 +52,8 @@ export default function MessagesClient({ currentUserId, initialConversations, al
         event: 'INSERT', schema: 'public', table: 'messages',
         filter: `conversation_id=eq.${selectedConv.id}`
       }, async (payload) => {
+        // Kendi gönderdiğimiz mesajı tekrar ekleme
+        if (payload.new.sender_id === currentUserId) return
         const { data } = await supabase
           .from('messages').select('*, sender:profiles(full_name, avatar_url)')
           .eq('id', payload.new.id).single()
@@ -79,19 +81,36 @@ export default function MessagesClient({ currentUserId, initialConversations, al
     e.preventDefault()
     if (!newMsg.trim() || !selectedConv) return
     setSending(true)
+    const msgContent = newMsg.trim()
+    setNewMsg('')
 
-    await supabase.from('messages').insert({
+    // Optimistic — hemen ekranda göster
+    const tempMsg = {
+      id: 'temp-' + Date.now(),
       conversation_id: selectedConv.id,
       sender_id: currentUserId,
-      content: newMsg.trim(),
-    })
+      content: msgContent,
+      created_at: new Date().toISOString(),
+      sender: { full_name: 'Sen', avatar_url: null },
+    }
+    setMessages(prev => [...prev, tempMsg])
+
+    // Veritabanına kaydet
+    const { data: savedMsg } = await supabase.from('messages')
+      .insert({ conversation_id: selectedConv.id, sender_id: currentUserId, content: msgContent })
+      .select('*, sender:profiles(full_name, avatar_url)').single()
+
+    // Temp mesajı gerçekle değiştir
+    if (savedMsg) {
+      setMessages(prev => prev.map(m => m.id === tempMsg.id ? savedMsg : m))
+    }
 
     await supabase.from('conversations').update({
-      last_message: newMsg.trim(),
+      last_message: msgContent,
       last_message_at: new Date().toISOString(),
     }).eq('id', selectedConv.id)
 
-    // Karşı tarafa bildirim gönder
+    // Karşı tarafa bildirim
     const other = selectedConv.participant1_id === currentUserId
       ? selectedConv.participant2
       : selectedConv.participant1
@@ -101,19 +120,17 @@ export default function MessagesClient({ currentUserId, initialConversations, al
         user_id: other.id,
         sender_id: currentUserId,
         type: 'message',
-        content: `Yeni bir mesaj aldın.`,
+        content: `Sana yeni bir mesaj gönderdi.`,
         link: '/mesajlar',
       })
     }
 
-    // Konuşma listesini güncelle
     setConversations(prev => prev.map(c =>
       c.id === selectedConv.id
-        ? { ...c, last_message: newMsg.trim(), last_message_at: new Date().toISOString() }
+        ? { ...c, last_message: msgContent, last_message_at: new Date().toISOString() }
         : c
     ))
 
-    setNewMsg('')
     setSending(false)
   }
 
