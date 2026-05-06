@@ -155,28 +155,71 @@ export default function HomePage() {
         </div>
       </nav>
 
-      {/* Hero */}
-      <div style={{ maxWidth: '100%', padding: '6rem 8rem 4rem', textAlign: 'center', opacity: visible ? 1 : 0, transition: 'opacity 0.6s' }}>
-        <div className="fade-up" style={{ animationDelay: '0.1s' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(196,80,10,.08)', border: '1px solid rgba(196,80,10,.2)', borderRadius: 999, padding: '5px 14px', marginBottom: '2rem' }}>
-            <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#C4500A' }} />
-            <span style={{ fontSize: 11, color: '#C4500A', letterSpacing: 2, textTransform: 'uppercase', fontFamily: 'monospace' }}>Türkiye'nin Girişimci Platformu</span>
+      {/* Hero — Editorial Grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', borderBottom: '1px solid rgba(26,26,24,.1)', opacity: visible ? 1 : 0, transition: 'opacity 0.8s' }}>
+        {/* Sol — Metin */}
+        <div className="fade-up" style={{ padding: '5rem 4rem 4rem 8rem', borderRight: '1px solid rgba(26,26,24,.1)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: 560 }}>
+          <div>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(196,80,10,.08)', border: '1px solid rgba(196,80,10,.2)', borderRadius: 999, padding: '5px 14px', marginBottom: '2rem' }}>
+              <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#C4500A' }} />
+              <span style={{ fontSize: 10, color: '#C4500A', letterSpacing: 2, textTransform: 'uppercase', fontFamily: 'monospace' }}>Türkiye'nin Girişimci Platformu</span>
+            </div>
+            <h1 style={{ fontFamily: 'Georgia, serif', fontSize: 56, fontWeight: 800, color: '#1a1a18', letterSpacing: -2.5, lineHeight: 1.05, margin: '0 0 1.5rem' }}>
+              Eksikliği olan<br />
+              girişimcilerin<br />
+              <em style={{ color: '#C4500A', fontStyle: 'normal' }}>birbirini bulduğu</em><br />
+              platform.
+            </h1>
+            <p style={{ fontSize: 16, color: 'rgba(26,26,24,.5)', maxWidth: 420, lineHeight: 1.75, margin: '0 0 2.5rem' }}>
+              Co-founder bul, yatırımcıyla tanış, kurs oluştur, kazan. Startup yolculuğunda ihtiyacın olan her şey burada.
+            </p>
+            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+              <a href="/auth/register" className="cta-btn" style={{ background: '#1a1a18', color: 'white', padding: '14px 32px', borderRadius: 8, fontSize: 14, textDecoration: 'none', fontWeight: 600, display: 'inline-block' }}>
+                Ücretsiz başla
+              </a>
+              <a href="/fiyatlandirma" className="cta-btn" style={{ background: 'transparent', color: '#1a1a18', padding: '14px 32px', borderRadius: 8, fontSize: 14, textDecoration: 'none', fontWeight: 500, border: '1px solid rgba(26,26,24,.2)', display: 'inline-block' }}>
+                Fiyatlandırma →
+              </a>
+            </div>
           </div>
-          <h1 style={{ fontFamily: 'Georgia, serif', fontSize: 64, fontWeight: 800, color: '#1a1a18', letterSpacing: -3, lineHeight: 1.05, margin: '0 0 1.5rem' }}>
-            Eksikliği olan girişimcilerin<br />
-            <em style={{ color: '#C4500A', fontStyle: 'normal' }}>birbirini bulduğu</em> platform.
-          </h1>
-          <p style={{ fontSize: 18, color: 'rgba(26,26,24,.5)', maxWidth: 560, margin: '0 auto 2.5rem', lineHeight: 1.7 }}>
-            Co-founder bul, yatırımcıyla tanış, kurs oluştur, kazan. Startup yolculuğunda ihtiyacın olan her şey burada.
-          </p>
-          <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <a href="/auth/register" className="cta-btn" style={{ background: '#1a1a18', color: 'white', padding: '14px 36px', borderRadius: 8, fontSize: 15, textDecoration: 'none', fontWeight: 600, letterSpacing: -0.3, display: 'inline-block' }}>
-              Ücretsiz başla
-            </a>
-            <a href="/fiyatlandirma" className="cta-btn" style={{ background: 'white', color: '#1a1a18', padding: '14px 36px', borderRadius: 8, fontSize: 15, textDecoration: 'none', fontWeight: 500, border: '1px solid rgba(26,26,24,.15)', display: 'inline-block' }}>
-              Fiyatlandırma →
-            </a>
+          <div style={{ display: 'flex', gap: 32, marginTop: '3rem', paddingTop: '2rem', borderTop: '1px solid rgba(26,26,24,.08)' }}>
+            {[
+              { n: '12K+', l: 'Girişimci' },
+              { n: '340+', l: 'Üniversite' },
+              { n: '86+', l: 'Demo Day' },
+            ].map((s, i) => (
+              <div key={i}>
+                <p style={{ fontFamily: 'Georgia, serif', fontSize: 24, fontWeight: 800, color: '#C4500A', margin: 0 }}>{s.n}</p>
+                <p style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(26,26,24,.4)', margin: '2px 0 0', letterSpacing: 1 }}>{s.l}</p>
+              </div>
+            ))}
           </div>
+        </div>
+
+        {/* Sağ — Özellik kartları grid */}
+        <div className="fade-up" style={{ animationDelay: '0.2s', display: 'grid', gridTemplateColumns: '1fr 1fr', borderLeft: '0' }}>
+          {[
+            { emoji: '🚀', title: 'Startup Sayfası', desc: 'Fikrini yayınla, güncellemelerini paylaş.' },
+            { emoji: '🤝', title: 'Co-founder', desc: 'Tamamlayıcı yeteneklerle ekip kur.' },
+            { emoji: '💼', title: 'Yatırımcı Ağı', desc: 'Demo Day\'de pitch yap, fon bul.' },
+            { emoji: '🎓', title: 'Kurs Sistemi', desc: 'Öğret ve kazanç elde et.' },
+            { emoji: '⚡', title: 'Karma Token', desc: 'Katkına göre puan kazan.' },
+            { emoji: '🏗️', title: 'Çalışma Alanı', desc: 'Uzaktan ekiple birlikte çalış.' },
+          ].map((f, i) => (
+            <div key={i} style={{
+              padding: '2rem',
+              borderRight: i % 2 === 0 ? '1px solid rgba(26,26,24,.08)' : 'none',
+              borderBottom: i < 4 ? '1px solid rgba(26,26,24,.08)' : 'none',
+              transition: 'background 0.2s',
+            }}
+              onMouseEnter={e => (e.currentTarget.style.background = 'rgba(196,80,10,.03)')}
+              onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+            >
+              <span style={{ fontSize: 28, display: 'block', marginBottom: 10 }}>{f.emoji}</span>
+              <p style={{ fontFamily: 'Georgia, serif', fontSize: 15, fontWeight: 700, color: '#1a1a18', margin: '0 0 5px' }}>{f.title}</p>
+              <p style={{ fontSize: 12, color: 'rgba(26,26,24,.45)', margin: 0, lineHeight: 1.6 }}>{f.desc}</p>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -312,6 +355,87 @@ export default function HomePage() {
                 <p style={{ fontSize: 13, color: 'rgba(26,26,24,.5)', margin: 0, lineHeight: 1.6 }}>{step.desc}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Büyük tipografi motivasyon */}
+      <div style={{ padding: '6rem 8rem', borderTop: '1px solid rgba(26,26,24,.08)', borderBottom: '1px solid rgba(26,26,24,.08)' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', alignItems: 'center' }}>
+          <div>
+            <p style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(26,26,24,.35)', letterSpacing: 3, textTransform: 'uppercase', marginBottom: '1.5rem' }}>NEDEN CAMPUSWE</p>
+            <h2 style={{ fontFamily: 'Georgia, serif', fontSize: 48, fontWeight: 800, color: '#1a1a18', letterSpacing: -2, lineHeight: 1.1, margin: '0 0 1.5rem' }}>
+              Yalnız başarı<br />
+              <em style={{ color: '#C4500A', fontStyle: 'normal' }}>bir mit.</em>
+            </h2>
+            <p style={{ fontSize: 15, color: 'rgba(26,26,24,.55)', lineHeight: 1.8, maxWidth: 420 }}>
+              Dünyanın en başarılı startupları bir gün ekip olarak kurulmadı. Farklı yeteneklerin birbirini bulmasıyla doğdu. Apple'da Jobs ve Wozniak. Microsoft'ta Gates ve Allen.
+            </p>
+            <p style={{ fontSize: 15, color: 'rgba(26,26,24,.55)', lineHeight: 1.8, maxWidth: 420, marginTop: '1rem' }}>
+              Senin hikayenin de böyle başlayabilir.
+            </p>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            {[
+              { n: '73%', text: 'başarılı startupların birden fazla kurucusu var' },
+              { n: '2x', text: 'co-founder olan startuplar yalnız kurulanlara göre 2 kat hızlı büyüyor' },
+              { n: '36%', text: 'girişimciler en büyük zorluğun doğru ekibi bulmak olduğunu söylüyor' },
+            ].map((s, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 20, background: 'white', border: '1px solid rgba(26,26,24,.08)', borderRadius: 12, padding: '1.25rem 1.5rem' }}>
+                <p style={{ fontFamily: 'Georgia, serif', fontSize: 36, fontWeight: 800, color: '#C4500A', margin: 0, flexShrink: 0, letterSpacing: -1 }}>{s.n}</p>
+                <p style={{ fontSize: 13, color: 'rgba(26,26,24,.6)', margin: 0, lineHeight: 1.6 }}>{s.text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Topluluktan bu hafta */}
+      <div style={{ padding: '5rem 8rem', background: 'rgba(196,80,10,.02)', borderBottom: '1px solid rgba(26,26,24,.08)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2.5rem' }}>
+          <div>
+            <p style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(26,26,24,.35)', letterSpacing: 3, textTransform: 'uppercase', marginBottom: '0.5rem' }}>TOPLULUKTAN BU HAFTA</p>
+            <h2 style={{ fontFamily: 'Georgia, serif', fontSize: 28, fontWeight: 700, color: '#1a1a18', margin: 0, letterSpacing: -1 }}>Gerçek insanlar, gerçek anlar.</h2>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(196,80,10,.08)', border: '1px solid rgba(196,80,10,.2)', borderRadius: 999, padding: '6px 14px' }}>
+            <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#C4500A' }} />
+            <span style={{ fontSize: 11, color: '#C4500A', fontFamily: 'monospace', letterSpacing: 1 }}>CANLI</span>
+          </div>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
+          {[
+            { emoji: '🤝', text: '3 co-founder eşleşmesi gerçekleşti', time: '2 sa önce' },
+            { emoji: '🚀', text: 'Yeni bir startup sayfası yayınlandı', time: '4 sa önce' },
+            { emoji: '☕', text: '12 kişi Kahve Molası\'nda tanıştı', time: 'Dün' },
+            { emoji: '🎓', text: 'Yeni bir kurs topluluğa eklendi', time: 'Dün' },
+            { emoji: '💰', text: 'Demo Day başvurusu kabul edildi', time: '2 gün önce' },
+            { emoji: '⚡', text: '840 Karma Token takas edildi', time: '2 gün önce' },
+            { emoji: '🏗️', text: 'Yeni çalışma alanı kuruldu', time: '3 gün önce' },
+            { emoji: '📅', text: 'Hackathon etkinliği oluşturuldu', time: '3 gün önce' },
+          ].map((item, i) => (
+            <div key={i} className="feature-card" style={{ background: 'white', border: '1px solid rgba(26,26,24,.08)', borderRadius: 10, padding: '1rem 1.25rem', display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+              <span style={{ fontSize: 20, flexShrink: 0 }}>{item.emoji}</span>
+              <div>
+                <p style={{ fontSize: 12, color: 'rgba(26,26,24,.7)', margin: '0 0 4px', lineHeight: 1.5 }}>{item.text}</p>
+                <p style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(26,26,24,.3)', margin: 0 }}>{item.time}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Paul Graham alıntısı */}
+      <div style={{ background: '#1a1a18', padding: '5rem 8rem' }}>
+        <div style={{ maxWidth: 720 }}>
+          <p style={{ fontFamily: 'Georgia, serif', fontSize: 40, fontWeight: 700, color: 'white', lineHeight: 1.3, letterSpacing: -1.5, margin: '0 0 2rem' }}>
+            "Eğer hâlâ doğru ekibi arıyorsan, aramayı bırakma. En iyi kariyerler, doğru insanlarla bir odada oturmakla başlar."
+          </p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{ width: 3, height: 36, background: '#C4500A', borderRadius: 2 }} />
+            <div>
+              <p style={{ fontSize: 14, fontWeight: 600, color: 'rgba(255,255,255,.7)', margin: 0 }}>Paul Graham</p>
+              <p style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(255,255,255,.3)', margin: 0, letterSpacing: 1 }}>Y COMBINATOR KURUCUSU</p>
+            </div>
           </div>
         </div>
       </div>
