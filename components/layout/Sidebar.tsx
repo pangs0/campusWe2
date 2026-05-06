@@ -7,7 +7,7 @@ import {
   LayoutDashboard, Globe, Compass, Home, Coffee,
   ArrowLeftRight, Clock, Star, BookOpen, User, LogOut,
   Rss, MessageCircle, Users, Library, Settings,
-  TrendingUp, Building2, Heart, Briefcase, CalendarDays, Rocket
+  TrendingUp, Building2, Heart, Briefcase, CalendarDays, GraduationCap
 } from 'lucide-react'
 import NotificationBell from '@/components/layout/NotificationBell'
 
@@ -47,6 +47,7 @@ const FOUNDER_NAV = [
       { href: '/sirketler', label: 'Şirketler', icon: Building2 },
       { href: '/kaynaklar', label: 'Kaynaklar', icon: Library },
       { href: '/kutuphane', label: 'Kütüphane', icon: BookOpen },
+      { href: '/kurslar', label: 'Kurslar', icon: GraduationCap },
     ]
   },
 ]
