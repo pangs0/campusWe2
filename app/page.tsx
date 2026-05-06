@@ -129,8 +129,8 @@ export default function HomePage() {
         .role-btn:hover { transform: translateY(-1px); }
         .cta-btn { transition: all 0.2s; }
         .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(196,80,10,.3); }
-        .step-card { transition: all 0.2s; }
-        .step-card:hover { background: white; box-shadow: 0 4px 16px rgba(26,26,24,.06); }
+        .step-card { transition: all 0.2s; border-radius: 12px; border: 1px solid transparent; }
+        .step-card:hover { background: rgba(196,80,10,.08); border-color: rgba(196,80,10,.2); transform: translateY(-3px); }
         .testimonial-card { transition: all 0.2s; }
         .testimonial-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(26,26,24,.08); }
         .earn-card { transition: all 0.2s; }
@@ -349,7 +349,7 @@ export default function HomePage() {
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 0 }}>
             {HOW_IT_WORKS.map((step, i) => (
-              <div key={i} style={{ textAlign: 'center', padding: '2rem', borderRight: i < 2 ? '1px solid rgba(26,26,24,.08)' : 'none' }}>
+              <div key={i} className="step-card" style={{ textAlign: 'center', padding: '2rem', borderRight: i < 2 ? '1px solid rgba(26,26,24,.08)' : 'none' }}>
                 <div style={{ fontFamily: 'Georgia, serif', fontSize: 48, fontWeight: 800, color: 'rgba(26,26,24,.08)', margin: '0 0 1rem', letterSpacing: -2 }}>{step.n}</div>
                 <h3 style={{ fontFamily: 'Georgia, serif', fontSize: 18, fontWeight: 700, color: '#1a1a18', margin: '0 0 8px' }}>{step.title}</h3>
                 <p style={{ fontSize: 13, color: 'rgba(26,26,24,.5)', margin: 0, lineHeight: 1.6 }}>{step.desc}</p>
