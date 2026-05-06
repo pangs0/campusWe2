@@ -290,10 +290,10 @@ export default function KurumsalPage() {
               12.000'den fazla üniversiteli girişimci ve yetenekli profil. Demo Day'e sponsor ol, markalı kuluçka katı aç, doğru insanları bul.
             </p>
             <div style={{ display: 'flex', gap: 12 }}>
-              <button onClick={() => document.getElementById('basvuru')?.scrollIntoView({behavior:'smooth'})} className="cta-btn" style={{ background: '#C4500A', color: 'white', padding: '13px 28px', borderRadius: 8, fontSize: 14, fontWeight: 600, border: 'none', cursor: 'pointer' }}>
+              <button onClick={() => { const el = document.getElementById('basvuru'); if(el) window.scrollTo({top: el.offsetTop - 80, behavior: 'smooth'}) }} className="cta-btn" style={{ background: '#C4500A', color: 'white', padding: '13px 28px', borderRadius: 8, fontSize: 14, fontWeight: 600, border: 'none', cursor: 'pointer' }}>
                 Başvuru yap →
               </button>
-              <button onClick={() => document.getElementById('paketler')?.scrollIntoView({behavior:'smooth'})} className="cta-btn" style={{ background: 'white', color: '#1a1a18', padding: '13px 28px', borderRadius: 8, fontSize: 14, fontWeight: 500, border: '1px solid rgba(26,26,24,.15)', cursor: 'pointer' }}>
+              <button onClick={() => { const el = document.getElementById('paketler'); if(el) window.scrollTo({top: el.offsetTop - 80, behavior: 'smooth'}) }} className="cta-btn" style={{ background: 'white', color: '#1a1a18', padding: '13px 28px', borderRadius: 8, fontSize: 14, fontWeight: 500, border: '1px solid rgba(26,26,24,.15)', cursor: 'pointer' }}>
                 Paketleri gör
               </button>
             </div>
@@ -397,7 +397,7 @@ export default function KurumsalPage() {
                   </div>
                 ))}
               </div>
-              <button onClick={() => document.getElementById('basvuru')?.scrollIntoView({behavior:'smooth'})} className="cta-btn" style={{ display: 'block', width: '100%', textAlign: 'center', padding: '12px', borderRadius: 8, background: pkg.featured ? '#C4500A' : 'transparent', color: pkg.featured ? 'white' : pkg.color, fontSize: 14, fontWeight: 500, border: pkg.featured ? 'none' : `1.5px solid ${pkg.color}`, cursor: 'pointer' }}>
+              <button onClick={() => { const el = document.getElementById('basvuru'); if(el) window.scrollTo({top: el.offsetTop - 80, behavior: 'smooth'}) }} className="cta-btn" style={{ display: 'block', width: '100%', textAlign: 'center', padding: '12px', borderRadius: 8, background: pkg.featured ? '#C4500A' : 'transparent', color: pkg.featured ? 'white' : pkg.color, fontSize: 14, fontWeight: 500, border: pkg.featured ? 'none' : `1.5px solid ${pkg.color}`, cursor: 'pointer' }}>
                 Hemen başvur →
               </button>
             </div>
@@ -478,7 +478,7 @@ export default function KurumsalPage() {
             <div style={{ padding: '1.5rem' }} />
             {['Starter', 'Growth', 'Enterprise'].map((p, i) => (
               <div key={i} style={{ padding: '1.25rem 1rem', textAlign: 'center', background: i === 1 ? '#1a1a18' : 'transparent', borderLeft: '1px solid rgba(26,26,24,.08)' }}>
-                <button onClick={() => document.getElementById('basvuru')?.scrollIntoView({behavior:'smooth'})} className="cta-btn"
+                <button onClick={() => { const el = document.getElementById('basvuru'); if(el) window.scrollTo({top: el.offsetTop - 80, behavior: 'smooth'}) }} className="cta-btn"
                   style={{ background: i === 1 ? '#C4500A' : 'transparent', color: i === 1 ? 'white' : '#C4500A', padding: '8px 16px', borderRadius: 6, border: i === 1 ? 'none' : '1px solid #C4500A', fontSize: 12, fontWeight: 500, cursor: 'pointer', width: '100%' }}>
                   Başvur →
                 </button>
@@ -541,11 +541,11 @@ export default function KurumsalPage() {
             </p>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-            <button onClick={() => document.getElementById('basvuru')?.scrollIntoView({behavior:'smooth'})} className="cta-btn"
+            <button onClick={() => { const el = document.getElementById('basvuru'); if(el) window.scrollTo({top: el.offsetTop - 80, behavior: 'smooth'}) }} className="cta-btn"
               style={{ background: '#C4500A', color: 'white', padding: '15px 32px', borderRadius: 8, border: 'none', fontSize: 15, fontWeight: 600, cursor: 'pointer', textAlign: 'center' }}>
               Demo talep et →
             </button>
-            <button onClick={() => document.getElementById('basvuru')?.scrollIntoView({behavior:'smooth'})} className="cta-btn"
+            <button onClick={() => { const el = document.getElementById('basvuru'); if(el) window.scrollTo({top: el.offsetTop - 80, behavior: 'smooth'}) }} className="cta-btn"
               style={{ background: 'white', color: '#1a1a18', padding: '15px 32px', borderRadius: 8, border: '1px solid rgba(26,26,24,.15)', fontSize: 15, fontWeight: 500, cursor: 'pointer', textAlign: 'center' }}>
               Teklif al
             </button>
