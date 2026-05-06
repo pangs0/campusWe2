@@ -320,7 +320,7 @@ export default function KurumsalPage() {
       </div>
 
       {/* Faydalar */}
-      <div ref={benefits.ref} className={`scroll-fade ${benefits.visible ? 'shown' : 'hidden'}`}
+      <div ref={benefits.ref}
         style={{ padding: '5rem 4rem' }}>
         <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
           <p style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(26,26,24,.35)', letterSpacing: 3, textTransform: 'uppercase', marginBottom: '0.75rem' }}>NEDEN CAMPUSWE</p>
@@ -346,7 +346,7 @@ export default function KurumsalPage() {
       </div>
 
       {/* Nasıl çalışır */}
-      <div ref={howIt.ref} className={`scroll-fade ${howIt.visible ? 'shown' : 'hidden'}`}
+      <div ref={howIt.ref}
         style={{ background: '#1a1a18', padding: '5rem 4rem' }}>
         <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
           <p style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(255,255,255,.25)', letterSpacing: 3, textTransform: 'uppercase', marginBottom: '0.75rem' }}>NASIL ÇALIŞIR</p>
@@ -371,7 +371,7 @@ export default function KurumsalPage() {
       </div>
 
       {/* Paketler */}
-      <div id="paketler" ref={packages.ref} className={`scroll-fade ${packages.visible ? 'shown' : 'hidden'}`}
+      <div id="paketler" ref={packages.ref}
         style={{ padding: '5rem 4rem' }}>
         <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
           <p style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(26,26,24,.35)', letterSpacing: 3, textTransform: 'uppercase', marginBottom: '0.75rem' }}>PAKETLER</p>
@@ -557,7 +557,7 @@ export default function KurumsalPage() {
       </div>
 
       {/* Başvuru Formu */}
-      <div id="basvuru" ref={formSection.ref} className={`scroll-fade ${formSection.visible ? 'shown' : 'hidden'}`}
+      <div id="basvuru" ref={formSection.ref}
         style={{ background: '#1a1a18', padding: '5rem 4rem' }}>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', alignItems: 'start' }}>
           <div>
