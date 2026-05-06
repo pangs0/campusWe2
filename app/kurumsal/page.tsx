@@ -244,8 +244,8 @@ export default function KurumsalPage() {
         .nav-link.active::after { width: 100%; }
         .cta-btn { transition: all 0.2s; }
         .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(196,80,10,.25); }
-        .step-card { transition: all 0.2s; }
-        .step-card:hover { background: white; box-shadow: 0 4px 16px rgba(26,26,24,.06); }
+        .step-card { transition: all 0.2s; border-radius: 12px; border: 1px solid transparent; }
+        .step-card:hover { background: rgba(196,80,10,.08) !important; border-color: rgba(196,80,10,.2); transform: translateY(-3px); }
         .pkg-card { transition: transform 0.2s, box-shadow 0.2s; }
         .pkg-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(26,26,24,.12); }
         .testimonial-card { transition: all 0.2s; }
