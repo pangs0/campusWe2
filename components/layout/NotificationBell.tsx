@@ -13,6 +13,7 @@ export default function NotificationBell({ userId }: { userId: string }) {
 
   useEffect(() => {
     if (!userId) return
+    console.log('NotificationBell userId:', userId)
     loadNotifications()
 
     // Her 5 saniyede kontrol et
