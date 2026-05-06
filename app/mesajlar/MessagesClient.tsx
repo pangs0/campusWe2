@@ -23,6 +23,26 @@ export default function MessagesClient({ currentUserId, initialConversations, al
   const bottomRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    // Konuşma listesini realtime dinle
+    const convChannel = supabase
+      .channel('conversations-list')
+      .on('postgres_changes', {
+        event: 'UPDATE', schema: 'public', table: 'conversations',
+      }, async (payload) => {
+        const updatedId = payload.new.id
+        if (conversations.find(c => c.id === updatedId)) {
+          setConversations(prev => prev.map(c =>
+            c.id === updatedId
+              ? { ...c, last_message: payload.new.last_message, last_message_at: payload.new.last_message_at }
+              : c
+          ).sort((a, b) => new Date(b.last_message_at).getTime() - new Date(a.last_message_at).getTime()))
+        }
+      })
+      .subscribe()
+    return () => { supabase.removeChannel(convChannel) }
+  }, [conversations])
+
+  useEffect(() => {
     if (!selectedConv) return
     loadMessages(selectedConv.id)
 
@@ -59,15 +79,40 @@ export default function MessagesClient({ currentUserId, initialConversations, al
     e.preventDefault()
     if (!newMsg.trim() || !selectedConv) return
     setSending(true)
+
     await supabase.from('messages').insert({
       conversation_id: selectedConv.id,
       sender_id: currentUserId,
       content: newMsg.trim(),
     })
+
     await supabase.from('conversations').update({
       last_message: newMsg.trim(),
       last_message_at: new Date().toISOString(),
     }).eq('id', selectedConv.id)
+
+    // Karşı tarafa bildirim gönder
+    const other = selectedConv.participant1_id === currentUserId
+      ? selectedConv.participant2
+      : selectedConv.participant1
+
+    if (other?.id) {
+      await supabase.from('notifications').insert({
+        user_id: other.id,
+        sender_id: currentUserId,
+        type: 'message',
+        content: `Yeni bir mesaj aldın.`,
+        link: '/mesajlar',
+      })
+    }
+
+    // Konuşma listesini güncelle
+    setConversations(prev => prev.map(c =>
+      c.id === selectedConv.id
+        ? { ...c, last_message: newMsg.trim(), last_message_at: new Date().toISOString() }
+        : c
+    ))
+
     setNewMsg('')
     setSending(false)
   }
