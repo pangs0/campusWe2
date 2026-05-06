@@ -7,7 +7,11 @@ type AppLayoutProps = {
 }
 
 export default function AppLayout({ children, user, profile }: AppLayoutProps) {
-  const sidebarUser = profile ? { ...user, ...profile } : user
+  const sidebarUser = {
+    ...user,
+    ...profile,
+    id: user?.id || profile?.id,
+  }
 
   return (
     <div className="flex min-h-screen bg-cream">
