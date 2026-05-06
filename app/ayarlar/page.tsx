@@ -69,7 +69,7 @@ export default async function AyarlarPage() {
   const completionPercent = Math.round((Object.values(completion).filter(Boolean).length / 5) * 100)
 
   return (
-    <AppLayout user={user}>
+    <AppLayout user={user} profile={profile}>
       <main className="px-8 py-10">
         <div className="mb-8">
           <p className="mono text-xs text-ink/35 tracking-widest mb-1">AYARLAR</p>
