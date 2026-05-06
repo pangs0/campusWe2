@@ -116,11 +116,27 @@ export default function HomePage() {
   return (
     <div style={{ background: '#F5F0E8', minHeight: '100vh', fontFamily: 'Inter, sans-serif', overflowX: 'hidden' }}>
       <style>{`
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideRight { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
         .fade-up { animation: fadeUp 0.7s ease both; }
-        .feature-card { transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s; }
-        .feature-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(26,26,24,.08); border-color: rgba(196,80,10,.25); }
-        .role-btn { transition: all 0.2s; }
+        .fade-in { animation: fadeIn 0.5s ease both; }
+        .slide-right { animation: slideRight 0.6s ease both; }
+        .feature-card { transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s; cursor: default; }
+        .feature-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(26,26,24,.1); border-color: rgba(196,80,10,.3); }
+        .role-btn { transition: all 0.25s; }
+        .role-btn:hover { transform: translateY(-1px); }
+        .cta-btn { transition: all 0.2s; }
+        .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(196,80,10,.3); }
+        .step-card { transition: all 0.2s; }
+        .step-card:hover { background: white; box-shadow: 0 4px 16px rgba(26,26,24,.06); }
+        .testimonial-card { transition: all 0.2s; }
+        .testimonial-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(26,26,24,.08); }
+        .earn-card { transition: all 0.2s; }
+        .earn-card:hover { transform: translateY(-3px); border-color: rgba(196,80,10,.25); box-shadow: 0 8px 24px rgba(26,26,24,.08); }
+        .nav-link { transition: color 0.15s; }
+        .nav-link:hover { color: #1a1a18 !important; }
       `}</style>
 
       {/* Nav */}
@@ -129,10 +145,10 @@ export default function HomePage() {
           Campus<em style={{ color: '#C4500A', fontStyle: 'normal' }}>We</em>
         </span>
         <div style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
-          <a href="/kurslar" style={{ fontSize: 13, color: 'rgba(26,26,24,.5)', textDecoration: 'none' }}>Kurslar</a>
-          <a href="/fiyatlandirma" style={{ fontSize: 13, color: 'rgba(26,26,24,.5)', textDecoration: 'none' }}>Fiyatlandırma</a>
-          <a href="/kurumsal" style={{ fontSize: 13, color: 'rgba(26,26,24,.5)', textDecoration: 'none' }}>Kurumsal</a>
-          <a href="/auth/login" style={{ fontSize: 13, color: 'rgba(26,26,24,.6)', textDecoration: 'none' }}>Giriş yap</a>
+          <a href="/kurslar" className="nav-link" style={{ fontSize: 13, color: 'rgba(26,26,24,.5)', textDecoration: 'none' }}>Kurslar</a>
+          <a href="/fiyatlandirma" className="nav-link" style={{ fontSize: 13, color: 'rgba(26,26,24,.5)', textDecoration: 'none' }}>Fiyatlandırma</a>
+          <a href="/kurumsal" className="nav-link" style={{ fontSize: 13, color: 'rgba(26,26,24,.5)', textDecoration: 'none' }}>Kurumsal</a>
+          <a href="/auth/login" className="nav-link" style={{ fontSize: 13, color: 'rgba(26,26,24,.6)', textDecoration: 'none' }}>Giriş yap</a>
           <a href="/auth/register" style={{ background: '#C4500A', color: '#F5F0E8', padding: '8px 20px', borderRadius: 6, fontSize: 13, textDecoration: 'none', fontWeight: 500 }}>
             Kayıt ol →
           </a>
@@ -140,7 +156,7 @@ export default function HomePage() {
       </nav>
 
       {/* Hero */}
-      <div style={{ maxWidth: 960, margin: '0 auto', padding: '6rem 2rem 4rem', textAlign: 'center', opacity: visible ? 1 : 0, transition: 'opacity 0.6s' }}>
+      <div style={{ maxWidth: '100%', padding: '6rem 8rem 4rem', textAlign: 'center', opacity: visible ? 1 : 0, transition: 'opacity 0.6s' }}>
         <div className="fade-up" style={{ animationDelay: '0.1s' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(196,80,10,.08)', border: '1px solid rgba(196,80,10,.2)', borderRadius: 999, padding: '5px 14px', marginBottom: '2rem' }}>
             <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#C4500A' }} />
@@ -154,10 +170,10 @@ export default function HomePage() {
             Co-founder bul, yatırımcıyla tanış, kurs oluştur, kazan. Startup yolculuğunda ihtiyacın olan her şey burada.
           </p>
           <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <a href="/auth/register" style={{ background: '#1a1a18', color: 'white', padding: '14px 36px', borderRadius: 8, fontSize: 15, textDecoration: 'none', fontWeight: 600, letterSpacing: -0.3 }}>
+            <a href="/auth/register" className="cta-btn" style={{ background: '#1a1a18', color: 'white', padding: '14px 36px', borderRadius: 8, fontSize: 15, textDecoration: 'none', fontWeight: 600, letterSpacing: -0.3, display: 'inline-block' }}>
               Ücretsiz başla
             </a>
-            <a href="/fiyatlandirma" style={{ background: 'white', color: '#1a1a18', padding: '14px 36px', borderRadius: 8, fontSize: 15, textDecoration: 'none', fontWeight: 500, border: '1px solid rgba(26,26,24,.15)' }}>
+            <a href="/fiyatlandirma" className="cta-btn" style={{ background: 'white', color: '#1a1a18', padding: '14px 36px', borderRadius: 8, fontSize: 15, textDecoration: 'none', fontWeight: 500, border: '1px solid rgba(26,26,24,.15)', display: 'inline-block' }}>
               Fiyatlandırma →
             </a>
           </div>
@@ -182,7 +198,7 @@ export default function HomePage() {
       </div>
 
       {/* Roller */}
-      <div style={{ maxWidth: 960, margin: '0 auto', padding: '5rem 2rem' }}>
+      <div style={{ maxWidth: '100%', padding: '5rem 8rem' }}>
         <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
           <p style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(26,26,24,.35)', letterSpacing: 3, textTransform: 'uppercase', marginBottom: '0.75rem' }}>HERKESİN BİR YERİ VAR</p>
           <h2 style={{ fontFamily: 'Georgia, serif', fontSize: 36, fontWeight: 800, color: '#1a1a18', margin: 0, letterSpacing: -1.5 }}>Sen kimsin?</h2>
@@ -251,7 +267,7 @@ export default function HomePage() {
       </div>
 
       {/* Para kazanma modeli */}
-      <div style={{ maxWidth: 960, margin: '0 auto', padding: '5rem 2rem' }}>
+      <div style={{ maxWidth: '100%', padding: '5rem 8rem' }}>
         <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
           <p style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(26,26,24,.35)', letterSpacing: 3, textTransform: 'uppercase', marginBottom: '0.75rem' }}>KAZANÇ MODELİ</p>
           <h2 style={{ fontFamily: 'Georgia, serif', fontSize: 36, fontWeight: 800, color: '#1a1a18', margin: 0, letterSpacing: -1.5 }}>
@@ -267,7 +283,7 @@ export default function HomePage() {
             { emoji: '⚡', title: 'Pro\'ya geç', desc: 'Sınırsız takas, öncelikli Demo Day, yatırımcı mesajı. Aylık ₺99.', cta: 'Pro\'ya geç', href: '/pro/upgrade' },
             { emoji: '🏢', title: 'Kurumsal ortak ol', desc: 'Markalı kuluçka katı aç, yetenek keşfet, Demo Day sponsoru ol.', cta: 'İletişime geç', href: '/kurumsal' },
           ].map((item, i) => (
-            <div key={i} style={{ background: 'white', border: '1px solid rgba(26,26,24,.1)', borderRadius: 16, padding: '2rem', display: 'flex', flexDirection: 'column' }}>
+            <div key={i} className="earn-card" style={{ background: 'white', border: '1px solid rgba(26,26,24,.1)', borderRadius: 16, padding: '2rem', display: 'flex', flexDirection: 'column' }}>
               <span style={{ fontSize: 32, marginBottom: 12 }}>{item.emoji}</span>
               <h3 style={{ fontFamily: 'Georgia, serif', fontSize: 20, fontWeight: 700, color: '#1a1a18', margin: '0 0 8px' }}>{item.title}</h3>
               <p style={{ fontSize: 13, color: 'rgba(26,26,24,.55)', lineHeight: 1.7, flex: 1, margin: '0 0 1.5rem' }}>{item.desc}</p>
@@ -301,7 +317,7 @@ export default function HomePage() {
       </div>
 
       {/* Testimonials */}
-      <div style={{ maxWidth: 960, margin: '0 auto', padding: '5rem 2rem' }}>
+      <div style={{ maxWidth: '100%', padding: '5rem 8rem' }}>
         <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
           <p style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(26,26,24,.35)', letterSpacing: 3, textTransform: 'uppercase', marginBottom: '0.75rem' }}>BAŞARI HİKAYELERİ</p>
           <h2 style={{ fontFamily: 'Georgia, serif', fontSize: 36, fontWeight: 800, color: '#1a1a18', margin: 0, letterSpacing: -1.5 }}>
@@ -310,7 +326,7 @@ export default function HomePage() {
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
           {TESTIMONIALS.map((t, i) => (
-            <div key={i} style={{ background: 'white', border: '1px solid rgba(26,26,24,.1)', borderRadius: 16, padding: '1.75rem' }}>
+            <div key={i} className="testimonial-card" style={{ background: 'white', border: '1px solid rgba(26,26,24,.1)', borderRadius: 16, padding: '1.75rem' }}>
               <p style={{ fontSize: 14, color: 'rgba(26,26,24,.65)', lineHeight: 1.75, fontStyle: 'italic', marginBottom: '1.5rem' }}>
                 "{t.quote}"
               </p>
