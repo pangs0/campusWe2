@@ -143,14 +143,13 @@ export default function HaritaPage() {
 
       const trPos = projection(TR_CENTER)!
 
-      // Pulse animasyonu
+      // Pulse animasyonu — CSS ile
       ;[0, 1, 2].forEach(i => {
-        const c = g.append('circle')
+        g.append('circle')
           .attr('cx', trPos[0]).attr('cy', trPos[1])
           .attr('r', 4).attr('fill', 'none')
-          .attr('stroke', '#C4500A').attr('stroke-width', 1.2).attr('opacity', 0)
-        c.append('animate').attr('attributeName', 'r').attr('values', '4;20;4').attr('dur', '2.4s').attr('begin', `${i * 0.8}s`).attr('repeatCount', 'indefinite')
-        c.append('animate').attr('attributeName', 'opacity').attr('values', '0.7;0;0.7').attr('dur', '2.4s').attr('begin', `${i * 0.8}s`).attr('repeatCount', 'indefinite')
+          .attr('stroke', '#C4500A').attr('stroke-width', 1.2)
+          .attr('class', `pulse-ring pulse-ring-${i}`)
       })
 
       const clickGroup = g.append('g').style('cursor', 'pointer').on('click', zoomToTurkey)
@@ -231,12 +230,11 @@ export default function HaritaPage() {
       // Pulse
       if (count > 0) {
         ;[0, 1].forEach(i => {
-          const p = cityGroup.append('circle')
+          cityGroup.append('circle')
             .attr('cx', pos[0]).attr('cy', pos[1])
             .attr('r', r).attr('fill', 'none')
-            .attr('stroke', '#C4500A').attr('stroke-width', 0.8).attr('opacity', 0)
-          p.append('animate').attr('attributeName', 'r').attr('values', `${r};${r + 12};${r}`).attr('dur', '2.2s').attr('begin', `${i}s`).attr('repeatCount', 'indefinite')
-          p.append('animate').attr('attributeName', 'opacity').attr('values', '0.6;0;0.6').attr('dur', '2.2s').attr('begin', `${i}s`).attr('repeatCount', 'indefinite')
+            .attr('stroke', '#C4500A').attr('stroke-width', 0.8)
+            .attr('class', `city-pulse city-pulse-${i}`)
         })
       }
 
@@ -378,7 +376,22 @@ export default function HaritaPage() {
           </div>
         )}
 
-        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+        <style>{`
+          @keyframes spin { to { transform: rotate(360deg); } }
+          @keyframes trPulse {
+            0% { r: 4; opacity: 0.7; }
+            100% { r: 20; opacity: 0; }
+          }
+          @keyframes cityPulse {
+            0% { r: 4; opacity: 0.6; }
+            100% { r: 16; opacity: 0; }
+          }
+          .pulse-ring-0 { animation: trPulse 2.4s ease-out infinite 0s; }
+          .pulse-ring-1 { animation: trPulse 2.4s ease-out infinite 0.8s; }
+          .pulse-ring-2 { animation: trPulse 2.4s ease-out infinite 1.6s; }
+          .city-pulse-0 { animation: cityPulse 2.2s ease-out infinite 0s; }
+          .city-pulse-1 { animation: cityPulse 2.2s ease-out infinite 1.1s; }
+        `}</style>
       </main>
     </AppLayout>
   )
