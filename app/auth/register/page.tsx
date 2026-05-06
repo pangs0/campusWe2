@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Check } from 'lucide-react'
+import { checkPasswordStrength } from '@/lib/security'
 
 const ROLES = [
   {
@@ -282,7 +283,18 @@ export default function RegisterPage() {
 
             <div>
               <label style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(26,26,24,.4)', letterSpacing: 1, display: 'block', marginBottom: 5 }}>ŞİFRE *</label>
-              <input type="password" className="input-auth" placeholder="En az 6 karakter" value={form.password} onChange={e => setForm(p => ({ ...p, password: e.target.value }))} required minLength={6} />
+              <input type="password" className="input-auth" placeholder="En az 8 karakter" value={form.password} onChange={e => setForm(p => ({ ...p, password: e.target.value }))} required minLength={8} />
+              {form.password.length > 0 && (() => {
+                const strength = checkPasswordStrength(form.password)
+                return (
+                  <div style={{ marginTop: 6 }}>
+                    <div style={{ height: 3, background: 'rgba(26,26,24,.1)', borderRadius: 2, overflow: 'hidden' }}>
+                      <div style={{ height: '100%', width: `${(strength.score / 5) * 100}%`, background: strength.color, borderRadius: 2, transition: 'all 0.3s' }} />
+                    </div>
+                    <p style={{ fontFamily: 'monospace', fontSize: 10, color: strength.color, margin: '3px 0 0', letterSpacing: 0.5 }}>{strength.label}</p>
+                  </div>
+                )
+              })()}
             </div>
 
             {error && (
