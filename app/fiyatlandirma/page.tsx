@@ -170,10 +170,10 @@ export default function FiyatlandirmaPage() {
       </div>
 
       {/* Plan kartları + karşılaştırma */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 0, margin: '0 4rem 5rem', border: '1px solid rgba(26,26,24,.1)', borderRadius: 20, overflow: 'hidden' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 0, margin: '0 4rem 5rem', border: '1px solid rgba(26,26,24,.1)', borderRadius: 20, overflow: 'visible', marginTop: 20 }}>
 
         {/* Ücretsiz */}
-        <div className="plan-card" style={{ background: 'white', padding: '2.5rem', display: 'flex', flexDirection: 'column', borderRight: '1px solid rgba(26,26,24,.08)' }}>
+        <div className="plan-card" style={{ background: 'white', padding: '2.5rem', display: 'flex', flexDirection: 'column', borderRight: '1px solid rgba(26,26,24,.08)', borderRadius: '20px 0 0 20px', border: '1px solid rgba(26,26,24,.1)' }}>
           <div style={{ marginBottom: '2rem' }}>
             <div style={{ width: 40, height: 40, borderRadius: 10, background: 'rgba(26,26,24,.06)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 12 }}>
               <Rocket size={18} color="rgba(26,26,24,.5)" />
@@ -201,7 +201,7 @@ export default function FiyatlandirmaPage() {
         </div>
 
         {/* Pro */}
-        <div className="plan-card" style={{ background: '#1a1a18', padding: '2.5rem', display: 'flex', flexDirection: 'column', position: 'relative', borderRight: '1px solid rgba(255,255,255,.08)' }}>
+        <div className="plan-card" style={{ background: '#1a1a18', padding: '2.5rem', display: 'flex', flexDirection: 'column', position: 'relative', borderRight: '1px solid rgba(255,255,255,.08)', borderRadius: 20, marginTop: -20, border: '2px solid #C4500A', zIndex: 1 }}>
           <div style={{ position: 'absolute', top: -13, left: '50%', transform: 'translateX(-50%)', background: '#C4500A', color: 'white', fontSize: 10, fontFamily: 'monospace', letterSpacing: 2, padding: '4px 16px', borderRadius: 999, whiteSpace: 'nowrap' }}>
             EN POPÜLER
           </div>
@@ -237,7 +237,7 @@ export default function FiyatlandirmaPage() {
         </div>
 
         {/* Kurumsal */}
-        <div className="plan-card" style={{ background: 'white', padding: '2.5rem', display: 'flex', flexDirection: 'column' }}>
+        <div className="plan-card" style={{ background: 'white', padding: '2.5rem', display: 'flex', flexDirection: 'column', borderRadius: '0 20px 20px 0', border: '1px solid rgba(26,26,24,.1)' }}>
           <div style={{ marginBottom: '2rem' }}>
             <div style={{ width: 40, height: 40, borderRadius: 10, background: 'rgba(29,78,216,.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 12 }}>
               <Building2 size={18} color="#1d4ed8" />
