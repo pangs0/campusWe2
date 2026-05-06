@@ -339,23 +339,21 @@ export default function HomePage() {
       </div>
 
       {/* Nasıl çalışır */}
-      <div style={{ background: '#faf9f6', borderTop: '1px solid rgba(26,26,24,.08)', borderBottom: '1px solid rgba(26,26,24,.08)', padding: '5rem 2rem' }}>
-        <div style={{ maxWidth: 720, margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-            <p style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(26,26,24,.35)', letterSpacing: 3, textTransform: 'uppercase', marginBottom: '0.75rem' }}>NASIL ÇALIŞIR</p>
-            <h2 style={{ fontFamily: 'Georgia, serif', fontSize: 36, fontWeight: 800, color: '#1a1a18', margin: 0, letterSpacing: -1.5 }}>
-              3 adımda başla.
-            </h2>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 0 }}>
-            {HOW_IT_WORKS.map((step, i) => (
-              <div key={i} className="step-card" style={{ textAlign: 'center', padding: '2rem', borderRight: i < 2 ? '1px solid rgba(26,26,24,.08)' : 'none' }}>
-                <div style={{ fontFamily: 'Georgia, serif', fontSize: 48, fontWeight: 800, color: 'rgba(26,26,24,.08)', margin: '0 0 1rem', letterSpacing: -2 }}>{step.n}</div>
-                <h3 style={{ fontFamily: 'Georgia, serif', fontSize: 18, fontWeight: 700, color: '#1a1a18', margin: '0 0 8px' }}>{step.title}</h3>
-                <p style={{ fontSize: 13, color: 'rgba(26,26,24,.5)', margin: 0, lineHeight: 1.6 }}>{step.desc}</p>
-              </div>
-            ))}
-          </div>
+      <div style={{ background: '#faf9f6', borderTop: '1px solid rgba(26,26,24,.08)', borderBottom: '1px solid rgba(26,26,24,.08)', padding: '5rem 8rem' }}>
+        <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+          <p style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(26,26,24,.35)', letterSpacing: 3, textTransform: 'uppercase', marginBottom: '0.75rem' }}>NASIL ÇALIŞIR</p>
+          <h2 style={{ fontFamily: 'Georgia, serif', fontSize: 36, fontWeight: 800, color: '#1a1a18', margin: 0, letterSpacing: -1.5 }}>
+            3 adımda başla.
+          </h2>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 0 }}>
+          {HOW_IT_WORKS.map((step, i) => (
+            <div key={i} className="step-card" style={{ textAlign: 'center', padding: '2.5rem', borderRight: i < 2 ? '1px solid rgba(26,26,24,.08)' : 'none' }}>
+              <div style={{ fontFamily: 'Georgia, serif', fontSize: 52, fontWeight: 800, color: 'rgba(26,26,24,.08)', margin: '0 0 1rem', letterSpacing: -2 }}>{step.n}</div>
+              <h3 style={{ fontFamily: 'Georgia, serif', fontSize: 20, fontWeight: 700, color: '#1a1a18', margin: '0 0 8px' }}>{step.title}</h3>
+              <p style={{ fontSize: 14, color: 'rgba(26,26,24,.5)', margin: 0, lineHeight: 1.7 }}>{step.desc}</p>
+            </div>
+          ))}
         </div>
       </div>
 
