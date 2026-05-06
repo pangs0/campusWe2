@@ -11,12 +11,12 @@ const securityHeaders = [
     key: 'Content-Security-Policy',
     value: [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-eval' 'unsafe-inline'",
+      "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net",
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob: https://*.supabase.co https://www.youtube.com",
       "font-src 'self'",
       "frame-src https://www.youtube.com https://youtube.com",
-      "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.anthropic.com",
+      "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.anthropic.com https://cdn.jsdelivr.net",
     ].join('; '),
   },
 ]
