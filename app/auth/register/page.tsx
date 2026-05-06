@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Check } from 'lucide-react'
-import { checkPasswordStrength } from '@/lib/security'
+import { checkPasswordStrength } from '@/lib/supabase/security'
 
 const ROLES = [
   {
