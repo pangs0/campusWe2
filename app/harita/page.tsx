@@ -111,7 +111,7 @@ export default function HaritaPage() {
 
     const g = svg.append('g')
 
-    d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then((world: any) => {
+    d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json').then((world: any) => {
       const countries = topojson.feature(world, world.objects.countries).features
 
       g.selectAll('path').data(countries).join('path')
@@ -202,8 +202,15 @@ export default function HaritaPage() {
         .attr('font-size', '12').attr('font-family', 'monospace')
         .style('cursor', 'pointer')
         .text('← Dünya haritasına dön')
-        .on('click', drawWorldMap)
-    }
+        .on('click', () => {
+          // SVG tamamen temizle ve yeniden çiz
+          svg.selectAll('*').remove()
+          zoomedRef.current = false
+          setZoomedToTurkey(false)
+          setTooltip(null)
+          // Kısa gecikme ile yeniden çiz — state güncellensin
+          setTimeout(() => drawWorldMap(), 50)
+        })    }
   }
 
   function addCityDots(g: any, projection: any, d3: any) {
