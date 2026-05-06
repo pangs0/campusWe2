@@ -39,11 +39,10 @@ export default function NotificationBell({ userId }: { userId: string }) {
   async function loadNotifications() {
     const { data, error } = await supabase
       .from('notifications')
-      .select('*, sender:profiles(full_name, avatar_url)')
+      .select('*, sender:profiles!notifications_sender_id_fkey(full_name, avatar_url)')
       .eq('user_id', userId)
       .order('created_at', { ascending: false })
       .limit(20)
-    console.log('Notifications data:', data, 'Error:', error)
     if (data) {
       setNotifications(data)
       setCount(data.filter(n => !n.is_read).length)
