@@ -12,18 +12,22 @@ export default function NotificationBell({ userId }: { userId: string }) {
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
+    if (!userId) return
     loadNotifications()
     const channel = supabase
-      .channel('notifications')
+      .channel(`notifications-${userId}`)
       .on('postgres_changes', {
         event: 'INSERT',
         schema: 'public',
         table: 'notifications',
         filter: `user_id=eq.${userId}`
-      }, () => loadNotifications())
+      }, (payload) => {
+        setNotifications(prev => [payload.new as any, ...prev])
+        setCount(prev => prev + 1)
+      })
       .subscribe()
     return () => { supabase.removeChannel(channel) }
-  }, [])
+  }, [userId])
 
   async function loadNotifications() {
     const { data } = await supabase
