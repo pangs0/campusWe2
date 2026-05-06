@@ -127,6 +127,63 @@ const PACKAGES = [
   },
 ]
 
+function ROICalculator() {
+  const [hires, setHires] = useState(5)
+  const [salary, setSalary] = useState(15000)
+  const traditional = hires * salary * 0.15
+  const campuswe = 899
+  const saving = Math.max(0, Math.round(traditional - campuswe))
+
+  return (
+    <div style={{ background: 'white', border: '1px solid rgba(26,26,24,.1)', borderRadius: 16, padding: '2rem' }}>
+      <div style={{ marginBottom: '1.5rem' }}>
+        <label style={{ fontFamily: 'monospace', fontSize: 11, color: 'rgba(26,26,24,.45)', letterSpacing: 1, display: 'block', marginBottom: 8 }}>
+          YILLIK İŞE ALIM HEDEFİ: <strong style={{ color: '#C4500A' }}>{hires} kişi</strong>
+        </label>
+        <input type="range" min={1} max={50} value={hires} onChange={e => setHires(Number(e.target.value))}
+          style={{ width: '100%', accentColor: '#C4500A' }} />
+      </div>
+      <div style={{ marginBottom: '2rem' }}>
+        <label style={{ fontFamily: 'monospace', fontSize: 11, color: 'rgba(26,26,24,.45)', letterSpacing: 1, display: 'block', marginBottom: 8 }}>
+          ORTALAMA MAAŞ: <strong style={{ color: '#C4500A' }}>₺{salary.toLocaleString()}</strong>
+        </label>
+        <input type="range" min={5000} max={100000} step={1000} value={salary} onChange={e => setSalary(Number(e.target.value))}
+          style={{ width: '100%', accentColor: '#C4500A' }} />
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: '1rem' }}>
+        <div style={{ background: 'rgba(26,26,24,.04)', borderRadius: 10, padding: '1rem', textAlign: 'center' }}>
+          <p style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(26,26,24,.4)', margin: '0 0 4px', letterSpacing: 1 }}>GELENEKSEL</p>
+          <p style={{ fontFamily: 'Georgia, serif', fontSize: 22, fontWeight: 800, color: '#dc2626', margin: 0 }}>₺{Math.round(traditional).toLocaleString()}</p>
+        </div>
+        <div style={{ background: 'rgba(196,80,10,.06)', borderRadius: 10, padding: '1rem', textAlign: 'center', border: '1px solid rgba(196,80,10,.15)' }}>
+          <p style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(26,26,24,.4)', margin: '0 0 4px', letterSpacing: 1 }}>CAMPUSWE</p>
+          <p style={{ fontFamily: 'Georgia, serif', fontSize: 22, fontWeight: 800, color: '#C4500A', margin: 0 }}>₺{campuswe.toLocaleString()}</p>
+        </div>
+      </div>
+      <div style={{ background: '#1a1a18', borderRadius: 10, padding: '1rem', textAlign: 'center' }}>
+        <p style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(255,255,255,.4)', margin: '0 0 4px', letterSpacing: 1 }}>YILLIK TASARRUF</p>
+        <p style={{ fontFamily: 'Georgia, serif', fontSize: 28, fontWeight: 800, color: '#22c55e', margin: 0 }}>₺{saving.toLocaleString()}</p>
+      </div>
+    </div>
+  )
+}
+
+function SSQItem({ q, a }: { q: string; a: string }) {
+  const [open, setOpen] = useState(false)
+  return (
+    <div style={{ borderBottom: '1px solid rgba(26,26,24,.08)', overflow: 'hidden' }}>
+      <button onClick={() => setOpen(!open)}
+        style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.25rem 0', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left' }}>
+        <span style={{ fontFamily: 'Georgia, serif', fontSize: 16, fontWeight: 700, color: '#1a1a18' }}>{q}</span>
+        <span style={{ fontSize: 20, color: '#C4500A', transition: 'transform 0.2s', transform: open ? 'rotate(45deg)' : 'rotate(0)', flexShrink: 0, marginLeft: 16 }}>+</span>
+      </button>
+      {open && (
+        <p style={{ fontSize: 14, color: 'rgba(26,26,24,.6)', lineHeight: 1.8, margin: '0 0 1.25rem', paddingRight: '2rem' }}>{a}</p>
+      )}
+    </div>
+  )
+}
+
 export default function KurumsalPage() {
   const pathname = usePathname()
   const supabase = createClient()
@@ -145,6 +202,10 @@ export default function KurumsalPage() {
   const howIt = useScrollFadeUp()
   const packages = useScrollFadeUp()
   const formSection = useScrollFadeUp()
+
+  function scrollTo(id: string) {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+  }
 
   useEffect(() => { setTimeout(() => setVisible(true), 100) }, [])
 
@@ -229,12 +290,12 @@ export default function KurumsalPage() {
               12.000'den fazla üniversiteli girişimci ve yetenekli profil. Demo Day'e sponsor ol, markalı kuluçka katı aç, doğru insanları bul.
             </p>
             <div style={{ display: 'flex', gap: 12 }}>
-              <a href="#basvuru" className="cta-btn" style={{ background: '#C4500A', color: 'white', padding: '13px 28px', borderRadius: 8, fontSize: 14, textDecoration: 'none', fontWeight: 600, display: 'inline-block' }}>
+              <button onClick={() => scrollTo('basvuru')} className="cta-btn" style={{ background: '#C4500A', color: 'white', padding: '13px 28px', borderRadius: 8, fontSize: 14, fontWeight: 600, border: 'none', cursor: 'pointer' }}>
                 Başvuru yap →
-              </a>
-              <a href="#paketler" className="cta-btn" style={{ background: 'white', color: '#1a1a18', padding: '13px 28px', borderRadius: 8, fontSize: 14, textDecoration: 'none', fontWeight: 500, border: '1px solid rgba(26,26,24,.15)', display: 'inline-block' }}>
+              </button>
+              <button onClick={() => scrollTo('paketler')} className="cta-btn" style={{ background: 'white', color: '#1a1a18', padding: '13px 28px', borderRadius: 8, fontSize: 14, fontWeight: 500, border: '1px solid rgba(26,26,24,.15)', cursor: 'pointer' }}>
                 Paketleri gör
-              </a>
+              </button>
             </div>
           </div>
         </div>
@@ -336,9 +397,9 @@ export default function KurumsalPage() {
                   </div>
                 ))}
               </div>
-              <a href="#basvuru" className="cta-btn" style={{ display: 'block', textAlign: 'center', padding: '12px', borderRadius: 8, background: pkg.featured ? '#C4500A' : 'transparent', color: pkg.featured ? 'white' : pkg.color, fontSize: 14, textDecoration: 'none', fontWeight: 500, border: pkg.featured ? 'none' : `1.5px solid ${pkg.color}` }}>
+              <button onClick={() => scrollTo('basvuru')} className="cta-btn" style={{ display: 'block', width: '100%', textAlign: 'center', padding: '12px', borderRadius: 8, background: pkg.featured ? '#C4500A' : 'transparent', color: pkg.featured ? 'white' : pkg.color, fontSize: 14, fontWeight: 500, border: pkg.featured ? 'none' : `1.5px solid ${pkg.color}`, cursor: 'pointer' }}>
                 Hemen başvur →
-              </a>
+              </button>
             </div>
           ))}
         </div>
@@ -365,6 +426,147 @@ export default function KurumsalPage() {
               </div>
             </div>
           ))}
+        </div>
+      </div>
+
+      {/* Başvuru Formu */}
+
+      {/* Güven bölümü */}
+      <div style={{ borderTop: '1px solid rgba(26,26,24,.08)', borderBottom: '1px solid rgba(26,26,24,.08)', padding: '3rem 4rem' }}>
+        <p style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(26,26,24,.3)', letterSpacing: 3, textTransform: 'uppercase', textAlign: 'center', marginBottom: '2rem' }}>BİZE GÜVENEN ŞİRKETLER</p>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 48, flexWrap: 'wrap' }}>
+          {['Trendyol', 'Getir', 'Turkcell', 'Arçelik', 'Yemeksepeti', 'Pegasus', 'Hepsiburada', 'Logo'].map((brand, i) => (
+            <div key={i} style={{ fontFamily: 'Georgia, serif', fontSize: 18, fontWeight: 800, color: 'rgba(26,26,24,.15)', letterSpacing: -0.5, transition: 'color 0.2s', cursor: 'default' }}
+              onMouseEnter={e => (e.currentTarget.style.color = 'rgba(26,26,24,.4)')}
+              onMouseLeave={e => (e.currentTarget.style.color = 'rgba(26,26,24,.15)')}>
+              {brand}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Karşılaştırma tablosu */}
+      <div style={{ padding: '5rem 4rem' }}>
+        <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+          <p style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(26,26,24,.35)', letterSpacing: 3, textTransform: 'uppercase', marginBottom: '0.75rem' }}>KARŞILAŞTIRMA</p>
+          <h2 style={{ fontFamily: 'Georgia, serif', fontSize: 38, fontWeight: 800, color: '#1a1a18', margin: 0, letterSpacing: -1.5 }}>
+            Hangi paket size uygun?
+          </h2>
+        </div>
+        <div style={{ border: '1px solid rgba(26,26,24,.1)', borderRadius: 16, overflow: 'hidden', background: 'white' }}>
+          {/* Header */}
+          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', borderBottom: '1px solid rgba(26,26,24,.08)' }}>
+            <div style={{ padding: '1.25rem 1.5rem' }} />
+            {['Starter', 'Growth', 'Enterprise'].map((p, i) => (
+              <div key={i} style={{ padding: '1.25rem 1rem', textAlign: 'center', background: i === 1 ? '#1a1a18' : 'transparent', borderLeft: '1px solid rgba(26,26,24,.08)' }}>
+                <p style={{ fontFamily: 'monospace', fontSize: 11, fontWeight: 700, color: i === 1 ? '#C4500A' : 'rgba(26,26,24,.5)', margin: 0, letterSpacing: 1 }}>{p.toUpperCase()}</p>
+              </div>
+            ))}
+          </div>
+          {/* Satırlar */}
+          {[
+            { label: 'Şirket profili', values: [true, true, true] },
+            { label: 'Yetenek keşfi', values: ['50/ay', 'Sınırsız', 'Sınırsız'] },
+            { label: 'İş ilanı', values: ['2', 'Sınırsız', 'Sınırsız'] },
+            { label: 'Demo Day sponsorluğu', values: [false, true, true] },
+            { label: 'Markalı kuluçka katı', values: [false, false, true] },
+            { label: 'Analitik panel', values: ['Temel', 'Gelişmiş', 'Özel'] },
+            { label: 'Aylık rapor', values: [false, true, true] },
+            { label: 'API erişimi', values: [false, false, true] },
+            { label: 'Account manager', values: [false, false, true] },
+            { label: 'Destek', values: ['Email', 'Öncelikli', 'SLA'] },
+          ].map((row, i) => (
+            <div key={i} style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', borderBottom: '1px solid rgba(26,26,24,.04)', background: i % 2 === 0 ? 'rgba(26,26,24,.015)' : 'white' }}>
+              <div style={{ padding: '1rem 1.5rem', fontSize: 13, color: 'rgba(26,26,24,.65)' }}>{row.label}</div>
+              {row.values.map((val, j) => (
+                <div key={j} style={{ padding: '1rem', textAlign: 'center', borderLeft: '1px solid rgba(26,26,24,.06)', background: j === 1 ? 'rgba(26,26,24,.97)' : 'transparent' }}>
+                  {val === true ? <span style={{ color: '#22c55e', fontSize: 16 }}>✓</span>
+                    : val === false ? <span style={{ color: 'rgba(26,26,24,.15)', fontSize: 16 }}>—</span>
+                    : <span style={{ fontSize: 12, fontFamily: 'monospace', color: j === 1 ? 'rgba(255,255,255,.6)' : 'rgba(26,26,24,.5)' }}>{val}</span>}
+                </div>
+              ))}
+            </div>
+          ))}
+          {/* CTA satırı */}
+          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr' }}>
+            <div style={{ padding: '1.5rem' }} />
+            {['Starter', 'Growth', 'Enterprise'].map((p, i) => (
+              <div key={i} style={{ padding: '1.25rem 1rem', textAlign: 'center', background: i === 1 ? '#1a1a18' : 'transparent', borderLeft: '1px solid rgba(26,26,24,.08)' }}>
+                <button onClick={() => scrollTo('basvuru')} className="cta-btn"
+                  style={{ background: i === 1 ? '#C4500A' : 'transparent', color: i === 1 ? 'white' : '#C4500A', padding: '8px 16px', borderRadius: 6, border: i === 1 ? 'none' : '1px solid #C4500A', fontSize: 12, fontWeight: 500, cursor: 'pointer', width: '100%' }}>
+                  Başvur →
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ROI Hesaplayıcı */}
+      <div style={{ background: 'rgba(196,80,10,.04)', borderTop: '1px solid rgba(196,80,10,.1)', borderBottom: '1px solid rgba(196,80,10,.1)', padding: '5rem 4rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', alignItems: 'center' }}>
+          <div>
+            <p style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(196,80,10,.6)', letterSpacing: 3, textTransform: 'uppercase', marginBottom: '1rem' }}>ROI HESAPLAYICI</p>
+            <h2 style={{ fontFamily: 'Georgia, serif', fontSize: 38, fontWeight: 800, color: '#1a1a18', letterSpacing: -1.5, margin: '0 0 1rem' }}>
+              Ne kadar tasarruf<br />
+              <em style={{ color: '#C4500A', fontStyle: 'normal' }}>edeceksiniz?</em>
+            </h2>
+            <p style={{ fontSize: 14, color: 'rgba(26,26,24,.5)', lineHeight: 1.8 }}>
+              Geleneksel işe alım yöntemleriyle kıyasladığınızda CampusWe'nin size sağladığı tasarrufu hesaplayın.
+            </p>
+          </div>
+          <ROICalculator />
+        </div>
+      </div>
+
+      {/* SSS */}
+      <div style={{ padding: '5rem 4rem' }}>
+        <div style={{ maxWidth: 720, margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+            <p style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(26,26,24,.35)', letterSpacing: 3, textTransform: 'uppercase', marginBottom: '0.75rem' }}>SSS</p>
+            <h2 style={{ fontFamily: 'Georgia, serif', fontSize: 38, fontWeight: 800, color: '#1a1a18', margin: 0, letterSpacing: -1.5 }}>
+              Aklınızdaki sorular.
+            </h2>
+          </div>
+          {[
+            { q: 'Deneme süresi var mı?', a: 'Evet, Growth ve Enterprise paketlerinde 30 günlük ücretsiz deneme sunuyoruz. Kredi kartı gerekmez.' },
+            { q: 'İstediğimde iptal edebilir miyim?', a: 'Evet, herhangi bir zamanda iptal edebilirsiniz. Yıllık paketlerde kalan süre için iade yapılır.' },
+            { q: 'API entegrasyonu nasıl çalışıyor?', a: 'Enterprise paketinde REST API erişimi sunuyoruz. Kendi İK sisteminizle entegre edebilirsiniz.' },
+            { q: 'Kaç kullanıcı hesabı açabiliriz?', a: 'Starter\'da 3, Growth\'ta 10, Enterprise\'da sınırsız kullanıcı hesabı oluşturabilirsiniz.' },
+            { q: 'Veri güvenliği nasıl sağlanıyor?', a: 'Tüm veriler SSL ile şifrelenir, Türkiye\'deki sunucularda KVKK uyumlu olarak saklanır.' },
+            { q: 'Demo Day\'e nasıl sponsor olabiliriz?', a: 'Growth ve Enterprise paketlerinde Demo Day sponsorluğu dahil. Ayrıca özel sponsorluk paketleri için iletişime geçin.' },
+          ].map((item, i) => (
+            <SSQItem key={i} q={item.q} a={item.a} />
+          ))}
+        </div>
+      </div>
+
+      {/* Alt CTA */}
+      <div style={{ background: 'rgba(26,26,24,.03)', borderTop: '1px solid rgba(26,26,24,.08)', borderBottom: '1px solid rgba(26,26,24,.08)', padding: '4rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem', alignItems: 'center' }}>
+          <div>
+            <p style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(26,26,24,.35)', letterSpacing: 3, textTransform: 'uppercase', marginBottom: '1rem' }}>HÂLÂ KARARSIZ MISINIZ</p>
+            <h2 style={{ fontFamily: 'Georgia, serif', fontSize: 32, fontWeight: 800, color: '#1a1a18', letterSpacing: -1, margin: '0 0 1rem' }}>
+              Önce demo isteyin,<br />
+              sonra karar verin.
+            </h2>
+            <p style={{ fontSize: 14, color: 'rgba(26,26,24,.5)', lineHeight: 1.8 }}>
+              30 dakikalık ücretsiz demo ile platformu şirketiniz için nasıl kullanabileceğinizi göstereceğiz.
+            </p>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <button onClick={() => scrollTo('basvuru')} className="cta-btn"
+              style={{ background: '#C4500A', color: 'white', padding: '15px 32px', borderRadius: 8, border: 'none', fontSize: 15, fontWeight: 600, cursor: 'pointer', textAlign: 'center' }}>
+              Demo talep et →
+            </button>
+            <button onClick={() => scrollTo('basvuru')} className="cta-btn"
+              style={{ background: 'white', color: '#1a1a18', padding: '15px 32px', borderRadius: 8, border: '1px solid rgba(26,26,24,.15)', fontSize: 15, fontWeight: 500, cursor: 'pointer', textAlign: 'center' }}>
+              Teklif al
+            </button>
+            <p style={{ fontSize: 12, color: 'rgba(26,26,24,.35)', textAlign: 'center', margin: 0 }}>
+              Kredi kartı gerekmez · 30 gün ücretsiz deneme
+            </p>
+          </div>
         </div>
       </div>
 
