@@ -1,58 +1,75 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { Rocket, TrendingUp, Building2, Check } from 'lucide-react'
+import { Check } from 'lucide-react'
 
 const ROLES = [
   {
     key: 'founder',
+    emoji: '🚀',
     label: 'Girişimci',
     desc: 'Startup kuruyorum veya kurmak istiyorum',
-    icon: Rocket,
-    color: 'border-brand bg-brand/5 text-brand',
-    activeColor: 'border-brand bg-brand/10',
+    color: '#C4500A',
+    bg: 'rgba(196,80,10,.06)',
+    border: 'rgba(196,80,10,.3)',
   },
   {
     key: 'investor',
+    emoji: '💼',
     label: 'Yatırımcı',
     desc: 'Startup\'lara yatırım yapıyorum',
-    icon: TrendingUp,
-    color: 'border-amber-500 bg-amber-50 text-amber-700',
-    activeColor: 'border-amber-500 bg-amber-50',
+    color: '#b45309',
+    bg: 'rgba(180,83,9,.06)',
+    border: 'rgba(180,83,9,.3)',
   },
   {
     key: 'company',
+    emoji: '🏢',
     label: 'Şirket',
-    desc: 'Yetenekleri keşfediyorum, etkinlik düzenliyorum',
-    icon: Building2,
-    color: 'border-blue-500 bg-blue-50 text-blue-700',
-    activeColor: 'border-blue-500 bg-blue-50',
+    desc: 'Yetenekleri keşfediyorum',
+    color: '#1d4ed8',
+    bg: 'rgba(29,78,216,.06)',
+    border: 'rgba(29,78,216,.3)',
   },
 ]
+
+const LEFT_FEATURES = {
+  founder: [
+    { emoji: '🤝', text: 'Co-founder bul, ekibini kur' },
+    { emoji: '📅', text: 'Demo Day\'de yatırımcılara pitch yap' },
+    { emoji: '⚡', text: 'Karma token kazan, takas yap' },
+    { emoji: '🎓', text: 'Kurs oluştur, pasif gelir elde et' },
+  ],
+  investor: [
+    { emoji: '🔍', text: 'Startupları filtrele ve keşfet' },
+    { emoji: '📅', text: 'Demo Day\'i izle, pitch gör' },
+    { emoji: '💬', text: 'Kurucularla direkt iletişim' },
+    { emoji: '❤️', text: 'Favori listeni oluştur' },
+  ],
+  company: [
+    { emoji: '👥', text: 'Yetenek keşfet, stajyer bul' },
+    { emoji: '🎯', text: 'Hackathon ve etkinlik düzenle' },
+    { emoji: '📋', text: 'İş ilanı yayınla' },
+    { emoji: '📊', text: 'İşe alım pipeline yönet' },
+  ],
+}
 
 export default function RegisterPage() {
   const router = useRouter()
   const supabase = createClient()
   const [role, setRole] = useState<'founder' | 'investor' | 'company'>('founder')
-  const [form, setForm] = useState({
-    email: '',
-    password: '',
-    full_name: '',
-    username: '',
-    university: '',
-    city: '',
-    company_name: '',
-    firm_name: '',
-  })
+  const [form, setForm] = useState({ email: '', password: '', full_name: '', username: '', university: '', city: '', company_name: '', firm_name: '' })
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [visible, setVisible] = useState(false)
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setForm(prev => ({ ...prev, [e.target.name]: e.target.value }))
-  }
+  useEffect(() => { setTimeout(() => setVisible(true), 100) }, [])
+
+  const selectedRole = ROLES.find(r => r.key === role)!
+  const features = LEFT_FEATURES[role]
 
   async function handleRegister(e: React.FormEvent) {
     e.preventDefault()
@@ -79,17 +96,10 @@ export default function RegisterPage() {
       })
 
       if (role === 'investor') {
-        await supabase.from('investor_profiles').insert({
-          id: data.user.id,
-          firm_name: form.firm_name,
-        })
+        await supabase.from('investor_profiles').insert({ id: data.user.id, firm_name: form.firm_name })
       }
-
       if (role === 'company') {
-        await supabase.from('company_profiles').insert({
-          id: data.user.id,
-          company_name: form.company_name || form.full_name,
-        })
+        await supabase.from('company_profiles').insert({ id: data.user.id, company_name: form.company_name || form.full_name })
       }
     }
 
@@ -100,122 +110,198 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-cream flex items-center justify-center px-4 py-10">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <Link href="/" className="font-serif text-2xl font-bold text-ink">
-            Campus<em className="text-brand not-italic">We</em>
-          </Link>
-          <p className="text-sm text-ink/45 mt-2">Topluluğa katıl.</p>
-        </div>
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', minHeight: '100vh', fontFamily: 'Inter, sans-serif' }}>
+      <style>{`
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .fade-up { animation: fadeUp 0.7s ease both; }
+        .fade-in { animation: fadeIn 0.5s ease both; }
+        .input-auth { width: 100%; padding: 11px 14px; border: 1.5px solid rgba(26,26,24,.15); border-radius: 8px; font-size: 14px; color: #1a1a18; outline: none; transition: border-color 0.2s; font-family: Inter, sans-serif; background: white; box-sizing: border-box; }
+        .input-auth:focus { border-color: #C4500A; }
+        .role-card { transition: all 0.2s; cursor: pointer; }
+        .role-card:hover { transform: translateY(-2px); }
+        .feature-item { transition: transform 0.2s; }
+        .feature-item:hover { transform: translateX(4px); }
+      `}</style>
 
-        {/* Rol seçimi */}
-        <div className="mb-6">
-          <p className="text-sm font-medium text-ink mb-3 text-center">Sen kimsin?</p>
-          <div className="grid grid-cols-3 gap-3">
-            {ROLES.map(r => (
-              <button key={r.key} type="button" onClick={() => setRole(r.key as any)}
-                className={`relative flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all ${
-                  role === r.key ? `border-2 ${r.activeColor}` : 'border-neutral-200 bg-white hover:border-neutral-300'
-                }`}>
-                {role === r.key && (
-                  <div className="absolute top-2 right-2 w-4 h-4 rounded-full bg-brand flex items-center justify-center">
-                    <Check size={10} className="text-white" />
-                  </div>
-                )}
-                <r.icon size={20} className={role === r.key ? 'text-brand' : 'text-ink/40'} />
-                <div className="text-center">
-                  <p className="text-xs font-semibold text-ink">{r.label}</p>
-                  <p className="text-xs text-ink/40 leading-tight mt-0.5">{r.desc}</p>
+      {/* Sol — koyu, dinamik */}
+      <div style={{
+        background: '#1a1a18',
+        backgroundImage: 'repeating-linear-gradient(0deg,transparent,transparent 79px,rgba(255,255,255,.03) 79px,rgba(255,255,255,.03) 80px)',
+        padding: '3rem 4rem',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        opacity: visible ? 1 : 0,
+        transition: 'opacity 0.6s',
+      }}>
+        <Link href="/" style={{ fontFamily: 'Georgia, serif', fontSize: 22, fontWeight: 800, color: 'white', textDecoration: 'none' }}>
+          Campus<em style={{ color: '#C4500A', fontStyle: 'normal' }}>We</em>
+        </Link>
+
+        <div>
+          <div className="fade-up" style={{ animationDelay: '0.1s' }}>
+            <p style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(255,255,255,.25)', letterSpacing: 3, textTransform: 'uppercase', marginBottom: '1rem' }}>
+              {selectedRole.emoji} {selectedRole.label.toUpperCase()} OLARAK
+            </p>
+            <h1 style={{ fontFamily: 'Georgia, serif', fontSize: 40, fontWeight: 800, color: 'white', letterSpacing: -2, lineHeight: 1.1, margin: '0 0 1.5rem', transition: 'all 0.3s' }}>
+              Topluluğa<br />
+              <em style={{ color: '#C4500A', fontStyle: 'normal' }}>katıl.</em>
+            </h1>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: '2rem' }}>
+            {features.map((f, i) => (
+              <div key={i} className="fade-up feature-item" style={{ animationDelay: `${0.2 + i * 0.1}s`, display: 'flex', alignItems: 'center', gap: 12 }}>
+                <div style={{ width: 34, height: 34, borderRadius: 8, background: `${selectedRole.bg.replace('06', '12')}`, border: `1px solid ${selectedRole.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 15, flexShrink: 0 }}>
+                  {f.emoji}
                 </div>
-              </button>
+                <span style={{ fontSize: 13, color: 'rgba(255,255,255,.55)' }}>{f.text}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Sosyal kanıt */}
+          <div className="fade-in" style={{ animationDelay: '0.6s', display: 'flex', gap: 20 }}>
+            {[{ n: '12K+', l: 'Girişimci' }, { n: '340+', l: 'Üniversite' }, { n: '86+', l: 'Demo Day' }].map((s, i) => (
+              <div key={i}>
+                <p style={{ fontFamily: 'Georgia, serif', fontSize: 20, fontWeight: 800, color: '#C4500A', margin: 0 }}>{s.n}</p>
+                <p style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(255,255,255,.3)', margin: 0, letterSpacing: 1 }}>{s.l}</p>
+              </div>
             ))}
           </div>
         </div>
 
-        <form onSubmit={handleRegister} className="card space-y-4">
-          <div>
-            <label className="label">Ad Soyad</label>
-            <input name="full_name" type="text" className="input" placeholder="Adınız Soyadınız"
-              value={form.full_name} onChange={handleChange} required />
+        <div className="fade-in" style={{ animationDelay: '0.8s', borderTop: '1px solid rgba(255,255,255,.08)', paddingTop: '1.5rem' }}>
+          <p style={{ fontFamily: 'Georgia, serif', fontSize: 14, color: 'rgba(255,255,255,.35)', fontStyle: 'italic', lineHeight: 1.7, margin: '0 0 0.75rem' }}>
+            "Her büyük startup bir eksiklikle başladı."
+          </p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <div style={{ width: 2, height: 20, background: '#C4500A', borderRadius: 1 }} />
+            <span style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(255,255,255,.25)', letterSpacing: 1 }}>CAMPUSWE · 2026</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Sağ — form */}
+      <div style={{
+        background: '#F5F0E8',
+        backgroundImage: 'repeating-linear-gradient(0deg,transparent,transparent 79px,rgba(26,26,24,.04) 79px,rgba(26,26,24,.04) 80px)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '2rem',
+        overflowY: 'auto',
+      }}>
+        <div className="fade-up" style={{ animationDelay: '0.3s', width: '100%', maxWidth: 420 }}>
+          <div style={{ marginBottom: '1.5rem' }}>
+            <h2 style={{ fontFamily: 'Georgia, serif', fontSize: 26, fontWeight: 800, color: '#1a1a18', margin: '0 0 4px', letterSpacing: -1 }}>
+              Hesap oluştur
+            </h2>
+            <p style={{ fontSize: 13, color: 'rgba(26,26,24,.45)', margin: 0 }}>
+              Zaten hesabın var mı?{' '}
+              <Link href="/auth/login" style={{ color: '#C4500A', textDecoration: 'none', fontWeight: 500 }}>Giriş yap →</Link>
+            </p>
           </div>
 
-          <div>
-            <label className="label">Kullanıcı adı</label>
-            <input name="username" type="text" className="input" placeholder="kullaniciadi"
-              value={form.username} onChange={handleChange} required />
+          {/* Rol seçimi */}
+          <div style={{ marginBottom: '1.5rem' }}>
+            <p style={{ fontFamily: 'monospace', fontSize: 11, color: 'rgba(26,26,24,.4)', letterSpacing: 1, marginBottom: 8 }}>SEN KİMSİN?</p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
+              {ROLES.map(r => (
+                <button key={r.key} type="button" onClick={() => setRole(r.key as any)} className="role-card"
+                  style={{ padding: '12px 8px', borderRadius: 10, border: role === r.key ? `2px solid ${r.color}` : '1.5px solid rgba(26,26,24,.12)', background: role === r.key ? r.bg : 'white', cursor: 'pointer', textAlign: 'center', position: 'relative' }}>
+                  {role === r.key && (
+                    <div style={{ position: 'absolute', top: 6, right: 6, width: 16, height: 16, borderRadius: '50%', background: r.color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Check size={9} color="white" />
+                    </div>
+                  )}
+                  <span style={{ fontSize: 20, display: 'block', marginBottom: 4 }}>{r.emoji}</span>
+                  <p style={{ fontSize: 11, fontWeight: 600, color: role === r.key ? r.color : '#1a1a18', margin: 0 }}>{r.label}</p>
+                </button>
+              ))}
+            </div>
           </div>
 
-          {role === 'founder' && (
-            <>
+          <form onSubmit={handleRegister} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
               <div>
-                <label className="label">Üniversite</label>
-                <input name="university" type="text" className="input" placeholder="ODTÜ, İTÜ, Bilkent..."
-                  value={form.university} onChange={handleChange} />
+                <label style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(26,26,24,.4)', letterSpacing: 1, display: 'block', marginBottom: 5 }}>AD SOYAD *</label>
+                <input className="input-auth" placeholder="Adınız Soyadınız" value={form.full_name} onChange={e => setForm(p => ({ ...p, full_name: e.target.value }))} required />
               </div>
               <div>
-                <label className="label">Şehir</label>
-                <input name="city" type="text" className="input" placeholder="İstanbul, Ankara..."
-                  value={form.city} onChange={handleChange} />
+                <label style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(26,26,24,.4)', letterSpacing: 1, display: 'block', marginBottom: 5 }}>KULLANICI ADI *</label>
+                <input className="input-auth" placeholder="kullaniciadi" value={form.username} onChange={e => setForm(p => ({ ...p, username: e.target.value }))} required />
               </div>
-            </>
-          )}
+            </div>
 
-          {role === 'investor' && (
-            <>
-              <div>
-                <label className="label">Firma adı</label>
-                <input name="firm_name" type="text" className="input" placeholder="XYZ Ventures, Angel..."
-                  value={form.firm_name} onChange={handleChange} />
+            {role === 'founder' && (
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                <div>
+                  <label style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(26,26,24,.4)', letterSpacing: 1, display: 'block', marginBottom: 5 }}>ÜNİVERSİTE</label>
+                  <input className="input-auth" placeholder="ODTÜ, İTÜ..." value={form.university} onChange={e => setForm(p => ({ ...p, university: e.target.value }))} />
+                </div>
+                <div>
+                  <label style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(26,26,24,.4)', letterSpacing: 1, display: 'block', marginBottom: 5 }}>ŞEHİR</label>
+                  <input className="input-auth" placeholder="İstanbul" value={form.city} onChange={e => setForm(p => ({ ...p, city: e.target.value }))} />
+                </div>
               </div>
-              <div>
-                <label className="label">Şehir</label>
-                <input name="city" type="text" className="input" placeholder="İstanbul, Ankara..."
-                  value={form.city} onChange={handleChange} />
+            )}
+
+            {role === 'investor' && (
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                <div>
+                  <label style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(26,26,24,.4)', letterSpacing: 1, display: 'block', marginBottom: 5 }}>FİRMA ADI</label>
+                  <input className="input-auth" placeholder="XYZ Ventures" value={form.firm_name} onChange={e => setForm(p => ({ ...p, firm_name: e.target.value }))} />
+                </div>
+                <div>
+                  <label style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(26,26,24,.4)', letterSpacing: 1, display: 'block', marginBottom: 5 }}>ŞEHİR</label>
+                  <input className="input-auth" placeholder="İstanbul" value={form.city} onChange={e => setForm(p => ({ ...p, city: e.target.value }))} />
+                </div>
               </div>
-            </>
-          )}
+            )}
 
-          {role === 'company' && (
-            <>
-              <div>
-                <label className="label">Şirket adı</label>
-                <input name="company_name" type="text" className="input" placeholder="Trendyol, Getir..."
-                  value={form.company_name} onChange={handleChange} required />
+            {role === 'company' && (
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                <div>
+                  <label style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(26,26,24,.4)', letterSpacing: 1, display: 'block', marginBottom: 5 }}>ŞİRKET ADI *</label>
+                  <input className="input-auth" placeholder="Şirket A.Ş." value={form.company_name} onChange={e => setForm(p => ({ ...p, company_name: e.target.value }))} required />
+                </div>
+                <div>
+                  <label style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(26,26,24,.4)', letterSpacing: 1, display: 'block', marginBottom: 5 }}>ŞEHİR</label>
+                  <input className="input-auth" placeholder="İstanbul" value={form.city} onChange={e => setForm(p => ({ ...p, city: e.target.value }))} />
+                </div>
               </div>
-              <div>
-                <label className="label">Şehir</label>
-                <input name="city" type="text" className="input" placeholder="İstanbul, Ankara..."
-                  value={form.city} onChange={handleChange} />
+            )}
+
+            <div>
+              <label style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(26,26,24,.4)', letterSpacing: 1, display: 'block', marginBottom: 5 }}>E-POSTA *</label>
+              <input type="email" className="input-auth" placeholder="ornek@email.com" value={form.email} onChange={e => setForm(p => ({ ...p, email: e.target.value }))} required />
+            </div>
+
+            <div>
+              <label style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(26,26,24,.4)', letterSpacing: 1, display: 'block', marginBottom: 5 }}>ŞİFRE *</label>
+              <input type="password" className="input-auth" placeholder="En az 6 karakter" value={form.password} onChange={e => setForm(p => ({ ...p, password: e.target.value }))} required minLength={6} />
+            </div>
+
+            {error && (
+              <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 8, padding: '10px 14px' }}>
+                <p style={{ fontSize: 13, color: '#dc2626', margin: 0 }}>⚠ {error}</p>
               </div>
-            </>
-          )}
+            )}
 
-          <div>
-            <label className="label">E-posta</label>
-            <input name="email" type="email" className="input" placeholder="ornek@email.com"
-              value={form.email} onChange={handleChange} required />
-          </div>
+            <button type="submit" disabled={loading}
+              style={{ padding: '13px', background: '#1a1a18', color: 'white', border: 'none', borderRadius: 8, fontSize: 14, fontWeight: 600, cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1, transition: 'all 0.2s', fontFamily: 'Inter, sans-serif' }}
+              onMouseEnter={e => { if (!loading) e.currentTarget.style.background = '#C4500A' }}
+              onMouseLeave={e => { e.currentTarget.style.background = '#1a1a18' }}>
+              {loading ? 'Hesap oluşturuluyor...' : `${selectedRole.emoji} ${selectedRole.label} olarak kayıt ol →`}
+            </button>
+          </form>
 
-          <div>
-            <label className="label">Şifre</label>
-            <input name="password" type="password" className="input" placeholder="En az 6 karakter"
-              value={form.password} onChange={handleChange} required minLength={6} />
-          </div>
-
-          {error && (
-            <p className="text-xs text-red-600 bg-red-50 border border-red-100 rounded px-3 py-2">{error}</p>
-          )}
-
-          <button type="submit" disabled={loading} className="btn-primary w-full justify-center disabled:opacity-60">
-            {loading ? 'Hesap oluşturuluyor...' : `${ROLES.find(r => r.key === role)?.label} olarak kayıt ol →`}
-          </button>
-        </form>
-
-        <p className="text-center text-sm text-ink/45 mt-4">
-          Zaten hesabın var mı?{' '}
-          <Link href="/auth/login" className="text-brand hover:underline">Giriş yap</Link>
-        </p>
+          <p style={{ textAlign: 'center', fontSize: 11, color: 'rgba(26,26,24,.3)', marginTop: '1rem', lineHeight: 1.6, fontFamily: 'monospace' }}>
+            🔒 SSL ile güvenli · KVKK uyumlu
+          </p>
+        </div>
       </div>
     </div>
   )
