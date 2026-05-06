@@ -114,6 +114,8 @@ export default function Sidebar({ user }: SidebarProps) {
   if (!user) return null
 
   const role = user.role || 'founder'
+  // Role henüz gelmediyse hiç render etme
+  if (!user.id) return null
   const navGroups = role === 'investor' ? INVESTOR_NAV : role === 'company' ? COMPANY_NAV : FOUNDER_NAV
 
   const roleLabel = role === 'investor' ? 'Yatırımcı' : role === 'company' ? 'Şirket' : 'Girişimci'

@@ -12,6 +12,9 @@ export default async function AyarlarPage() {
   const { data: profile } = await supabase
     .from('profiles').select('*').eq('id', user.id).single()
 
+  // AppLayout için role garantisi
+  const sidebarProfile = { id: user.id, role: profile?.role || 'founder', full_name: profile?.full_name, avatar_url: profile?.avatar_url }
+
   const { data: skills } = await supabase
     .from('user_skills').select('id').eq('user_id', user.id)
 
@@ -69,7 +72,7 @@ export default async function AyarlarPage() {
   const completionPercent = Math.round((Object.values(completion).filter(Boolean).length / 5) * 100)
 
   return (
-    <AppLayout user={user} profile={profile}>
+    <AppLayout user={user} profile={sidebarProfile}>
       <main className="px-8 py-10">
         <div className="mb-8">
           <p className="mono text-xs text-ink/35 tracking-widest mb-1">AYARLAR</p>
