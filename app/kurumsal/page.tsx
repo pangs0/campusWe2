@@ -127,6 +127,10 @@ const PACKAGES = [
   },
 ]
 
+function scrollToSection(id: string) {
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+}
+
 function ROICalculator() {
   const [hires, setHires] = useState(5)
   const [salary, setSalary] = useState(15000)
@@ -202,10 +206,6 @@ export default function KurumsalPage() {
   const howIt = useScrollFadeUp()
   const packages = useScrollFadeUp()
   const formSection = useScrollFadeUp()
-
-  function scrollTo(id: string) {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
-  }
 
   useEffect(() => { setTimeout(() => setVisible(true), 100) }, [])
 
@@ -290,10 +290,10 @@ export default function KurumsalPage() {
               12.000'den fazla üniversiteli girişimci ve yetenekli profil. Demo Day'e sponsor ol, markalı kuluçka katı aç, doğru insanları bul.
             </p>
             <div style={{ display: 'flex', gap: 12 }}>
-              <button onClick={() => scrollTo('basvuru')} className="cta-btn" style={{ background: '#C4500A', color: 'white', padding: '13px 28px', borderRadius: 8, fontSize: 14, fontWeight: 600, border: 'none', cursor: 'pointer' }}>
+              <button onClick={() => scrollToSection('basvuru')} className="cta-btn" style={{ background: '#C4500A', color: 'white', padding: '13px 28px', borderRadius: 8, fontSize: 14, fontWeight: 600, border: 'none', cursor: 'pointer' }}>
                 Başvuru yap →
               </button>
-              <button onClick={() => scrollTo('paketler')} className="cta-btn" style={{ background: 'white', color: '#1a1a18', padding: '13px 28px', borderRadius: 8, fontSize: 14, fontWeight: 500, border: '1px solid rgba(26,26,24,.15)', cursor: 'pointer' }}>
+              <button onClick={() => scrollToSection('paketler')} className="cta-btn" style={{ background: 'white', color: '#1a1a18', padding: '13px 28px', borderRadius: 8, fontSize: 14, fontWeight: 500, border: '1px solid rgba(26,26,24,.15)', cursor: 'pointer' }}>
                 Paketleri gör
               </button>
             </div>
@@ -397,7 +397,7 @@ export default function KurumsalPage() {
                   </div>
                 ))}
               </div>
-              <button onClick={() => scrollTo('basvuru')} className="cta-btn" style={{ display: 'block', width: '100%', textAlign: 'center', padding: '12px', borderRadius: 8, background: pkg.featured ? '#C4500A' : 'transparent', color: pkg.featured ? 'white' : pkg.color, fontSize: 14, fontWeight: 500, border: pkg.featured ? 'none' : `1.5px solid ${pkg.color}`, cursor: 'pointer' }}>
+              <button onClick={() => scrollToSection('basvuru')} className="cta-btn" style={{ display: 'block', width: '100%', textAlign: 'center', padding: '12px', borderRadius: 8, background: pkg.featured ? '#C4500A' : 'transparent', color: pkg.featured ? 'white' : pkg.color, fontSize: 14, fontWeight: 500, border: pkg.featured ? 'none' : `1.5px solid ${pkg.color}`, cursor: 'pointer' }}>
                 Hemen başvur →
               </button>
             </div>
@@ -430,20 +430,6 @@ export default function KurumsalPage() {
       </div>
 
       {/* Başvuru Formu */}
-
-      {/* Güven bölümü */}
-      <div style={{ borderTop: '1px solid rgba(26,26,24,.08)', borderBottom: '1px solid rgba(26,26,24,.08)', padding: '3rem 4rem' }}>
-        <p style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(26,26,24,.3)', letterSpacing: 3, textTransform: 'uppercase', textAlign: 'center', marginBottom: '2rem' }}>BİZE GÜVENEN ŞİRKETLER</p>
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 48, flexWrap: 'wrap' }}>
-          {['Trendyol', 'Getir', 'Turkcell', 'Arçelik', 'Yemeksepeti', 'Pegasus', 'Hepsiburada', 'Logo'].map((brand, i) => (
-            <div key={i} style={{ fontFamily: 'Georgia, serif', fontSize: 18, fontWeight: 800, color: 'rgba(26,26,24,.15)', letterSpacing: -0.5, transition: 'color 0.2s', cursor: 'default' }}
-              onMouseEnter={e => (e.currentTarget.style.color = 'rgba(26,26,24,.4)')}
-              onMouseLeave={e => (e.currentTarget.style.color = 'rgba(26,26,24,.15)')}>
-              {brand}
-            </div>
-          ))}
-        </div>
-      </div>
 
       {/* Karşılaştırma tablosu */}
       <div style={{ padding: '5rem 4rem' }}>
@@ -492,7 +478,7 @@ export default function KurumsalPage() {
             <div style={{ padding: '1.5rem' }} />
             {['Starter', 'Growth', 'Enterprise'].map((p, i) => (
               <div key={i} style={{ padding: '1.25rem 1rem', textAlign: 'center', background: i === 1 ? '#1a1a18' : 'transparent', borderLeft: '1px solid rgba(26,26,24,.08)' }}>
-                <button onClick={() => scrollTo('basvuru')} className="cta-btn"
+                <button onClick={() => scrollToSection('basvuru')} className="cta-btn"
                   style={{ background: i === 1 ? '#C4500A' : 'transparent', color: i === 1 ? 'white' : '#C4500A', padding: '8px 16px', borderRadius: 6, border: i === 1 ? 'none' : '1px solid #C4500A', fontSize: 12, fontWeight: 500, cursor: 'pointer', width: '100%' }}>
                   Başvur →
                 </button>
@@ -555,11 +541,11 @@ export default function KurumsalPage() {
             </p>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-            <button onClick={() => scrollTo('basvuru')} className="cta-btn"
+            <button onClick={() => scrollToSection('basvuru')} className="cta-btn"
               style={{ background: '#C4500A', color: 'white', padding: '15px 32px', borderRadius: 8, border: 'none', fontSize: 15, fontWeight: 600, cursor: 'pointer', textAlign: 'center' }}>
               Demo talep et →
             </button>
-            <button onClick={() => scrollTo('basvuru')} className="cta-btn"
+            <button onClick={() => scrollToSection('basvuru')} className="cta-btn"
               style={{ background: 'white', color: '#1a1a18', padding: '15px 32px', borderRadius: 8, border: '1px solid rgba(26,26,24,.15)', fontSize: 15, fontWeight: 500, cursor: 'pointer', textAlign: 'center' }}>
               Teklif al
             </button>
