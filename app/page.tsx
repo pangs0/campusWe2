@@ -174,7 +174,7 @@ export default function HomePage() {
               Co-founder bul, yatırımcıyla tanış, kurs oluştur, kazan. Startup yolculuğunda ihtiyacın olan her şey burada.
             </p>
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-              <a href="/auth/register" className="cta-btn" style={{ background: '#1a1a18', color: 'white', padding: '14px 32px', borderRadius: 8, fontSize: 14, textDecoration: 'none', fontWeight: 600, display: 'inline-block' }}>
+              <a href="/auth/register" className="cta-btn" style={{ background: '#C4500A', color: 'white', padding: '14px 32px', borderRadius: 8, fontSize: 14, textDecoration: 'none', fontWeight: 600, display: 'inline-block' }}>
                 Ücretsiz başla
               </a>
               <a href="/fiyatlandirma" className="cta-btn" style={{ background: 'transparent', color: '#1a1a18', padding: '14px 32px', borderRadius: 8, fontSize: 14, textDecoration: 'none', fontWeight: 500, border: '1px solid rgba(26,26,24,.2)', display: 'inline-block' }}>
