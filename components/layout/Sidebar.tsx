@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useRouter, usePathname } from 'next/navigation'
+import { useRef, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import {
   LayoutDashboard, Globe, Compass, Home, Coffee,
@@ -104,6 +105,24 @@ export default function Sidebar({ user }: SidebarProps) {
   const router = useRouter()
   const pathname = usePathname()
   const supabase = createClient()
+  const navRef = useRef<HTMLElement>(null)
+  const scrollPos = useRef(0)
+
+  // Scroll pozisyonunu kaydet
+  useEffect(() => {
+    const nav = navRef.current
+    if (!nav) return
+    const handleScroll = () => { scrollPos.current = nav.scrollTop }
+    nav.addEventListener('scroll', handleScroll)
+    return () => nav.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  // Sayfa değişince scroll pozisyonunu geri yükle
+  useEffect(() => {
+    const nav = navRef.current
+    if (!nav) return
+    nav.scrollTop = scrollPos.current
+  }, [pathname])
 
   async function handleSignOut() {
     await supabase.auth.signOut()
@@ -139,7 +158,7 @@ export default function Sidebar({ user }: SidebarProps) {
         </span>
       </div>
 
-      <nav className="sidebar-nav flex-1 overflow-y-auto py-3 px-3">
+      <nav ref={navRef} className="sidebar-nav flex-1 overflow-y-auto py-3 px-3">
         {navGroups.map(group => (
           <div key={group.label} className="mb-4">
             <p className="mono text-xs text-ink/25 tracking-widest px-3 mb-1">{group.label.toUpperCase()}</p>
