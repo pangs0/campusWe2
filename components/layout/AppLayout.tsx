@@ -16,7 +16,7 @@ export default function AppLayout({ children, user, profile }: AppLayoutProps) {
   return (
     <div className="flex min-h-screen bg-cream">
       <Sidebar user={sidebarUser} />
-      <div className="flex-1 ml-56 min-w-0">
+      <div className="flex-1 ml-56 min-w-0 transition-none">
         {children}
       </div>
     </div>

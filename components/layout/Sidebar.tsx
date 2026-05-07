@@ -112,10 +112,9 @@ export default function Sidebar({ user }: SidebarProps) {
   }
 
   if (!user) return null
+  if (!user.id) return null
 
   const role = user.role || 'founder'
-  // Role henüz gelmediyse hiç render etme
-  if (!user.id) return null
   const navGroups = role === 'investor' ? INVESTOR_NAV : role === 'company' ? COMPANY_NAV : FOUNDER_NAV
 
   const roleLabel = role === 'investor' ? 'Yatırımcı' : role === 'company' ? 'Şirket' : 'Girişimci'
@@ -123,7 +122,15 @@ export default function Sidebar({ user }: SidebarProps) {
 
   return (
     <aside className="fixed top-0 left-0 h-screen w-56 bg-cream border-r border-neutral-200 flex flex-col z-50">
-      <div className="px-5 py-4 border-b border-neutral-200">
+      <style>{`
+        .sidebar-nav::-webkit-scrollbar { width: 3px; }
+        .sidebar-nav::-webkit-scrollbar-track { background: transparent; }
+        .sidebar-nav::-webkit-scrollbar-thumb { background: rgba(196,80,10,.2); border-radius: 99px; }
+        .sidebar-nav::-webkit-scrollbar-thumb:hover { background: rgba(196,80,10,.4); }
+        .sidebar-nav { scrollbar-width: thin; scrollbar-color: rgba(196,80,10,.2) transparent; }
+      `}</style>
+
+      <div className="px-5 py-4 border-b border-neutral-200 flex-shrink-0">
         <Link href="/" className="font-serif text-xl font-bold text-ink block mb-2">
           Campus<em className="text-brand not-italic">We</em>
         </Link>
@@ -132,7 +139,7 @@ export default function Sidebar({ user }: SidebarProps) {
         </span>
       </div>
 
-      <nav className="flex-1 overflow-y-auto py-3 px-3">
+      <nav className="sidebar-nav flex-1 overflow-y-auto py-3 px-3">
         {navGroups.map(group => (
           <div key={group.label} className="mb-4">
             <p className="mono text-xs text-ink/25 tracking-widest px-3 mb-1">{group.label.toUpperCase()}</p>
@@ -154,7 +161,7 @@ export default function Sidebar({ user }: SidebarProps) {
         ))}
       </nav>
 
-      <div className="border-t border-neutral-200 p-3 space-y-0.5">
+      <div className="border-t border-neutral-200 p-3 space-y-0.5 flex-shrink-0">
         <NotificationBell userId={user.id} />
         <Link href="/profile"
           className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors ${
