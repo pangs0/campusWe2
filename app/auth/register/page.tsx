@@ -65,6 +65,7 @@ export default function RegisterPage() {
   const [form, setForm] = useState({ email: '', password: '', full_name: '', username: '', university: '', city: '', company_name: '', firm_name: '' })
   const [error, setError] = useState('')
   const [agreed, setAgreed] = useState(false)
+  const [sent, setSent] = useState(false)
   const [loading, setLoading] = useState(false)
   const [visible, setVisible] = useState(false)
 
@@ -105,10 +106,8 @@ export default function RegisterPage() {
       }
     }
 
-    if (role === 'investor') router.push('/yatirimci')
-    else if (role === 'company') router.push('/sirket')
-    else router.push('/dashboard')
-    router.refresh()
+    setSent(true)
+    setLoading(false)
   }
 
   return (
@@ -196,15 +195,29 @@ export default function RegisterPage() {
         overflowY: 'auto',
       }}>
         <div className="fade-up" style={{ animationDelay: '0.3s', width: '100%', maxWidth: 420 }}>
-          <div style={{ marginBottom: '1.5rem' }}>
-            <h2 style={{ fontFamily: 'Georgia, serif', fontSize: 26, fontWeight: 800, color: '#1a1a18', margin: '0 0 4px', letterSpacing: -1 }}>
-              Hesap oluştur
-            </h2>
-            <p style={{ fontSize: 13, color: 'rgba(26,26,24,.45)', margin: 0 }}>
-              Zaten hesabın var mı?{' '}
-              <Link href="/auth/login" style={{ color: '#C4500A', textDecoration: 'none', fontWeight: 500 }}>Giriş yap →</Link>
-            </p>
-          </div>
+
+          {sent ? (
+            <div style={{ textAlign: 'center', padding: '2rem' }}>
+              <div style={{ width: 72, height: 72, borderRadius: '50%', background: 'rgba(196,80,10,.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem', fontSize: 32 }}>
+                📧
+              </div>
+              <h2 style={{ fontFamily: 'Georgia, serif', fontSize: 26, fontWeight: 800, color: '#1a1a18', margin: '0 0 0.75rem', letterSpacing: -1 }}>
+                E-postanı doğrula
+              </h2>
+              <p style={{ fontSize: 14, color: 'rgba(26,26,24,.55)', lineHeight: 1.8, marginBottom: '1.5rem' }}>
+                <strong>{form.email}</strong> adresine bir doğrulama bağlantısı gönderdik. Gelen kutunu kontrol et ve bağlantıya tıkla.
+              </p>
+              <div style={{ background: 'rgba(196,80,10,.04)', border: '1px solid rgba(196,80,10,.12)', borderRadius: 10, padding: '1rem', marginBottom: '1.5rem' }}>
+                <p style={{ fontSize: 12, color: 'rgba(26,26,24,.5)', margin: 0, lineHeight: 1.7 }}>
+                  📁 Spam klasörünü de kontrol etmeyi unutma. Mail 1-2 dakika içinde gelir.
+                </p>
+              </div>
+              <Link href="/auth/login" style={{ display: 'block', textAlign: 'center', padding: '12px', borderRadius: 8, background: '#1a1a18', color: 'white', fontSize: 14, textDecoration: 'none', fontWeight: 500 }}>
+                Giriş sayfasına git →
+              </Link>
+            </div>
+          ) : (
+            <div>
 
           {/* Rol seçimi */}
           <div style={{ marginBottom: '1.5rem' }}>
@@ -323,6 +336,8 @@ export default function RegisterPage() {
           <p style={{ textAlign: 'center', fontSize: 11, color: 'rgba(26,26,24,.3)', marginTop: '1rem', lineHeight: 1.6, fontFamily: 'monospace' }}>
             🔒 SSL ile güvenli · KVKK uyumlu
           </p>
+          </div>
+          )}
         </div>
       </div>
     </div>
