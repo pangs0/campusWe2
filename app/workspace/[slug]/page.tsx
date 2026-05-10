@@ -8,6 +8,9 @@ export default async function WorkspacePage({ params }: { params: { slug: string
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/auth/login')
 
+  const { data: profile } = await supabase
+    .from('profiles').select('id, full_name, avatar_url, role, karma_tokens').eq('id', user.id).single()
+
   const { data: startup } = await supabase
     .from('startups')
     .select('*, founder:profiles(full_name, avatar_url)')
@@ -48,7 +51,7 @@ export default async function WorkspacePage({ params }: { params: { slug: string
   const isMember = members?.some(m => m.profile?.id === user.id)
 
   return (
-    <AppLayout user={user}>
+    <AppLayout user={user} profile={profile}>
       <main className="px-8 py-10">
         <WorkspaceClient
           startup={startup}
