@@ -38,6 +38,37 @@ export default async function DashboardPage() {
     .order('created_at', { ascending: false })
     .limit(8)
 
+  // Yaklaşan toplantı
+  const { data: upcomingMeeting } = await supabase
+    .from('meetings')
+    .select('*, startup:startups(name, slug)')
+    .gte('scheduled_at', new Date().toISOString())
+    .order('scheduled_at', { ascending: true })
+    .limit(1)
+    .single()
+
+  // Bekleyen görevler
+  const { count: pendingTasks } = await supabase
+    .from('tasks')
+    .select('*', { count: 'exact', head: true })
+    .eq('assigned_to', user.id)
+    .neq('status', 'done')
+
+  // Okunmamış mesajlar
+  const { count: unreadMessages } = await supabase
+    .from('conversations')
+    .select('*', { count: 'exact', head: true })
+    .or(`participant1_id.eq.${user.id},participant2_id.eq.${user.id}`)
+
+  // Günlük hedefler
+  const today = new Date().toISOString().split('T')[0]
+  const { data: todayGoals } = await supabase
+    .from('daily_goals')
+    .select('*')
+    .eq('user_id', user.id)
+    .eq('date', today)
+    .order('created_at')
+
   const { percent, steps } = getProfileCompletion(profile, skills || [], myStartups || [])
   const isNew = (myStartups?.length || 0) === 0 && (skills?.length || 0) === 0
 
@@ -112,7 +143,7 @@ export default async function DashboardPage() {
           </div>
         )}
 
-        <div className="grid grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-4 gap-4 mb-8">
           <div className="card">
             <p className="mono text-xs text-ink/35 tracking-widest mb-2">STARTUPLAR</p>
             <p className="font-serif text-3xl font-bold text-ink">{myStartups?.length || 0}</p>
@@ -122,8 +153,71 @@ export default async function DashboardPage() {
             <p className="font-serif text-3xl font-bold text-brand">{profile?.karma_tokens || 0}</p>
           </div>
           <div className="card">
+            <p className="mono text-xs text-ink/35 tracking-widest mb-2">BEKLİYEN GÖREV</p>
+            <p className="font-serif text-3xl font-bold text-ink">{pendingTasks || 0}</p>
+          </div>
+          <div className="card">
             <p className="mono text-xs text-ink/35 tracking-widest mb-2">YETENEKLERİM</p>
             <p className="font-serif text-3xl font-bold text-ink">{skills?.length || 0}</p>
+          </div>
+        </div>
+
+        {/* Günlük hedefler + Yaklaşan toplantı */}
+        <div className="grid grid-cols-2 gap-4 mb-8">
+
+          {/* Günlük hedefler */}
+          <div className="card">
+            <div className="flex items-center justify-between mb-3">
+              <p className="mono text-xs text-ink/35 tracking-widest">BUGÜNÜN HEDEFLERİ</p>
+              <Link href="/kutuphane" className="text-xs text-brand hover:underline">Tümü →</Link>
+            </div>
+            {todayGoals && todayGoals.length > 0 ? (
+              <div className="space-y-1.5">
+                {todayGoals.slice(0, 4).map((g: any) => (
+                  <div key={g.id} className="flex items-center gap-2.5">
+                    <div className={`w-4 h-4 rounded border flex items-center justify-center flex-shrink-0 ${g.is_completed ? 'bg-green-500 border-green-500' : 'border-neutral-300'}`}>
+                      {g.is_completed && <CheckCircle size={10} color="white" />}
+                    </div>
+                    <span className={`text-sm ${g.is_completed ? 'line-through text-ink/30' : 'text-ink/70'}`}>{g.title}</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-4">
+                <p className="text-xs text-ink/35 mb-2">Bugün için hedef belirlemedin.</p>
+                <Link href="/kutuphane" className="text-xs text-brand hover:underline">Hedef ekle →</Link>
+              </div>
+            )}
+          </div>
+
+          {/* Yaklaşan toplantı */}
+          <div className="card">
+            <div className="flex items-center justify-between mb-3">
+              <p className="mono text-xs text-ink/35 tracking-widest">YAKLAŞAN TOPLANTI</p>
+              {myStartups?.[0] && (
+                <Link href={`/workspace/${myStartups[0].slug}`} className="text-xs text-brand hover:underline">Workspace →</Link>
+              )}
+            </div>
+            {upcomingMeeting ? (
+              <div className="p-3 rounded-xl" style={{ background: 'rgba(196,80,10,.04)', border: '1px solid rgba(196,80,10,.12)' }}>
+                <p className="text-sm font-medium text-ink">{upcomingMeeting.title}</p>
+                <p className="mono text-xs text-ink/40 mt-1">
+                  {new Date(upcomingMeeting.scheduled_at).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long' })}
+                  {' · '}
+                  {new Date(upcomingMeeting.scheduled_at).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}
+                </p>
+                {upcomingMeeting.startup && (
+                  <p className="mono text-xs text-brand mt-0.5">{upcomingMeeting.startup.name}</p>
+                )}
+              </div>
+            ) : (
+              <div className="text-center py-4">
+                <p className="text-xs text-ink/35 mb-2">Yaklaşan toplantı yok.</p>
+                {myStartups?.[0] && (
+                  <Link href={`/workspace/${myStartups[0].slug}`} className="text-xs text-brand hover:underline">Toplantı oluştur →</Link>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
