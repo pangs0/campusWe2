@@ -192,9 +192,15 @@ export default function ProUpgradePage() {
                 ))}
               </div>
 
-              <button className="cta-btn" style={{ width: '100%', padding: '14px', background: '#C4500A', color: 'white', border: 'none', borderRadius: 10, fontSize: 15, fontWeight: 600, cursor: 'pointer', fontFamily: 'Inter, sans-serif', marginBottom: 10 }}>
+              <button className="cta-btn" onClick={() => alert('Ödeme sistemi yakında aktif olacak! 🚀 Şu an beta sürecindeyiz.')} style={{ width: '100%', padding: '14px', background: '#C4500A', color: 'white', border: 'none', borderRadius: 10, fontSize: 15, fontWeight: 600, cursor: 'pointer', fontFamily: 'Inter, sans-serif', marginBottom: 10 }}>
                 Pro'ya geç — ₺{currentPrice}/ay →
               </button>
+
+              <div style={{ background: 'rgba(196,80,10,.04)', border: '1px solid rgba(196,80,10,.1)', borderRadius: 8, padding: '8px 12px', marginBottom: 10 }}>
+                <p style={{ fontSize: 11, color: 'rgba(26,26,24,.5)', margin: 0, textAlign: 'center', fontFamily: 'monospace' }}>
+                  🔜 Ödeme sistemi yakında aktif — Beta sürecinde ücretsiz dene
+                </p>
+              </div>
 
               <div style={{ display: 'flex', justifyContent: 'center', gap: 16, flexWrap: 'wrap' }}>
                 {[{ icon: Shield, text: 'Güvenli ödeme' }, { icon: RefreshCw, text: 'İstediğin zaman iptal' }].map((b, i) => (
@@ -319,7 +325,7 @@ export default function ProUpgradePage() {
           847 girişimci zaten Pro. Sıra sende.
         </p>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-          <button className="cta-btn" style={{ background: '#C4500A', color: 'white', padding: '14px 36px', borderRadius: 8, border: 'none', fontSize: 15, fontWeight: 600, cursor: 'pointer', fontFamily: 'Inter, sans-serif' }}>
+          <button className="cta-btn" onClick={() => alert('Ödeme sistemi yakında aktif olacak! 🚀 Şu an beta sürecindeyiz.')} style={{ background: '#C4500A', color: 'white', padding: '14px 36px', borderRadius: 8, border: 'none', fontSize: 15, fontWeight: 600, cursor: 'pointer', fontFamily: 'Inter, sans-serif' }}>
             Pro'ya geç — ₺{currentPrice}/ay →
           </button>
           <Link href="/fiyatlandirma" style={{ background: 'rgba(255,255,255,.08)', color: 'rgba(255,255,255,.7)', padding: '14px 36px', borderRadius: 8, border: '1px solid rgba(255,255,255,.12)', fontSize: 15, textDecoration: 'none', fontWeight: 500, display: 'inline-block' }}>
