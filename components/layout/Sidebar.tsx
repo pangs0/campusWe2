@@ -106,23 +106,21 @@ export default function Sidebar({ user }: SidebarProps) {
   const pathname = usePathname()
   const supabase = createClient()
   const navRef = useRef<HTMLElement>(null)
-  const scrollPos = useRef(0)
 
   // Scroll pozisyonunu kaydet
   useEffect(() => {
     const nav = navRef.current
     if (!nav) return
-    const handleScroll = () => { scrollPos.current = nav.scrollTop }
+    // Kaydedilmiş pozisyonu geri yükle
+    const saved = sessionStorage.getItem('sidebar-scroll')
+    if (saved) nav.scrollTop = parseInt(saved)
+
+    const handleScroll = () => {
+      sessionStorage.setItem('sidebar-scroll', nav.scrollTop.toString())
+    }
     nav.addEventListener('scroll', handleScroll)
     return () => nav.removeEventListener('scroll', handleScroll)
   }, [])
-
-  // Sayfa değişince scroll pozisyonunu geri yükle
-  useEffect(() => {
-    const nav = navRef.current
-    if (!nav) return
-    nav.scrollTop = scrollPos.current
-  }, [pathname])
 
   async function handleSignOut() {
     await supabase.auth.signOut()
