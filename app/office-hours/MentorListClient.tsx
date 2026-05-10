@@ -27,9 +27,14 @@ export default function MentorListClient({ userId, sessions, isMentor }: Props) 
   const [booking, setBooking] = useState<string | null>(null)
 
   const filtered = sessions.filter(s =>
-    s.mentor?.id !== userId &&
-    (filter === 'Tümü' || s.expertise?.includes(filter))
+    filter === 'Tümü' || s.expertise?.includes(filter)
   )
+
+  // Kendi kartını en sona at, diğerlerini öne al
+  const sorted = [
+    ...filtered.filter(s => s.mentor?.id !== userId),
+    ...filtered.filter(s => s.mentor?.id === userId),
+  ]
 
   async function bookSession(session: any) {
     setBooking(session.id)
@@ -71,9 +76,14 @@ export default function MentorListClient({ userId, sessions, isMentor }: Props) 
           <p className="text-sm text-ink/45 mt-1">Sektör profesyonelleri haftada 1 saat gönüllü mentorluk yapıyor.</p>
         </div>
         {isMentor ? (
-          <div className="flex items-center gap-2 bg-brand/8 border border-brand/15 rounded-lg px-4 py-2.5">
-            <Star size={13} className="text-brand" />
-            <span className="mono text-sm text-brand font-medium">Aktif Mentor</span>
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 bg-brand/8 border border-brand/15 rounded-lg px-4 py-2.5">
+              <Star size={13} className="text-brand" />
+              <span className="mono text-sm text-brand font-medium">Aktif Mentor</span>
+            </div>
+            <Link href="/office-hours/yeni" className="btn-secondary flex items-center gap-1.5 text-sm">
+              Düzenle
+            </Link>
           </div>
         ) : (
           <Link href="/office-hours/yeni" className="btn-primary flex items-center gap-1.5 text-sm">
@@ -111,9 +121,9 @@ export default function MentorListClient({ userId, sessions, isMentor }: Props) 
       </div>
 
       {/* Mentor listesi */}
-      {filtered.length > 0 ? (
+      {sorted.length > 0 ? (
         <div className="grid grid-cols-2 gap-4">
-          {filtered.map((session: any) => (
+          {sorted.map((session: any) => (
             <div key={session.id} className="card hover:border-brand/25 transition-colors">
               <div className="flex items-start gap-3 mb-3">
                 <div className="w-11 h-11 rounded-full bg-brand/15 flex items-center justify-center text-lg font-bold text-brand font-serif flex-shrink-0 overflow-hidden">
@@ -174,7 +184,9 @@ export default function MentorListClient({ userId, sessions, isMentor }: Props) 
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  {booked.has(session.id) ? (
+                  {session.mentor?.id === userId ? (
+                    <span className="mono text-xs bg-brand/8 text-brand border border-brand/15 rounded-full px-3 py-1">Senin kartın</span>
+                  ) : booked.has(session.id) ? (
                     <span className="mono text-xs text-green-600 flex items-center gap-1">
                       <CheckCircle size={11} /> Mesaj gönderildi
                     </span>
