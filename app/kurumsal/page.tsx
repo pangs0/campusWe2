@@ -94,9 +94,9 @@ const HOW_IT_WORKS = [
 ]
 
 const TESTIMONIALS = [
-  { quote: 'CampusWe sayesinde 3 ayda 4 stajyer aldık. Hepsi tam aradığımız profildeydi.', name: 'Ayşe Kara', meta: 'Trendyol · İK Direktörü', emoji: '🛍️' },
-  { quote: 'Demo Day sponsorluğu mükemmeldi. Startup ekosistemiyle bağlantı kurmak bu kadar kolay olmamıştı.', name: 'Can Öztürk', meta: 'Arçelik · İnovasyon Müdürü', emoji: '⚡' },
-  { quote: 'Markalı kuluçka katımız sayesinde üniversiteli yeteneklere direkt ulaşıyoruz.', name: 'Selin Yılmaz', meta: 'Turkcell · Teknoloji Partneri', emoji: '📱' },
+  { quote: 'CampusWe sayesinde 3 ayda 4 stajyer aldık. Hepsi tam aradığımız profildeydi.', name: 'Ayşe K.', meta: 'İK Direktörü', emoji: '🛍️' },
+  { quote: 'Demo Day sponsorluğu mükemmeldi. Startup ekosistemiyle bağlantı kurmak bu kadar kolay olmamıştı.', name: 'Can Ö.', meta: 'İnovasyon Müdürü', emoji: '⚡' },
+  { quote: 'Markalı kuluçka katımız sayesinde üniversiteli yeteneklere direkt ulaşıyoruz.', name: 'Selin Y.', meta: 'Teknoloji Partneri', emoji: '📱' },
 ]
 
 const PACKAGES = [
