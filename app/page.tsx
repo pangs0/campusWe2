@@ -165,10 +165,9 @@ export default function HomePage() {
               <span style={{ fontSize: 10, color: '#C4500A', letterSpacing: 2, textTransform: 'uppercase', fontFamily: 'monospace' }}>Türkiye'nin Girişimci Platformu</span>
             </div>
             <h1 style={{ fontFamily: 'Georgia, serif', fontSize: 56, fontWeight: 800, color: '#1a1a18', letterSpacing: -2.5, lineHeight: 1.05, margin: '0 0 1.5rem' }}>
-              Eksikliği olan<br />
-              girişimcilerin<br />
-              <em style={{ color: '#C4500A', fontStyle: 'normal' }}>birbirini bulduğu</em><br />
-              platform.
+              Co-founder bul,<br />
+              yatırımcıyla tanış,<br />
+              <em style={{ color: '#C4500A', fontStyle: 'normal' }}>birlikte büyü.</em>
             </h1>
             <p style={{ fontSize: 16, color: 'rgba(26,26,24,.5)', maxWidth: 420, lineHeight: 1.75, margin: '0 0 2.5rem' }}>
               Co-founder bul, yatırımcıyla tanış, kurs oluştur, kazan. Startup yolculuğunda ihtiyacın olan her şey burada.
