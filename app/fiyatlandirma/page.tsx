@@ -61,9 +61,9 @@ const PRO_FEATURES = [
 ]
 
 const TESTIMONIALS = [
-  { quote: 'Pro\'ya geçtikten sonra Demo Day\'de yatırımcıyla tanıştım. 3 ay içinde seed turunu kapattık.', name: 'Kaan Demir', meta: 'İTÜ · AgriTech', emoji: '🌱' },
-  { quote: 'Sınırsız takas özelliği hayatımı değiştirdi. Her eksikliğimi topluluğa açıyorum.', name: 'Zeynep Arslan', meta: 'Bilkent · EduTech', emoji: '📚' },
-  { quote: 'Yatırımcılarla direkt mesajlaşma özelliği inanılmaz. 2 haftada 3 meeting ayarladım.', name: 'Mert Yıldız', meta: 'ODTÜ · FinTech', emoji: '💰' },
+  { quote: 'Pro\'ya geçtikten sonra Demo Day\'de yatırımcıyla tanıştım. 3 ay içinde seed turunu kapattık.', name: 'Kaan Demir', meta: 'AgriTech Kurucusu', emoji: '🌱' },
+  { quote: 'Sınırsız takas özelliği hayatımı değiştirdi. Her eksikliğimi topluluğa açıyorum.', name: 'Zeynep Arslan', meta: 'EduTech Kurucusu', emoji: '📚' },
+  { quote: 'Yatırımcılarla direkt mesajlaşma özelliği inanılmaz. 2 haftada 3 meeting ayarladım.', name: 'Mert Yıldız', meta: 'FinTech Kurucusu', emoji: '💰' },
 ]
 
 const NAV_LINKS = [

@@ -90,9 +90,9 @@ const ROLES = [
 ]
 
 const TESTIMONIALS = [
-  { quote: 'Co-founder\'ımı CampusWe\'de buldum. 3 ayda MVP\'yi çıkardık.', name: 'Kaan D.', meta: 'İTÜ · AgriTech Kurucusu', emoji: '🌱' },
-  { quote: 'Demo Day\'de yatırımcıyla tanıştım. Seed turunu kapattık.', name: 'Zeynep A.', meta: 'Bilkent · EduTech Kurucusu', emoji: '📚' },
-  { quote: 'Takas sistemiyle UI tasarımımı hallettim, karşılığında kod yazdım.', name: 'Mert Y.', meta: 'ODTÜ · FinTech Kurucusu', emoji: '💰' },
+  { quote: 'Co-founder\'ımı CampusWe\'de buldum. 3 ayda MVP\'yi çıkardık.', name: 'Kaan D.', meta: 'AgriTech Kurucusu', emoji: '🌱' },
+  { quote: 'Demo Day\'de yatırımcıyla tanıştım. Seed turunu kapattık.', name: 'Zeynep A.', meta: 'EduTech Kurucusu', emoji: '📚' },
+  { quote: 'Takas sistemiyle UI tasarımımı hallettim, karşılığında kod yazdım.', name: 'Mert Y.', meta: 'FinTech Kurucusu', emoji: '💰' },
 ]
 
 const HOW_IT_WORKS = [
