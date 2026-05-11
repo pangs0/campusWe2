@@ -138,11 +138,10 @@ export default function ProfileEditClient({ userId, profile, role, skills: initi
         <h1 className="font-serif text-3xl font-bold text-ink">Bilgilerini güncelle.</h1>
       </div>
 
-      <form onSubmit={handleSave}>
-        <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-3 gap-6 items-start">
 
-          {/* Sol — form */}
-          <div className="col-span-2 space-y-5">
+        {/* Sol — form */}
+        <form onSubmit={handleSave} className="col-span-2 space-y-5">
 
             {/* Genel bilgiler */}
             <div className="card space-y-4">
@@ -378,10 +377,10 @@ export default function ProfileEditClient({ userId, profile, role, skills: initi
             <button type="submit" disabled={loading} className="btn-primary w-full justify-center disabled:opacity-60 py-3">
               {saved ? '✓ Kaydedildi — yönlendiriliyor' : loading ? 'Kaydediliyor...' : 'Kaydet'}
             </button>
-          </div>
+        </form>
 
-          {/* Sağ — önizleme */}
-          <div className="space-y-4 sticky top-6 self-start">
+        {/* Sağ — önizleme */}
+        <div className="space-y-4 sticky top-10 self-start">
             <div className="card">
               <p className="mono text-xs text-ink/35 tracking-widest mb-3">CANLI ÖNİZLEME</p>
 
@@ -440,9 +439,8 @@ export default function ProfileEditClient({ userId, profile, role, skills: initi
                 ))}
               </div>
             </div>
-          </div>
         </div>
-      </form>
+      </div>
     </div>
   )
 }
