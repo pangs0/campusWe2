@@ -28,12 +28,12 @@ export default function InstructorClient({ userId, courses: initialCourses, tota
   async function createCourse(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
-    const { data } = await supabase.from('courses').insert({
+    const { data, error } = await supabase.from('courses').insert({
       ...form,
       instructor_id: userId,
       is_published: false,
-    }).select('*, course_enrollments(id), course_reviews(rating)').single()
-    if (data) setCourses(prev => [data, ...prev])
+    }).select().single()
+    if (data) setCourses(prev => [{ ...data, course_enrollments: [], course_reviews: [] }, ...prev])
     setShowForm(false)
     setForm({ title: '', description: '', category: 'girisimcilik', level: 'başlangıç', price: 0, is_free: true, thumbnail_url: '' })
     setLoading(false)

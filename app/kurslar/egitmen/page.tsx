@@ -13,7 +13,7 @@ export default async function EgitmenPage() {
 
   const { data: courses } = await supabase
     .from('courses')
-    .select('*, course_enrollments(id), course_reviews(rating)')
+    .select('*, course_enrollments(id), course_reviews(id, rating)')
     .eq('instructor_id', user.id)
     .order('created_at', { ascending: false })
 
