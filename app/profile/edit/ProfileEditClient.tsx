@@ -385,12 +385,12 @@ export default function ProfileEditClient({ userId, profile, role, skills: initi
               <p className="mono text-xs text-ink/35 tracking-widest mb-3">CANLI ÖNİZLEME</p>
 
               {/* Kapak */}
-              <div style={{ height: 60, background: 'linear-gradient(135deg, #1a1a18, #2a1a10)', borderRadius: '8px 8px 0 0', marginBottom: -24, position: 'relative' }}>
+              <div style={{ height: 60, background: 'linear-gradient(135deg, #1a1a18, #2a1a10)', borderRadius: '8px 8px 0 0', marginBottom: -20, position: 'relative' }}>
                 <div style={{ position: 'absolute', inset: 0, backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(196,80,10,.06) 20px, rgba(196,80,10,.06) 40px)', borderRadius: '8px 8px 0 0' }} />
               </div>
 
-              <div style={{ padding: '0 12px 12px' }}>
-                <div className="w-12 h-12 rounded-full overflow-hidden bg-brand/15 flex items-center justify-center font-serif font-bold text-brand text-lg mb-2 border-2 border-white">
+              <div style={{ padding: '0 12px 12px', paddingTop: 26 }}>
+                <div className="w-12 h-12 rounded-full overflow-hidden bg-brand/15 flex items-center justify-center font-serif font-bold text-brand text-lg mb-2 border-2 border-white shadow-sm">
                   {avatarPreview
                     ? <img src={avatarPreview} alt="" className="w-full h-full object-cover" />
                     : form.full_name?.[0] || '?'
