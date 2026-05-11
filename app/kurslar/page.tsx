@@ -157,8 +157,7 @@ export default async function KurslarPage({ searchParams }: { searchParams: { ca
                       </div>
                       {course.instructor?.id ? (
                         <Link href={`/egitmen/${course.instructor.id}`}
-                          className="text-xs text-ink/45 hover:text-brand transition-colors truncate"
-                          onClick={e => e.stopPropagation()}>
+                          className="text-xs text-ink/45 hover:text-brand transition-colors truncate">
                           {course.instructor?.full_name}
                         </Link>
                       ) : (
