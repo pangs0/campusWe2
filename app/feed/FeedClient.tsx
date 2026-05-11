@@ -61,21 +61,19 @@ export default function FeedClient({ userId, avatarUrl, fullName, startups, init
             {avatarUrl ? <img src={avatarUrl} alt={fullName} className="w-full h-full object-cover" /> : fullName?.[0]}
           </div>
           <div className="flex-1">
-            <textarea className="w-full text-sm text-ink placeholder:text-ink/35 resize-none focus:outline-none bg-transparent leading-relaxed"
-              <TypewriterTextarea
-                className="input resize-none"
-                value={content}
-                onChange={e => setContent(e.target.value)}
-                rows={3}
-                placeholders={[
-                  'Girişim yolculuğundan bir şey paylaş...',
-                  'Bu hafta ne öğrendin?',
-                  'Startup\'ında ne değişti?',
-                  'Topluluğa bir soru sor...',
-                  'Başarını kutla 🎉',
-                ]}
-              />
-              value={content} onChange={e => setContent(e.target.value)} />
+            <TypewriterTextarea
+              className="w-full text-sm text-ink placeholder:text-ink/35 resize-none focus:outline-none bg-transparent leading-relaxed"
+              value={content}
+              onChange={e => setContent(e.target.value)}
+              rows={3}
+              placeholders={[
+                'Girişim yolculuğundan bir şey paylaş...',
+                'Bu hafta ne öğrendin?',
+                'Startup\'ında ne değişti?',
+                'Topluluğa bir soru sor...',
+                'Başarını kutla 🎉',
+              ]}
+            />
             {imagePreview && (
               <div className="relative mt-2 rounded-lg overflow-hidden border border-neutral-200">
                 <img src={imagePreview} alt="" className="w-full max-h-64 object-cover" />
