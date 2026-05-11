@@ -4,7 +4,8 @@ import { useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
-import { ArrowLeft, X, Plus, Check, Upload, Camera, Linkedin, Globe, Twitter, Instagram } from 'lucide-react'
+import { ArrowLeft, X, Plus, Check, Upload, Camera, Linkedin, Globe, Twitter } from 'lucide-react'
+import { useToast } from '@/components/ui/Toast'
 
 const SKILL_CATEGORIES = ['Teknik', 'Tasarım', 'Pazarlama', 'İş Geliştirme', 'Finans', 'Hukuk', 'Diğer']
 const FOCUS_AREAS = ['FinTech', 'EdTech', 'HealthTech', 'AgriTech', 'SaaS', 'Yapay Zeka', 'E-ticaret', 'CleanTech', 'DeepTech', 'GameTech']
@@ -25,6 +26,7 @@ type Props = {
 export default function ProfileEditClient({ userId, profile, role, skills: initialSkills, investorProfile, companyProfile }: Props) {
   const supabase = createClient()
   const router = useRouter()
+  const toast = useToast()
   const fileRef = useRef<HTMLInputElement>(null)
   const [loading, setLoading] = useState(false)
   const [saved, setSaved] = useState(false)
@@ -110,6 +112,7 @@ export default function ProfileEditClient({ userId, profile, role, skills: initi
 
     setLoading(false)
     setSaved(true)
+    toast.success('Profil başarıyla güncellendi! ✓')
     setTimeout(() => { setSaved(false); router.push('/profile') }, 1500)
   }
 
