@@ -91,7 +91,11 @@ export default function NewStartupClient({ userId, profile }: { userId: string; 
       logo_url,
     }).select().single()
 
-    if (insertError) { setError('Bir hata oluştu. Tekrar dene.'); setLoading(false); return }
+    if (insertError) { 
+      setError('Hata: ' + insertError.message + ' (Code: ' + insertError.code + ')')
+      setLoading(false)
+      return 
+    }
     await supabase.from('startup_members').insert({ startup_id: data.id, user_id: userId, role: 'Kurucu' })
     router.push(`/startup/${data.slug}`)
   }
