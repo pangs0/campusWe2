@@ -2,7 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import AppLayout from '@/components/layout/AppLayout'
 import Link from 'next/link'
-import { BookOpen, Plus, Star, Users, Clock, Play } from 'lucide-react'
+import { BookOpen, Plus, Star, Users, Clock, Play, Search } from 'lucide-react'
 
 const CATEGORIES = [
   { key: 'tumu', label: 'Tümü' },
@@ -15,7 +15,7 @@ const CATEGORIES = [
   { key: 'diger', label: 'Diğer' },
 ]
 
-export default async function KurslarPage({ searchParams }: { searchParams: { category?: string } }) {
+export default async function KurslarPage({ searchParams }: { searchParams: { category?: string; q?: string } }) {
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/auth/login')
@@ -31,6 +31,10 @@ export default async function KurslarPage({ searchParams }: { searchParams: { ca
 
   if (searchParams.category && searchParams.category !== 'tumu') {
     query = query.eq('category', searchParams.category)
+  }
+
+  if (searchParams.q) {
+    query = query.or(`title.ilike.%${searchParams.q}%,description.ilike.%${searchParams.q}%`)
   }
 
   const { data: courses } = await query
@@ -71,19 +75,34 @@ export default async function KurslarPage({ searchParams }: { searchParams: { ca
           </div>
         </div>
 
-        {/* Kategori filtreleri */}
-        <div className="flex gap-2 flex-wrap mb-8">
-          {CATEGORIES.map(cat => (
-            <Link key={cat.key} href={`/kurslar?category=${cat.key}`}
-              className={`mono text-xs px-3 py-1.5 rounded-full border transition-colors ${
-                (searchParams.category || 'tumu') === cat.key
-                  ? 'bg-ink text-cream border-ink'
-                  : 'bg-white text-ink/50 border-neutral-200 hover:border-ink/40'
-              }`}>
-              {cat.label}
-            </Link>
-          ))}
+        {/* Arama + Kategori filtreleri */}
+        <div className="flex items-center gap-3 mb-5 flex-wrap">
+          <form method="GET" action="/kurslar" className="relative flex-1 max-w-xs">
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink/30" />
+            <input type="text" name="q" defaultValue={searchParams.q || ''}
+              placeholder="Kurs veya eğitmen ara..."
+              className="input pl-9 py-2 text-sm w-full" />
+          </form>
+          <div className="flex gap-2 flex-wrap">
+            {CATEGORIES.map(cat => (
+              <Link key={cat.key} href={`/kurslar?category=${cat.key}${searchParams.q ? `&q=${searchParams.q}` : ''}`}
+                className={`mono text-xs px-3 py-1.5 rounded-full border transition-colors ${
+                  (searchParams.category || 'tumu') === cat.key
+                    ? 'bg-ink text-cream border-ink'
+                    : 'bg-white text-ink/50 border-neutral-200 hover:border-ink/40'
+                }`}>
+                {cat.label}
+              </Link>
+            ))}
+          </div>
         </div>
+
+        {/* Sonuç sayısı */}
+        {searchParams.q && (
+          <p className="text-sm text-ink/45 mb-4">
+            <strong>"{searchParams.q}"</strong> için {courses?.length || 0} sonuç
+          </p>
+        )}
 
         {/* Kurs grid */}
         {courses && courses.length > 0 ? (

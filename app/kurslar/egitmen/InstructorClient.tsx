@@ -13,9 +13,12 @@ type Props = {
   courses: any[]
   totalStudents: number
   totalEarnings: number
+  monthlyEarnings: number
+  avgRating: number
+  totalReviews: number
 }
 
-export default function InstructorClient({ userId, courses: initialCourses, totalStudents, totalEarnings }: Props) {
+export default function InstructorClient({ userId, courses: initialCourses, totalStudents, totalEarnings, monthlyEarnings, avgRating, totalReviews }: Props) {
   const supabase = createClient()
   const [courses, setCourses] = useState(initialCourses)
   const [showForm, setShowForm] = useState(false)
@@ -27,6 +30,11 @@ export default function InstructorClient({ userId, courses: initialCourses, tota
     title: '', description: '', category: 'girisimcilik', level: 'başlangıç',
     price: 0, is_free: true, thumbnail_url: '',
   })
+
+  function getCourseRating(reviews: any[]) {
+    if (!reviews?.length) return null
+    return (reviews.reduce((sum: number, r: any) => sum + r.rating, 0) / reviews.length).toFixed(1)
+  }
 
   function handleThumbnailChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
@@ -40,26 +48,18 @@ export default function InstructorClient({ userId, courses: initialCourses, tota
   async function createCourse(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
-
     let thumbnail_url = form.thumbnail_url
-
-    // Thumbnail yükle
     if (thumbnailFile) {
       const cleanName = thumbnailFile.name.replace(/[^a-zA-Z0-9._-]/g, '-')
       const path = `${userId}/${Date.now()}-${cleanName}`
-      const { error: uploadError } = await supabase.storage
-        .from('course-thumbnails').upload(path, thumbnailFile)
+      const { error: uploadError } = await supabase.storage.from('course-thumbnails').upload(path, thumbnailFile)
       if (!uploadError) {
         const { data: urlData } = supabase.storage.from('course-thumbnails').getPublicUrl(path)
         thumbnail_url = urlData.publicUrl
       }
     }
-
-    const { data, error } = await supabase.from('courses').insert({
-      ...form,
-      thumbnail_url,
-      instructor_id: userId,
-      is_published: false,
+    const { data } = await supabase.from('courses').insert({
+      ...form, thumbnail_url, instructor_id: userId, is_published: false,
     }).select().single()
     if (data) setCourses(prev => [{ ...data, course_enrollments: [], course_reviews: [] }, ...prev])
     setShowForm(false)
@@ -74,10 +74,13 @@ export default function InstructorClient({ userId, courses: initialCourses, tota
     setCourses(prev => prev.map(c => c.id === id ? { ...c, is_published: !isPublished } : c))
   }
 
-  function avgRating(reviews: any[]) {
-    if (!reviews?.length) return null
-    return (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)
-  }
+  const statItems = [
+    { n: courses.length, l: 'Kurs', icon: BookOpen, color: 'text-brand' },
+    { n: totalStudents, l: 'Toplam Öğrenci', icon: Users, color: 'text-blue-600' },
+    { n: `₺${totalEarnings.toLocaleString()}`, l: 'Toplam Kazanç', icon: TrendingUp, color: 'text-green-600' },
+    { n: `₺${monthlyEarnings.toLocaleString()}`, l: 'Bu Ay', icon: TrendingUp, color: 'text-brand' },
+    { n: avgRating > 0 ? `${avgRating} ⭐` : '—', l: `${totalReviews} değerlendirme`, icon: Star, color: 'text-amber-500' },
+  ]
 
   return (
     <div>
@@ -91,26 +94,20 @@ export default function InstructorClient({ userId, courses: initialCourses, tota
         </button>
       </div>
 
-      {/* İstatistikler */}
-      <div className="grid grid-cols-3 gap-4 mb-8">
-        {[
-          { n: courses.length, l: 'Kurs', icon: BookOpen },
-          { n: totalStudents, l: 'Öğrenci', icon: Users },
-          { n: `₺${totalEarnings.toLocaleString()}`, l: 'Kazanç (%75)', icon: TrendingUp },
-        ].map(s => (
+      <div className="grid grid-cols-5 gap-4 mb-8">
+        {statItems.map(s => (
           <div key={s.l} className="card flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-brand/10 flex items-center justify-center flex-shrink-0">
-              <s.icon size={18} className="text-brand" />
+            <div className="w-9 h-9 rounded-full bg-brand/10 flex items-center justify-center flex-shrink-0">
+              <s.icon size={16} className={s.color} />
             </div>
             <div>
-              <p className="font-serif text-2xl font-bold text-ink">{s.n}</p>
+              <p className={`font-serif text-xl font-bold ${s.color}`}>{s.n}</p>
               <p className="mono text-xs text-ink/35">{s.l}</p>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Yeni kurs formu */}
       {showForm && (
         <form onSubmit={createCourse} className="card mb-6 space-y-4">
           <div className="flex items-center justify-between">
@@ -119,11 +116,13 @@ export default function InstructorClient({ userId, courses: initialCourses, tota
           </div>
           <div>
             <label className="label">Kurs başlığı</label>
-            <input className="input" placeholder="Sıfırdan Startup Kurmak" value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} required />
+            <input className="input" placeholder="Sıfırdan Startup Kurmak" value={form.title}
+              onChange={e => setForm(p => ({ ...p, title: e.target.value }))} required />
           </div>
           <div>
             <label className="label">Açıklama</label>
-            <textarea className="input resize-none" rows={3} placeholder="Bu kursda ne öğrenecekler?" value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))} />
+            <textarea className="input resize-none" rows={3} placeholder="Bu kursda ne öğrenecekler?"
+              value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))} />
           </div>
           <div className="grid grid-cols-3 gap-4">
             <div>
@@ -140,11 +139,14 @@ export default function InstructorClient({ userId, courses: initialCourses, tota
             </div>
             <div>
               <label className="label">Fiyat (₺)</label>
-              <input type="number" className="input" value={form.price} onChange={e => setForm(p => ({ ...p, price: parseInt(e.target.value) || 0 }))} disabled={form.is_free} />
+              <input type="number" className="input" value={form.price}
+                onChange={e => setForm(p => ({ ...p, price: parseInt(e.target.value) || 0 }))}
+                disabled={form.is_free} />
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <input type="checkbox" id="is_free" checked={form.is_free} onChange={e => setForm(p => ({ ...p, is_free: e.target.checked }))} className="accent-brand w-4 h-4" />
+            <input type="checkbox" id="is_free" checked={form.is_free}
+              onChange={e => setForm(p => ({ ...p, is_free: e.target.checked }))} className="accent-brand w-4 h-4" />
             <label htmlFor="is_free" className="text-sm text-ink/60 cursor-pointer">Ücretsiz kurs</label>
           </div>
           <div>
@@ -166,8 +168,8 @@ export default function InstructorClient({ userId, courses: initialCourses, tota
               </div>
               {!thumbnailPreview && (
                 <div className="flex-1">
-                  <input className="input text-xs" placeholder="veya URL gir: https://..." value={form.thumbnail_url}
-                    onChange={e => setForm(p => ({ ...p, thumbnail_url: e.target.value }))} />
+                  <input className="input text-xs" placeholder="veya URL gir: https://..."
+                    value={form.thumbnail_url} onChange={e => setForm(p => ({ ...p, thumbnail_url: e.target.value }))} />
                 </div>
               )}
             </div>
@@ -178,11 +180,10 @@ export default function InstructorClient({ userId, courses: initialCourses, tota
         </form>
       )}
 
-      {/* Kurs listesi */}
       {courses.length > 0 ? (
         <div className="space-y-4">
           {courses.map(course => {
-            const rating = avgRating(course.course_reviews)
+            const rating = getCourseRating(course.course_reviews)
             const students = course.course_enrollments?.length || 0
             const earnings = Math.round(course.price * students * 0.75)
             return (
@@ -207,7 +208,9 @@ export default function InstructorClient({ userId, courses: initialCourses, tota
                           </span>
                         )}
                         <span className="mono text-xs text-ink/35">{students} öğrenci</span>
-                        {!course.is_free && <span className="mono text-xs text-green-600">₺{earnings} kazanç</span>}
+                        {!course.is_free && earnings > 0 && (
+                          <span className="mono text-xs text-green-600">₺{earnings} kazanç</span>
+                        )}
                       </div>
                     </div>
                     <div className="flex items-center gap-2 ml-4 flex-shrink-0">
@@ -216,7 +219,11 @@ export default function InstructorClient({ userId, courses: initialCourses, tota
                         <Edit size={11} /> Düzenle
                       </Link>
                       <button onClick={() => togglePublish(course.id, course.is_published)}
-                        className={`flex items-center gap-1 text-xs py-1.5 px-3 rounded-lg border transition-colors ${course.is_published ? 'bg-green-50 text-green-700 border-green-200' : 'bg-neutral-50 text-ink/50 border-neutral-200 hover:border-brand/30'}`}>
+                        className={`flex items-center gap-1 text-xs py-1.5 px-3 rounded-lg border transition-colors ${
+                          course.is_published
+                            ? 'bg-green-50 text-green-700 border-green-200'
+                            : 'bg-neutral-50 text-ink/50 border-neutral-200 hover:border-brand/30'
+                        }`}>
                         {course.is_published ? <><Eye size={11} /> Yayında</> : <><EyeOff size={11} /> Yayınla</>}
                       </button>
                     </div>
