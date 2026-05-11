@@ -138,10 +138,10 @@ export default function ProfileEditClient({ userId, profile, role, skills: initi
         <h1 className="font-serif text-3xl font-bold text-ink">Bilgilerini güncelle.</h1>
       </div>
 
-      <div className="grid grid-cols-3 gap-6 items-start">
+      <div className="grid grid-cols-5 gap-6 items-start">
 
         {/* Sol — form */}
-        <form onSubmit={handleSave} className="col-span-2 space-y-5">
+        <form onSubmit={handleSave} className="col-span-3 space-y-5">
 
             {/* Genel bilgiler */}
             <div className="card space-y-4">
@@ -380,7 +380,7 @@ export default function ProfileEditClient({ userId, profile, role, skills: initi
         </form>
 
         {/* Sağ — önizleme */}
-        <div className="space-y-4 sticky top-10 self-start">
+        <div className="col-span-2 space-y-4 sticky top-10 self-start">
             <div className="card">
               <p className="mono text-xs text-ink/35 tracking-widest mb-3">CANLI ÖNİZLEME</p>
 
