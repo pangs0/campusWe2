@@ -6,17 +6,25 @@ export default async function WorkspacePage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/auth/login')
 
-  // Kullanıcının startupını bul
-  const { data: startup } = await supabase
+  // Önce kurucusu olduğu startupı bul
+  const { data: ownStartup } = await supabase
     .from('startups')
     .select('slug')
     .eq('founder_id', user.id)
     .single()
 
-  if (startup?.slug) {
-    redirect(`/workspace/${startup.slug}`)
-  }
+  if (ownStartup?.slug) redirect(`/workspace/${ownStartup.slug}`)
 
-  // Startup yoksa oluşturma sayfasına yönlendir
+  // Sonra üye olduğu startupı bul
+  const { data: membership } = await supabase
+    .from('startup_members')
+    .select('startup:startups(slug)')
+    .eq('user_id', user.id)
+    .single()
+
+  const memberSlug = (membership?.startup as any)?.slug
+  if (memberSlug) redirect(`/workspace/${memberSlug}`)
+
+  // İkisi de yoksa startup oluşturma sayfasına yönlendir
   redirect('/startup/new')
 }
