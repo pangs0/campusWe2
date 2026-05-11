@@ -1,9 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
-import { Plus, X, BookOpen, Users, TrendingUp, Edit, Eye, EyeOff, Star } from 'lucide-react'
+import { Plus, X, BookOpen, Users, TrendingUp, Edit, Eye, EyeOff, Star, Upload } from 'lucide-react'
 
 const CATEGORIES = ['girisimcilik', 'teknoloji', 'pazarlama', 'finans', 'tasarim', 'kisisel_gelisim', 'diger']
 const LEVELS = ['başlangıç', 'orta', 'ileri']
@@ -20,21 +20,51 @@ export default function InstructorClient({ userId, courses: initialCourses, tota
   const [courses, setCourses] = useState(initialCourses)
   const [showForm, setShowForm] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [thumbnailFile, setThumbnailFile] = useState<File | null>(null)
+  const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null)
+  const fileRef = useRef<HTMLInputElement>(null)
   const [form, setForm] = useState({
     title: '', description: '', category: 'girisimcilik', level: 'başlangıç',
     price: 0, is_free: true, thumbnail_url: '',
   })
 
+  function handleThumbnailChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setThumbnailFile(file)
+    const reader = new FileReader()
+    reader.onload = () => setThumbnailPreview(reader.result as string)
+    reader.readAsDataURL(file)
+  }
+
   async function createCourse(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
+
+    let thumbnail_url = form.thumbnail_url
+
+    // Thumbnail yükle
+    if (thumbnailFile) {
+      const cleanName = thumbnailFile.name.replace(/[^a-zA-Z0-9._-]/g, '-')
+      const path = `${userId}/${Date.now()}-${cleanName}`
+      const { error: uploadError } = await supabase.storage
+        .from('course-thumbnails').upload(path, thumbnailFile)
+      if (!uploadError) {
+        const { data: urlData } = supabase.storage.from('course-thumbnails').getPublicUrl(path)
+        thumbnail_url = urlData.publicUrl
+      }
+    }
+
     const { data, error } = await supabase.from('courses').insert({
       ...form,
+      thumbnail_url,
       instructor_id: userId,
       is_published: false,
     }).select().single()
     if (data) setCourses(prev => [{ ...data, course_enrollments: [], course_reviews: [] }, ...prev])
     setShowForm(false)
+    setThumbnailFile(null)
+    setThumbnailPreview(null)
     setForm({ title: '', description: '', category: 'girisimcilik', level: 'başlangıç', price: 0, is_free: true, thumbnail_url: '' })
     setLoading(false)
   }
@@ -118,8 +148,29 @@ export default function InstructorClient({ userId, courses: initialCourses, tota
             <label htmlFor="is_free" className="text-sm text-ink/60 cursor-pointer">Ücretsiz kurs</label>
           </div>
           <div>
-            <label className="label">Kapak görseli URL (opsiyonel)</label>
-            <input className="input" placeholder="https://..." value={form.thumbnail_url} onChange={e => setForm(p => ({ ...p, thumbnail_url: e.target.value }))} />
+            <label className="label">Kapak görseli</label>
+            <div className="flex items-center gap-3">
+              <div style={{ width: 80, height: 56, borderRadius: 8, overflow: 'hidden', border: '1.5px dashed rgba(26,26,24,.15)', background: 'rgba(26,26,24,.03)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                {thumbnailPreview
+                  ? <img src={thumbnailPreview} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  : <Upload size={18} className="text-ink/20" />
+                }
+              </div>
+              <div>
+                <button type="button" onClick={() => fileRef.current?.click()}
+                  className="btn-secondary text-xs px-3 py-1.5 flex items-center gap-1.5">
+                  <Upload size={12} /> Görsel yükle
+                </button>
+                <p className="mono text-xs text-ink/30 mt-1">PNG, JPG · Maks 2MB</p>
+                <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleThumbnailChange} />
+              </div>
+              {!thumbnailPreview && (
+                <div className="flex-1">
+                  <input className="input text-xs" placeholder="veya URL gir: https://..." value={form.thumbnail_url}
+                    onChange={e => setForm(p => ({ ...p, thumbnail_url: e.target.value }))} />
+                </div>
+              )}
+            </div>
           </div>
           <button type="submit" disabled={loading} className="btn-primary disabled:opacity-60">
             {loading ? 'Oluşturuluyor...' : 'Kurs oluştur →'}
