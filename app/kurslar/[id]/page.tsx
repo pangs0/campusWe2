@@ -81,7 +81,9 @@ export default async function KursDetayPage({ params }: { params: { id: string }
                       : course.instructor?.full_name?.[0]
                     }
                   </div>
-                  <span className="text-sm text-ink/60">{course.instructor?.full_name}</span>
+                  <span className="text-sm text-ink/60 hover:text-brand transition-colors">
+                    <Link href={`/egitmen/${course.instructor?.id}`}>{course.instructor?.full_name}</Link>
+                  </span>
                 </div>
                 {avgRating && (
                   <div className="flex items-center gap-1 text-amber-500">

@@ -25,7 +25,7 @@ export default async function KurslarPage({ searchParams }: { searchParams: { ca
 
   let query = supabase
     .from('courses')
-    .select('*, instructor:profiles(full_name, avatar_url), course_enrollments(id), course_reviews(rating)')
+    .select('*, instructor:profiles(id, full_name, avatar_url, username), course_enrollments(id), course_reviews(rating)')
     .eq('is_published', true)
     .order('created_at', { ascending: false })
 
@@ -155,7 +155,15 @@ export default async function KurslarPage({ searchParams }: { searchParams: { ca
                           : course.instructor?.full_name?.[0]
                         }
                       </div>
-                      <span className="text-xs text-ink/45 truncate">{course.instructor?.full_name}</span>
+                      {course.instructor?.id ? (
+                        <Link href={`/egitmen/${course.instructor.id}`}
+                          className="text-xs text-ink/45 hover:text-brand transition-colors truncate"
+                          onClick={e => e.stopPropagation()}>
+                          {course.instructor?.full_name}
+                        </Link>
+                      ) : (
+                        <span className="text-xs text-ink/45 truncate">{course.instructor?.full_name}</span>
+                      )}
                     </div>
 
                     <div className="flex items-center justify-between">
