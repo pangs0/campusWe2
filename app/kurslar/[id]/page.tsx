@@ -2,7 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect, notFound } from 'next/navigation'
 import AppLayout from '@/components/layout/AppLayout'
 import Link from 'next/link'
-import { Star, Users, Clock, Play, BookOpen, Check, ArrowLeft } from 'lucide-react'
+import { Star, Users, Clock, Play, BookOpen, Check, ArrowLeft, Award } from 'lucide-react'
 import CourseEnrollClient from '@/app/kurslar/[id]/CourseEnrollClient'
 
 export default async function KursDetayPage({ params }: { params: { id: string } }) {
@@ -227,6 +227,22 @@ export default async function KursDetayPage({ params }: { params: { id: string }
                 <Link href={`/kurslar/egitmen/${course.id}/duzenle`}
                   className="btn-secondary w-full text-center text-xs mt-4 block">
                   Kursu düzenle
+                </Link>
+              )}
+
+              {/* Sertifika butonu */}
+              {isEnrolled && totalLessons > 0 && (
+                <Link href={`/kurslar/${course.id}/sertifika`}
+                  className={`w-full text-center text-xs mt-3 py-2.5 rounded-lg border flex items-center justify-center gap-1.5 transition-colors ${
+                    completedIds.size === totalLessons
+                      ? 'bg-green-50 text-green-700 border-green-200 hover:bg-green-100'
+                      : 'bg-neutral-50 text-ink/35 border-neutral-200 cursor-not-allowed'
+                  }`}>
+                  <Award size={12} />
+                  {completedIds.size === totalLessons
+                    ? 'Sertifikayı görüntüle'
+                    : `${completedIds.size}/${totalLessons} ders tamamlandı`
+                  }
                 </Link>
               )}
             </div>
