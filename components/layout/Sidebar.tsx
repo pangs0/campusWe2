@@ -11,6 +11,7 @@ import {
   TrendingUp, Building2, Heart, Briefcase, CalendarDays, GraduationCap, MonitorPlay, Menu, X
 } from 'lucide-react'
 import NotificationBell from '@/components/layout/NotificationBell'
+import GlobalSearch from '@/components/ui/GlobalSearch'
 
 type SidebarProps = { user?: any }
 
@@ -211,6 +212,10 @@ export default function Sidebar({ user }: SidebarProps) {
       </div>
 
       <nav ref={navRef} className="sidebar-nav flex-1 overflow-y-auto py-3 px-3">
+        {/* Arama */}
+        <div className="mb-3">
+          <GlobalSearch />
+        </div>
         {navGroups.map(group => (
           <div key={group.label} className="mb-4">
             <p className="mono text-xs text-ink/25 tracking-widest px-3 mb-1">{group.label.toUpperCase()}</p>
