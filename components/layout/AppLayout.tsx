@@ -1,4 +1,5 @@
 import Sidebar from '@/components/layout/Sidebar'
+import OnboardingModal from '@/components/ui/OnboardingModal'
 
 type AppLayoutProps = {
   children: React.ReactNode
@@ -13,12 +14,17 @@ export default function AppLayout({ children, user, profile }: AppLayoutProps) {
     id: user?.id || profile?.id,
   }
 
+  const isFounder = profile?.role === 'founder' || !profile?.role
+
   return (
     <div className="flex min-h-screen bg-cream">
       <Sidebar user={sidebarUser} />
       <div className="flex-1 md:ml-56 min-w-0 transition-none">
         {children}
       </div>
+      {isFounder && user?.id && (
+        <OnboardingModal userId={user.id} profile={profile} />
+      )}
     </div>
   )
 }
