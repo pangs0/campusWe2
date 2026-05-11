@@ -13,7 +13,7 @@ export default async function OfficeHoursPage() {
 
   const { data: sessions } = await supabase
     .from('office_hours')
-    .select('*, profiles(id, full_name, avatar_url, university, city)')
+    .select('*, mentor:profiles!office_hours_mentor_id_fkey(id, full_name, avatar_url, university, city)')
     .order('created_at', { ascending: false })
 
   return (

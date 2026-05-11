@@ -67,13 +67,15 @@ const INVESTOR_NAV = [
     items: [
       { href: '/yatirimci', label: 'Dashboard', icon: LayoutDashboard },
       { href: '/mesajlar', label: 'Mesajlar', icon: MessageCircle },
+      { href: '/bildirimler', label: 'Bildirimler', icon: Star },
     ]
   },
   {
     label: 'Keşfet',
     items: [
-      { href: '/yatirimci', label: 'Startuplar', icon: Compass },
+      { href: '/yatirimcilar', label: 'Startuplar', icon: Compass },
       { href: '/demo-day', label: 'Demo Day', icon: Star },
+      { href: '/kahve', label: 'Kahve Molası', icon: Coffee },
     ]
   },
   {
@@ -81,6 +83,13 @@ const INVESTOR_NAV = [
     items: [
       { href: '/yatirimci/portfoy', label: 'Portföyüm', icon: Heart },
       { href: '/yatirimci/office-hours', label: 'Office Hours', icon: Clock },
+    ]
+  },
+  {
+    label: 'Hesap',
+    items: [
+      { href: '/profile', label: 'Profil', icon: User },
+      { href: '/ayarlar', label: 'Ayarlar', icon: Settings },
     ]
   },
 ]
@@ -91,20 +100,28 @@ const COMPANY_NAV = [
     items: [
       { href: '/sirket', label: 'Dashboard', icon: LayoutDashboard },
       { href: '/mesajlar', label: 'Mesajlar', icon: MessageCircle },
+      { href: '/bildirimler', label: 'Bildirimler', icon: Star },
     ]
   },
   {
     label: 'Keşfet',
     items: [
-      { href: '/sirket', label: 'Yetenek Keşfi', icon: Users },
-      { href: '/kesfet', label: 'Startuplar', icon: Compass },
+      { href: '/startuplar', label: 'Startuplar', icon: Compass },
+      { href: '/kahve', label: 'Kahve Molası', icon: Coffee },
     ]
   },
   {
     label: 'Yönet',
     items: [
-      { href: '/sirket/etkinlikler', label: 'Etkinlikler', icon: CalendarDays },
       { href: '/sirket/ilanlar', label: 'İş İlanları', icon: Briefcase },
+      { href: '/sirket/etkinlikler', label: 'Etkinlikler', icon: CalendarDays },
+    ]
+  },
+  {
+    label: 'Hesap',
+    items: [
+      { href: '/profile', label: 'Profil', icon: User },
+      { href: '/ayarlar', label: 'Ayarlar', icon: Settings },
     ]
   },
 ]
