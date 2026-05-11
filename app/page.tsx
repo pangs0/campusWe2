@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import EgitmenSection from '@/components/landing/EgitmenSection'
 import Link from 'next/link'
 
 function useCountUp(target: number, duration = 1500) {
@@ -148,6 +149,7 @@ export default function HomePage() {
           <a href="/kurslar" className="nav-link" style={{ fontSize: 13, color: 'rgba(26,26,24,.5)', textDecoration: 'none' }}>Kurslar</a>
           <a href="/fiyatlandirma" className="nav-link" style={{ fontSize: 13, color: 'rgba(26,26,24,.5)', textDecoration: 'none' }}>Fiyatlandırma</a>
           <a href="/kurumsal" className="nav-link" style={{ fontSize: 13, color: 'rgba(26,26,24,.5)', textDecoration: 'none' }}>Kurumsal</a>
+          <a href="/kurslar/egitmen-ol" className="nav-link" style={{ fontSize: 13, color: '#C4500A', textDecoration: 'none', border: '1px solid rgba(196,80,10,.3)', borderRadius: 6, padding: '6px 14px' }}>Eğitmen Ol</a>
           <a href="/auth/login" className="nav-link" style={{ fontSize: 13, color: 'rgba(26,26,24,.6)', textDecoration: 'none' }}>Giriş yap</a>
           <a href="/auth/register" className="cta-btn" style={{ background: '#C4500A', color: '#F5F0E8', padding: '8px 20px', borderRadius: 6, fontSize: 13, textDecoration: 'none', fontWeight: 500, display: 'inline-block' }}>
             Kayıt ol →
@@ -480,6 +482,57 @@ export default function HomePage() {
           <a href="/fiyatlandirma" style={{ background: 'rgba(255,255,255,.08)', color: 'rgba(255,255,255,.7)', padding: '14px 36px', borderRadius: 8, fontSize: 15, textDecoration: 'none', fontWeight: 500, border: '1px solid rgba(255,255,255,.12)' }}>
             Planları incele
           </a>
+        </div>
+      </div>
+
+      {/* EĞİTMEN BÖLÜMÜ */}
+      <div className="egitmen-section" style={{ background: '#1a1a18', padding: '6rem 8rem', position: 'relative', overflow: 'hidden' }}>
+
+        {/* Arka plan animasyonu */}
+        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(196,80,10,.15) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(196,80,10,.08) 0%, transparent 40%)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 60px, rgba(196,80,10,.03) 60px, rgba(196,80,10,.03) 61px)', pointerEvents: 'none' }} />
+
+        {/* Floating partiküller */}
+        <style>{`
+          @keyframes float1 { 0%,100% { transform: translateY(0px) rotate(0deg); opacity: .3; } 50% { transform: translateY(-20px) rotate(180deg); opacity: .6; } }
+          @keyframes float2 { 0%,100% { transform: translateY(0px) rotate(0deg); opacity: .2; } 50% { transform: translateY(-30px) rotate(-180deg); opacity: .5; } }
+          @keyframes float3 { 0%,100% { transform: translateY(0px); opacity: .15; } 50% { transform: translateY(-15px); opacity: .4; } }
+          @keyframes countUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+          @keyframes slideInLeft { from { opacity: 0; transform: translateX(-40px); } to { opacity: 1; transform: translateX(0); } }
+          @keyframes slideInRight { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: translateX(0); } }
+          @keyframes slideInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+          @keyframes pulse-glow { 0%,100% { box-shadow: 0 0 20px rgba(196,80,10,.3); } 50% { box-shadow: 0 0 40px rgba(196,80,10,.6), 0 0 80px rgba(196,80,10,.2); } }
+          @keyframes shimmer { 0% { background-position: -200% center; } 100% { background-position: 200% center; } }
+          .egitmen-animate { opacity: 0; }
+          .egitmen-animate.visible { animation: slideInUp 0.7s ease forwards; }
+          .egitmen-animate-left { opacity: 0; }
+          .egitmen-animate-left.visible { animation: slideInLeft 0.7s ease forwards; }
+          .egitmen-animate-right { opacity: 0; }
+          .egitmen-animate-right.visible { animation: slideInRight 0.7s ease forwards; }
+          .egitmen-card { transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease; }
+          .egitmen-card:hover { transform: translateY(-6px); border-color: rgba(196,80,10,.4) !important; box-shadow: 0 20px 40px rgba(0,0,0,.3), 0 0 20px rgba(196,80,10,.1); }
+          .simulator-result { animation: pulse-glow 2s infinite; }
+          .shimmer-text { background: linear-gradient(90deg, #C4500A, #ff8c4b, #C4500A); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shimmer 3s linear infinite; }
+          .step-line::after { content: ''; position: absolute; top: 20px; left: 50%; width: 100%; height: 1px; background: linear-gradient(90deg, rgba(196,80,10,.4), rgba(196,80,10,.1)); }
+        `}</style>
+
+        {[
+          { top: '10%', left: '5%', size: 6, anim: 'float1 4s infinite' },
+          { top: '20%', left: '15%', size: 4, anim: 'float2 5s infinite 1s' },
+          { top: '60%', left: '8%', size: 8, anim: 'float3 6s infinite 2s' },
+          { top: '80%', left: '20%', size: 3, anim: 'float1 4s infinite 3s' },
+          { top: '15%', right: '10%', size: 5, anim: 'float2 5s infinite' },
+          { top: '40%', right: '5%', size: 7, anim: 'float3 6s infinite 1s' },
+          { top: '70%', right: '15%', size: 4, anim: 'float1 4s infinite 2s' },
+        ].map((p, i) => (
+          <div key={i} style={{ position: 'absolute', top: p.top, left: p.left, right: (p as any).right, width: p.size, height: p.size, borderRadius: '50%', background: '#C4500A', animation: p.anim, pointerEvents: 'none' }} />
+        ))}
+
+        <div style={{ position: 'relative', zIndex: 1 }}>
+
+          {/* Başlık */}
+          <EgitmenSection />
+
         </div>
       </div>
 
