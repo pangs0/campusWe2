@@ -161,117 +161,63 @@ export default function GlobalSearch() {
   )
 
   return (
-    <>
-      {/* Overlay */}
-      <div className="fixed inset-0 bg-black/50 z-[100] backdrop-blur-sm" onClick={() => setOpen(false)} />
+    <div className="relative">
+      {/* Overlay — sadece dışarı tıklayınca kapat */}
+      <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
 
-      {/* Modal */}
-      <div className="fixed top-[12%] left-1/2 -translate-x-1/2 z-[101] w-full max-w-2xl px-4" style={{ marginLeft: 112 }}>
-        <div className="bg-cream rounded-2xl shadow-2xl overflow-hidden border border-neutral-200">
-
-          {/* Input */}
-          <div className="flex items-center gap-3 px-4 py-3.5 border-b border-neutral-200">
-            <Search size={16} className="text-ink/30 flex-shrink-0" />
-            <input
-              ref={inputRef}
-              type="text"
-              placeholder="Startup, kullanıcı, kurs veya kaynak ara..."
-              value={query}
-              onChange={e => setQuery(e.target.value)}
-              onKeyDown={handleKeyDown}
-              className="flex-1 text-sm text-ink placeholder:text-ink/30 outline-none bg-transparent"
-            />
-            {loading && (
-              <div className="w-4 h-4 border-2 border-brand/30 border-t-brand rounded-full animate-spin flex-shrink-0" />
-            )}
-            <button onClick={() => setOpen(false)} className="text-ink/25 hover:text-ink transition-colors flex-shrink-0">
-              <X size={16} />
-            </button>
-          </div>
-
-          {/* Sonuçlar */}
-          <div className="max-h-96 overflow-y-auto">
-            {query && results.length > 0 ? (
-              <div className="py-2">
-                {results.map((r, i) => {
-                  const Icon = TYPE_ICONS[r.type]
-                  return (
-                    <button key={r.id} onClick={() => navigate(r.href, query)}
-                      className={`w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors ${
-                        selected === i ? 'bg-brand/8' : 'hover:bg-brand/5'
-                      }`}>
-                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${TYPE_COLORS[r.type]}`}>
-                        {r.avatar
-                          ? <img src={r.avatar} alt="" className="w-full h-full object-cover rounded-lg" />
-                          : <Icon size={14} />
-                        }
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-ink truncate">{r.title}</p>
-                        {r.subtitle && <p className="mono text-xs text-ink/35 truncate">{r.subtitle}</p>}
-                      </div>
-                      <span className={`mono text-xs px-2 py-0.5 rounded-full flex-shrink-0 ${TYPE_COLORS[r.type]}`}>
-                        {TYPE_LABELS[r.type]}
-                      </span>
-                    </button>
-                  )
-                })}
-              </div>
-            ) : query && !loading ? (
-              <div className="py-12 text-center">
-                <Search size={28} className="text-ink/15 mx-auto mb-2" />
-                <p className="text-sm text-ink/35">"{query}" için sonuç bulunamadı.</p>
-              </div>
-            ) : !query ? (
-              <div className="py-2">
-                {recent.length > 0 && (
-                  <div className="mb-1">
-                    {recent.map((r, i) => (
-                      <button key={i} onClick={() => setQuery(r)}
-                        className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-brand/5 transition-colors text-left">
-                        <Clock size={14} className="text-ink/25 flex-shrink-0" />
-                        <span className="text-sm text-ink/55">{r}</span>
-                      </button>
-                    ))}
-                    <div className="border-t border-neutral-200 mx-4 my-1" />
-                  </div>
-                )}
-                {[
-                  { label: 'Tüm startuplar', href: '/startuplar', icon: TrendingUp },
-                  { label: 'Kurslar', href: '/kurslar', icon: BookOpen },
-                  { label: 'Kaynaklar', href: '/kaynaklar', icon: FileText },
-                  { label: 'Co-founder bul', href: '/eslestirme', icon: Users },
-                ].map(item => (
-                  <button key={item.href} onClick={() => navigate(item.href)}
-                    className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-brand/5 transition-colors text-left group">
-                    <div className="w-8 h-8 rounded-lg bg-neutral-200/60 flex items-center justify-center flex-shrink-0">
-                      <item.icon size={14} className="text-ink/40" />
-                    </div>
-                    <span className="text-sm text-ink/55 group-hover:text-ink transition-colors">{item.label}</span>
-                    <ArrowRight size={13} className="text-ink/20 ml-auto group-hover:text-brand transition-colors" />
-                  </button>
-                ))}
-              </div>
-            ) : null}
-          </div>
-
-          {/* Footer */}
-          <div className="border-t border-neutral-200 px-4 py-2 flex items-center gap-4 bg-neutral-100/50">
-            <div className="flex items-center gap-1.5">
-              <kbd className="mono text-xs bg-neutral-100 text-ink/30 px-1.5 py-0.5 rounded">↑↓</kbd>
-              <span className="mono text-xs text-ink/25">seç</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <kbd className="mono text-xs bg-neutral-100 text-ink/30 px-1.5 py-0.5 rounded">↵</kbd>
-              <span className="mono text-xs text-ink/25">git</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <kbd className="mono text-xs bg-neutral-100 text-ink/30 px-1.5 py-0.5 rounded">Esc</kbd>
-              <span className="mono text-xs text-ink/25">kapat</span>
-            </div>
-          </div>
+      {/* Inline arama kutusu */}
+      <div className="relative z-50">
+        {/* Input */}
+        <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-neutral-100 border border-brand/20">
+          <Search size={14} className="text-brand/60 flex-shrink-0" />
+          <input
+            ref={inputRef}
+            type="text"
+            placeholder="Ara..."
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            onKeyDown={handleKeyDown}
+            className="flex-1 text-sm text-ink placeholder:text-ink/35 outline-none bg-transparent min-w-0"
+          />
+          {loading
+            ? <div className="w-3 h-3 border-2 border-brand/30 border-t-brand rounded-full animate-spin flex-shrink-0" />
+            : <button onClick={() => setOpen(false)} className="text-ink/25 hover:text-ink flex-shrink-0"><X size={13} /></button>
+          }
         </div>
+
+        {/* Sonuçlar dropdown */}
+        {query && (
+          <div className="absolute top-full left-0 right-0 mt-1 bg-cream border border-neutral-200 rounded-xl shadow-lg overflow-hidden z-50 max-h-80 overflow-y-auto">
+            {results.length > 0 ? results.map((r, i) => {
+              const Icon = TYPE_ICONS[r.type]
+              return (
+                <button key={r.id} onClick={() => navigate(r.href, query)}
+                  className={`w-full flex items-center gap-2.5 px-3 py-2.5 text-left transition-colors ${
+                    selected === i ? 'bg-brand/8' : 'hover:bg-brand/5'
+                  }`}>
+                  <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 ${TYPE_COLORS[r.type]}`}>
+                    {r.avatar
+                      ? <img src={r.avatar} alt="" className="w-full h-full object-cover rounded-lg" />
+                      : <Icon size={12} />
+                    }
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-medium text-ink truncate">{r.title}</p>
+                    {r.subtitle && <p className="mono text-xs text-ink/30 truncate">{r.subtitle}</p>}
+                  </div>
+                  <span className={`mono text-xs px-1.5 py-0.5 rounded flex-shrink-0 ${TYPE_COLORS[r.type]}`} style={{fontSize: 9}}>
+                    {TYPE_LABELS[r.type]}
+                  </span>
+                </button>
+              )
+            }) : (
+              <div className="py-6 text-center">
+                <p className="text-xs text-ink/35">"{query}" için sonuç yok.</p>
+              </div>
+            )}
+          </div>
+        )}
       </div>
-    </>
+    </div>
   )
 }
