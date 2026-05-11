@@ -72,17 +72,16 @@ export default function OnboardingModal({ userId, profile }: { userId: string; p
   const [dismissed, setDismissed] = useState(false)
 
   useEffect(() => {
-    // Daha önce kapatıldı mı
     const key = `onboarding-dismissed-${userId}`
     if (localStorage.getItem(key)) return
+    if (!userId) return
 
-    // Startup var mı
     supabase.from('startups').select('id').eq('founder_id', userId).single()
       .then(({ data }) => {
         setHasStartup(!!data)
-        // Profil tamamlanmamışsa göster
-        if (!profile?.avatar_url || !profile?.bio) {
-          setTimeout(() => setOpen(true), 1500)
+        const profileIncomplete = !profile?.avatar_url || !profile?.bio || !data
+        if (profileIncomplete) {
+          setTimeout(() => setOpen(true), 2000)
         }
       })
   }, [userId])
@@ -176,7 +175,12 @@ export default function OnboardingModal({ userId, profile }: { userId: string; p
           <div className="px-4 pb-4 flex items-center gap-3">
             {!isCompleted && (
               <button
-                onClick={() => { dismiss(); router.push(step.href) }}
+                onClick={() => {
+                  localStorage.setItem(`onboarding-dismissed-${userId}`, '1')
+                  setOpen(false)
+                  router.push(step.href)
+                  router.refresh()
+                }}
                 className="btn-primary flex-1 justify-center py-2.5 flex items-center gap-2">
                 {step.action} <ArrowRight size={14} />
               </button>
