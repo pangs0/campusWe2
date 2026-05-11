@@ -167,10 +167,10 @@ export default function GlobalSearch() {
 
       {/* Modal */}
       <div className="fixed top-[15%] left-1/2 -translate-x-1/2 z-[101] w-full max-w-xl px-4">
-        <div className="bg-white rounded-2xl shadow-2xl overflow-hidden border border-neutral-200">
+        <div className="bg-cream rounded-2xl shadow-2xl overflow-hidden border border-neutral-200">
 
           {/* Input */}
-          <div className="flex items-center gap-3 px-4 py-3.5 border-b border-neutral-100">
+          <div className="flex items-center gap-3 px-4 py-3.5 border-b border-neutral-200">
             <Search size={16} className="text-ink/30 flex-shrink-0" />
             <input
               ref={inputRef}
@@ -198,7 +198,7 @@ export default function GlobalSearch() {
                   return (
                     <button key={r.id} onClick={() => navigate(r.href, query)}
                       className={`w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors ${
-                        selected === i ? 'bg-brand/5' : 'hover:bg-neutral-50'
+                        selected === i ? 'bg-brand/8' : 'hover:bg-brand/5'
                       }`}>
                       <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${TYPE_COLORS[r.type]}`}>
                         {r.avatar
@@ -223,20 +223,19 @@ export default function GlobalSearch() {
                 <p className="text-sm text-ink/35">"{query}" için sonuç bulunamadı.</p>
               </div>
             ) : !query ? (
-              <div className="py-3">
+              <div className="py-2">
                 {recent.length > 0 && (
-                  <div>
-                    <p className="mono text-xs text-ink/25 tracking-widest px-4 py-2">SON ARAMALAR</p>
+                  <div className="mb-1">
                     {recent.map((r, i) => (
                       <button key={i} onClick={() => setQuery(r)}
-                        className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-neutral-50 transition-colors text-left">
+                        className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-brand/5 transition-colors text-left">
                         <Clock size={14} className="text-ink/25 flex-shrink-0" />
                         <span className="text-sm text-ink/55">{r}</span>
                       </button>
                     ))}
+                    <div className="border-t border-neutral-200 mx-4 my-1" />
                   </div>
                 )}
-                <p className="mono text-xs text-ink/25 tracking-widest px-4 py-2 mt-1">HIZLI ERİŞİM</p>
                 {[
                   { label: 'Tüm startuplar', href: '/startuplar', icon: TrendingUp },
                   { label: 'Kurslar', href: '/kurslar', icon: BookOpen },
@@ -244,8 +243,8 @@ export default function GlobalSearch() {
                   { label: 'Co-founder bul', href: '/eslestirme', icon: Users },
                 ].map(item => (
                   <button key={item.href} onClick={() => navigate(item.href)}
-                    className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-neutral-50 transition-colors text-left group">
-                    <div className="w-8 h-8 rounded-lg bg-neutral-100 flex items-center justify-center flex-shrink-0">
+                    className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-brand/5 transition-colors text-left group">
+                    <div className="w-8 h-8 rounded-lg bg-neutral-200/60 flex items-center justify-center flex-shrink-0">
                       <item.icon size={14} className="text-ink/40" />
                     </div>
                     <span className="text-sm text-ink/55 group-hover:text-ink transition-colors">{item.label}</span>
@@ -257,7 +256,7 @@ export default function GlobalSearch() {
           </div>
 
           {/* Footer */}
-          <div className="border-t border-neutral-100 px-4 py-2 flex items-center gap-4">
+          <div className="border-t border-neutral-200 px-4 py-2 flex items-center gap-4 bg-neutral-100/50">
             <div className="flex items-center gap-1.5">
               <kbd className="mono text-xs bg-neutral-100 text-ink/30 px-1.5 py-0.5 rounded">↑↓</kbd>
               <span className="mono text-xs text-ink/25">seç</span>
