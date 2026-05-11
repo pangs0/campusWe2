@@ -2,13 +2,13 @@
 
 import Link from 'next/link'
 import { useRouter, usePathname } from 'next/navigation'
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import {
   LayoutDashboard, Globe, Compass, Home, Coffee,
   ArrowLeftRight, Clock, Star, BookOpen, User, LogOut,
   Rss, MessageCircle, Users, Library, Settings,
-  TrendingUp, Building2, Heart, Briefcase, CalendarDays, GraduationCap, MonitorPlay
+  TrendingUp, Building2, Heart, Briefcase, CalendarDays, GraduationCap, MonitorPlay, Menu, X
 } from 'lucide-react'
 import NotificationBell from '@/components/layout/NotificationBell'
 
@@ -131,6 +131,10 @@ export default function Sidebar({ user }: SidebarProps) {
   const pathname = usePathname()
   const supabase = createClient()
   const navRef = useRef<HTMLElement>(null)
+  const [mobileOpen, setMobileOpen] = useState(false)
+
+  // Sayfa değişince mobil menüyü kapat
+  useEffect(() => { setMobileOpen(false) }, [pathname])
 
   // Scroll pozisyonunu kaydet
   useEffect(() => {
@@ -163,7 +167,26 @@ export default function Sidebar({ user }: SidebarProps) {
   const roleColor = role === 'investor' ? 'text-amber-600 bg-amber-50' : role === 'company' ? 'text-blue-600 bg-blue-50' : 'text-brand bg-brand/8'
 
   return (
-    <aside className="fixed top-0 left-0 h-screen w-56 bg-cream border-r border-neutral-200 flex flex-col z-50">
+    <>
+      {/* Mobil hamburger butonu */}
+      <button
+        onClick={() => setMobileOpen(true)}
+        className="fixed top-4 left-4 z-50 md:hidden bg-white border border-neutral-200 rounded-lg p-2 shadow-sm"
+      >
+        <Menu size={18} className="text-ink/60" />
+      </button>
+
+      {/* Mobil overlay */}
+      {mobileOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 z-40 md:hidden"
+          onClick={() => setMobileOpen(false)}
+        />
+      )}
+
+      <aside className={`fixed top-0 left-0 h-screen w-56 bg-cream border-r border-neutral-200 flex flex-col z-50 transition-transform duration-300
+        ${mobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+      `}>
       <style>{`
         .sidebar-nav::-webkit-scrollbar { width: 3px; }
         .sidebar-nav::-webkit-scrollbar-track { background: transparent; }
@@ -172,13 +195,19 @@ export default function Sidebar({ user }: SidebarProps) {
         .sidebar-nav { scrollbar-width: thin; scrollbar-color: rgba(196,80,10,.2) transparent; }
       `}</style>
 
-      <div className="px-5 py-4 border-b border-neutral-200 flex-shrink-0">
-        <Link href="/" className="font-serif text-xl font-bold text-ink block mb-2">
-          Campus<em className="text-brand not-italic">We</em>
-        </Link>
-        <span className={`mono text-xs px-2 py-0.5 rounded-full font-medium ${roleColor}`}>
-          {roleLabel}
-        </span>
+      <div className="px-5 py-4 border-b border-neutral-200 flex-shrink-0 flex items-center justify-between">
+        <div>
+          <Link href="/" className="font-serif text-xl font-bold text-ink block mb-2">
+            Campus<em className="text-brand not-italic">We</em>
+          </Link>
+          <span className={`mono text-xs px-2 py-0.5 rounded-full font-medium ${roleColor}`}>
+            {roleLabel}
+          </span>
+        </div>
+        {/* Mobil kapat butonu */}
+        <button onClick={() => setMobileOpen(false)} className="md:hidden text-ink/30 hover:text-ink">
+          <X size={18} />
+        </button>
       </div>
 
       <nav ref={navRef} className="sidebar-nav flex-1 overflow-y-auto py-3 px-3">
@@ -227,6 +256,7 @@ export default function Sidebar({ user }: SidebarProps) {
           Çıkış yap
         </button>
       </div>
-    </aside>
+      </aside>
+    </>
   )
 }
