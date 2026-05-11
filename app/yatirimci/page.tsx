@@ -12,11 +12,11 @@ export default async function YatirimciPage() {
     .from('profiles').select('id, full_name, avatar_url, role, karma_tokens').eq('id', user.id).single()
 
   let { data: investorProfile } = await supabase
-    .from('investor_profiles').select('*').eq('id', user.id).single()
+    .from('investor_profiles').select('*').eq('id', user.id).maybeSingle()
 
   if (!investorProfile) {
     await supabase.from('investor_profiles').insert({ id: user.id })
-    const { data } = await supabase.from('investor_profiles').select('*').eq('id', user.id).single()
+    const { data } = await supabase.from('investor_profiles').select('*').eq('id', user.id).maybeSingle()
     investorProfile = data
   }
 

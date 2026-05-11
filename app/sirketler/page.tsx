@@ -9,7 +9,7 @@ export default async function SirketlerPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/auth/login')
 
-  const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
+  const { data: profile } = await supabase.from('profiles').select('id, full_name, avatar_url, role, karma_tokens').eq('id', user.id).single()
   if (profile?.role === 'investor') redirect('/yatirimci')
   if (profile?.role === 'company') redirect('/sirket')
 

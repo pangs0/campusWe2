@@ -18,7 +18,7 @@ export default async function OfficeHoursPage() {
     .order('created_at', { ascending: false })
 
   const { data: mySession } = await supabase
-    .from('office_hours').select('id').eq('mentor_id', user.id).single()
+    .from('office_hours').select('id').eq('mentor_id', user.id).maybeSingle()
 
   return (
     <AppLayout user={user} profile={profile}>

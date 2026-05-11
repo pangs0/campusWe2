@@ -15,7 +15,7 @@ export default async function YeniOfficeHoursPage() {
     .from('user_skills').select('skill_name').eq('user_id', user.id)
 
   const { data: existing } = await supabase
-    .from('office_hours').select('id').eq('mentor_id', user.id).single()
+    .from('office_hours').select('id').eq('mentor_id', user.id).maybeSingle()
 
   return (
     <AppLayout user={user} profile={profile}>

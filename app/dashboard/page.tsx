@@ -45,7 +45,7 @@ export default async function DashboardPage() {
     .gte('scheduled_at', new Date().toISOString())
     .order('scheduled_at', { ascending: true })
     .limit(1)
-    .single()
+    .maybeSingle()
 
   // Bekleyen görevler
   const { count: pendingTasks } = await supabase
