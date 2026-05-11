@@ -122,9 +122,32 @@ export default function CourseEditorClient({ course, initialSections }: { course
                     <input className="input text-sm" placeholder="Ders başlığı"
                       value={newLesson[section.id]?.title || ''}
                       onChange={e => setNewLesson(prev => ({ ...prev, [section.id]: { ...prev[section.id], title: e.target.value } }))} />
-                    <input className="input text-sm" placeholder="YouTube linki veya video URL"
-                      value={newLesson[section.id]?.video_url || ''}
-                      onChange={e => setNewLesson(prev => ({ ...prev, [section.id]: { ...prev[section.id], video_url: e.target.value } }))} />
+                    <div>
+                      <input className="input text-sm" placeholder="YouTube linki: https://youtube.com/watch?v=..."
+                        value={newLesson[section.id]?.video_url || ''}
+                        onChange={e => setNewLesson(prev => ({ ...prev, [section.id]: { ...prev[section.id], video_url: e.target.value } }))} />
+                      {/* YouTube önizleme */}
+                      {newLesson[section.id]?.video_url && (() => {
+                        const url = newLesson[section.id].video_url
+                        const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/)
+                        const videoId = match?.[1]
+                        return videoId ? (
+                          <div className="mt-2 rounded-lg overflow-hidden border border-neutral-200" style={{ aspectRatio: '16/9' }}>
+                            <iframe
+                              src={`https://www.youtube.com/embed/${videoId}`}
+                              className="w-full h-full"
+                              allowFullScreen
+                              title="Video önizleme"
+                            />
+                          </div>
+                        ) : url.length > 10 ? (
+                          <p className="mono text-xs text-red-500 mt-1">⚠️ Geçerli bir YouTube linki değil</p>
+                        ) : null
+                      })()}
+                      <p className="mono text-xs text-ink/30 mt-1">
+                        💡 YouTube videonu "Listelenmemiş" yaparak gizleyebilirsin
+                      </p>
+                    </div>
                     <textarea className="input text-sm resize-none" rows={3} placeholder="Ders içeriği (opsiyonel)"
                       value={newLesson[section.id]?.content || ''}
                       onChange={e => setNewLesson(prev => ({ ...prev, [section.id]: { ...prev[section.id], content: e.target.value } }))} />
