@@ -166,7 +166,7 @@ export default function GlobalSearch() {
       <div className="fixed inset-0 bg-black/50 z-[100] backdrop-blur-sm" onClick={() => setOpen(false)} />
 
       {/* Modal */}
-      <div className="fixed top-[15%] left-1/2 -translate-x-1/2 z-[101] w-full max-w-xl px-4">
+      <div className="fixed top-[12%] left-1/2 -translate-x-1/2 z-[101] w-full max-w-2xl px-4" style={{ marginLeft: 112 }}>
         <div className="bg-cream rounded-2xl shadow-2xl overflow-hidden border border-neutral-200">
 
           {/* Input */}
