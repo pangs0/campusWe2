@@ -100,7 +100,7 @@ export default function WorkspaceClient({ startup, members, meetings: initialMee
   async function createTask(e: React.FormEvent) {
     e.preventDefault()
     setTaskLoading(true)
-    const { data } = await supabase.from('tasks').insert({
+    const { data, error } = await supabase.from('tasks').insert({
       startup_id: startup.id,
       created_by: currentUserId,
       title: taskForm.title,
@@ -109,7 +109,7 @@ export default function WorkspaceClient({ startup, members, meetings: initialMee
       assigned_to: taskForm.assigned_to || null,
       due_date: taskForm.due_date || null,
       status: 'yapılacak',
-    }).select('*, creator:profiles(full_name), assignee:profiles!tasks_assigned_to_fkey(full_name, avatar_url)').single()
+    }).select().single()
     if (data) setTasks(prev => [data, ...prev])
     setTaskForm({ title: '', description: '', priority: 'orta', assigned_to: '', due_date: '' })
     setShowTaskForm(false)
@@ -157,19 +157,23 @@ export default function WorkspaceClient({ startup, members, meetings: initialMee
     if (!file) return
     setUploading(true)
     const path = `${startup.id}/${Date.now()}-${file.name}`
-    const { error } = await supabase.storage.from('startup-files').upload(path, file)
-    if (!error) {
-      const { data: urlData } = supabase.storage.from('startup-files').getPublicUrl(path)
-      const { data } = await supabase.from('startup_files').insert({
-        startup_id: startup.id,
-        uploaded_by: currentUserId,
-        name: file.name,
-        file_url: urlData.publicUrl,
-        file_size: file.size,
-        file_type: file.type,
-      }).select('*, uploader:profiles(full_name)').single()
-      if (data) setFiles(prev => [data, ...prev])
+    const { error: uploadError } = await supabase.storage.from('startup-files').upload(path, file)
+    if (uploadError) {
+      console.error('Dosya yükleme hatası:', uploadError.message)
+      alert('Dosya yüklenemedi: ' + uploadError.message)
+      setUploading(false)
+      return
     }
+    const { data: urlData } = supabase.storage.from('startup-files').getPublicUrl(path)
+    const { data } = await supabase.from('startup_files').insert({
+      startup_id: startup.id,
+      uploaded_by: currentUserId,
+      name: file.name,
+      file_url: urlData.publicUrl,
+      file_size: file.size,
+      file_type: file.type,
+    }).select().single()
+    if (data) setFiles(prev => [data, ...prev])
     setUploading(false)
   }
 
