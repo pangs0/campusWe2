@@ -93,18 +93,13 @@ export default function EgitmenOlClient({ userId, profile, skills, isInstructor 
                 <p className="text-xs text-ink/45">Kurslarını düzenle, yayınla, izle.</p>
               </Link>
 
-              <div className="card hover:border-brand/30 transition-colors group cursor-pointer"
-                onClick={() => {
-                  const btn = document.querySelector('[data-action="new-course"]') as HTMLButtonElement
-                  if (btn) btn.click()
-                  else window.location.href = '/kurslar/egitmen'
-                }}>
+              <Link href="/kurslar/egitmen" className="card hover:border-brand/30 transition-colors group block">
                 <div className="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center mb-3">
                   <Plus size={20} className="text-green-600" />
                 </div>
                 <h3 className="font-serif font-bold text-ink mb-1 group-hover:text-brand transition-colors">Yeni Kurs</h3>
                 <p className="text-xs text-ink/45">Yeni bir kurs oluşturmaya başla.</p>
-              </div>
+              </Link>
 
               <Link href="/kurslar/ogrencim" className="card hover:border-brand/30 transition-colors group">
                 <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center mb-3">
