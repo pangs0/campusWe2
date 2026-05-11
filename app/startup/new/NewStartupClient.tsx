@@ -92,7 +92,7 @@ export default function NewStartupClient({ userId, profile }: { userId: string; 
     }).select().single()
 
     if (insertError) { 
-      setError('Hata: ' + insertError.message + ' (Code: ' + insertError.code + ')')
+      setError('Bir hata oluştu. Tekrar dene.')
       setLoading(false)
       return 
     }
