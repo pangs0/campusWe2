@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { Send, ArrowLeft } from 'lucide-react'
+import TypewriterInput from '@/components/ui/TypewriterInput'
 import Link from 'next/link'
 
 type Props = {
@@ -126,13 +127,16 @@ export default function ChatClient({ conversationId, currentUserId, other, initi
 
       {/* Mesaj gönder */}
       <form onSubmit={handleSend} className="flex items-center gap-3 px-6 py-4 border-t border-neutral-200 bg-cream flex-shrink-0">
-        <input
-          type="text"
+        <TypewriterInput
           className="input flex-1"
-          placeholder={`${other?.full_name}'e mesaj gönder...`}
+          placeholders={[
+            `${other?.full_name}'e mesaj gönder...`,
+            'Merhaba! 👋',
+            'Bir şey sormak istiyorum...',
+            'Nasılsın?',
+          ]}
           value={newMsg}
           onChange={e => setNewMsg(e.target.value)}
-          autoFocus
         />
         <button
           type="submit"

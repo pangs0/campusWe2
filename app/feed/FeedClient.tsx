@@ -2,6 +2,7 @@
 
 import { useState, useRef } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import TypewriterTextarea from '@/components/ui/TypewriterTextarea'
 import { Heart, MessageCircle, Send, Image, X, Users } from 'lucide-react'
 
 type Props = {
@@ -61,7 +62,19 @@ export default function FeedClient({ userId, avatarUrl, fullName, startups, init
           </div>
           <div className="flex-1">
             <textarea className="w-full text-sm text-ink placeholder:text-ink/35 resize-none focus:outline-none bg-transparent leading-relaxed"
-              placeholder="Girişim yolculuğundan bir şey paylaş..." rows={3}
+              <TypewriterTextarea
+                className="input resize-none"
+                value={content}
+                onChange={e => setContent(e.target.value)}
+                rows={3}
+                placeholders={[
+                  'Girişim yolculuğundan bir şey paylaş...',
+                  'Bu hafta ne öğrendin?',
+                  'Startup\'ında ne değişti?',
+                  'Topluluğa bir soru sor...',
+                  'Başarını kutla 🎉',
+                ]}
+              />
               value={content} onChange={e => setContent(e.target.value)} />
             {imagePreview && (
               <div className="relative mt-2 rounded-lg overflow-hidden border border-neutral-200">
