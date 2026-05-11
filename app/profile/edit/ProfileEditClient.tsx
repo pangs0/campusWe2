@@ -381,7 +381,7 @@ export default function ProfileEditClient({ userId, profile, role, skills: initi
           </div>
 
           {/* Sağ — önizleme */}
-          <div className="space-y-4">
+          <div className="space-y-4 sticky top-6 self-start">
             <div className="card">
               <p className="mono text-xs text-ink/35 tracking-widest mb-3">CANLI ÖNİZLEME</p>
 
