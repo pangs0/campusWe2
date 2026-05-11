@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
-import { ArrowLeft, CheckCircle, BookOpen, DollarSign, Users, Star, TrendingUp, Play, Award, Lightbulb } from 'lucide-react'
+import { ArrowLeft, CheckCircle, BookOpen, DollarSign, Users, Star, TrendingUp, Play, Award, Lightbulb, Plus } from 'lucide-react'
 
 const EXPERTISE_AREAS = [
   'Girişimcilik', 'Web Geliştirme', 'Mobil Uygulama', 'Yapay Zeka',
@@ -70,19 +70,107 @@ export default function EgitmenOlClient({ userId, profile, skills, isInstructor 
 
   if (isInstructor) {
     return (
-      <div className="max-w-lg mx-auto text-center py-16">
-        <div className="w-16 h-16 rounded-full bg-brand/10 flex items-center justify-center mx-auto mb-4">
-          <CheckCircle size={28} className="text-brand" />
+      <div>
+        <div className="mb-8">
+          <p className="mono text-xs text-ink/35 tracking-widest mb-1">EĞİTMEN PANELI</p>
+          <h1 className="font-serif text-3xl font-bold text-ink" style={{ letterSpacing: -1 }}>
+            Hoş geldin, <em className="text-brand not-italic">{profile?.full_name?.split(' ')[0]}!</em>
+          </h1>
+          <p className="text-sm text-ink/45 mt-1">Kurslarını yönet, yeni içerikler ekle.</p>
         </div>
-        <h2 className="font-serif text-2xl font-bold text-ink mb-2">Zaten eğitmensin!</h2>
-        <p className="text-sm text-ink/50 mb-6">Eğitmen panelinizde kurslarınızı yönetebilirsiniz.</p>
-        <div className="flex gap-3 justify-center">
-          <Link href="/kurslar/egitmen" className="btn-primary text-sm px-6 py-2">
-            Eğitmen paneli →
-          </Link>
-          <Link href="/kurslar/egitmen/yeni" className="btn-secondary text-sm px-6 py-2">
-            Yeni kurs oluştur
-          </Link>
+
+        <div className="grid grid-cols-3 gap-6">
+          {/* Sol — hızlı aksiyonlar */}
+          <div className="col-span-2 space-y-4">
+
+            {/* Hızlı aksiyonlar */}
+            <div className="grid grid-cols-2 gap-4">
+              <Link href="/kurslar/egitmen" className="card hover:border-brand/30 transition-colors group">
+                <div className="w-10 h-10 rounded-xl bg-brand/10 flex items-center justify-center mb-3">
+                  <BookOpen size={20} className="text-brand" />
+                </div>
+                <h3 className="font-serif font-bold text-ink mb-1 group-hover:text-brand transition-colors">Kurslarım</h3>
+                <p className="text-xs text-ink/45">Kurslarını düzenle, yayınla, izle.</p>
+              </Link>
+
+              <div className="card hover:border-brand/30 transition-colors group cursor-pointer"
+                onClick={() => {
+                  const btn = document.querySelector('[data-action="new-course"]') as HTMLButtonElement
+                  if (btn) btn.click()
+                  else window.location.href = '/kurslar/egitmen'
+                }}>
+                <div className="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center mb-3">
+                  <Plus size={20} className="text-green-600" />
+                </div>
+                <h3 className="font-serif font-bold text-ink mb-1 group-hover:text-brand transition-colors">Yeni Kurs</h3>
+                <p className="text-xs text-ink/45">Yeni bir kurs oluşturmaya başla.</p>
+              </div>
+
+              <Link href="/kurslar/ogrencim" className="card hover:border-brand/30 transition-colors group">
+                <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center mb-3">
+                  <Users size={20} className="text-blue-600" />
+                </div>
+                <h3 className="font-serif font-bold text-ink mb-1 group-hover:text-brand transition-colors">Öğrencilerim</h3>
+                <p className="text-xs text-ink/45">Kayıtlı öğrencilerini gör.</p>
+              </Link>
+
+              <Link href="/kurslar" className="card hover:border-brand/30 transition-colors group">
+                <div className="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center mb-3">
+                  <Play size={20} className="text-purple-600" />
+                </div>
+                <h3 className="font-serif font-bold text-ink mb-1 group-hover:text-brand transition-colors">Kurs Keşfet</h3>
+                <p className="text-xs text-ink/45">Diğer eğitmenlerin kurslarını izle.</p>
+              </Link>
+            </div>
+
+            {/* Gelir hesaplayıcı */}
+            <div className="card" style={{ background: '#1a1a18' }}>
+              <div className="flex items-center gap-2 mb-4">
+                <DollarSign size={14} className="text-brand" />
+                <p className="mono text-xs text-brand tracking-widest">GELİR POTANSİYELİ</p>
+              </div>
+              <div className="grid grid-cols-3 gap-4">
+                {[
+                  { students: 10, price: 99 },
+                  { students: 50, price: 199 },
+                  { students: 100, price: 299 },
+                ].map((ex, i) => (
+                  <div key={i} className="text-center p-3 rounded-xl" style={{ background: 'rgba(255,255,255,.05)' }}>
+                    <p className="mono text-xs text-white/40 mb-1">{ex.students} öğrenci × ₺{ex.price}</p>
+                    <p className="font-serif text-xl font-bold text-brand">₺{(ex.students * ex.price * 0.75).toLocaleString()}</p>
+                    <p className="mono text-xs text-white/25 mt-0.5">senin payın</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Sağ — ipuçları */}
+          <div className="space-y-4">
+            <div className="card">
+              <p className="mono text-xs text-ink/35 tracking-widest mb-3">BAŞARILI KURS İPUÇLARI</p>
+              <div className="space-y-3">
+                {[
+                  { icon: '🎯', text: 'Her ders 5-15 dk olsun' },
+                  { icon: '📹', text: 'YouTube\'a "Listelenmemiş" yükle' },
+                  { icon: '✅', text: 'Pratik ödevler ekle' },
+                  { icon: '💬', text: 'Öğrenci sorularını yanıtla' },
+                  { icon: '🔄', text: 'İçeriği güncel tut' },
+                ].map((tip, i) => (
+                  <div key={i} className="flex items-start gap-2">
+                    <span style={{ fontSize: 12, flexShrink: 0 }}>{tip.icon}</span>
+                    <p className="text-xs text-ink/55 leading-relaxed">{tip.text}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="card" style={{ background: 'rgba(196,80,10,.03)', border: '1px solid rgba(196,80,10,.1)' }}>
+              <p className="mono text-xs text-brand tracking-widest mb-2">KOMİSYON</p>
+              <p className="font-serif text-3xl font-bold text-brand">%75</p>
+              <p className="text-xs text-ink/50 mt-1">Her satıştan senin payın. Platform %25 alır.</p>
+            </div>
+          </div>
         </div>
       </div>
     )
