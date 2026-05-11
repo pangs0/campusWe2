@@ -56,6 +56,7 @@ const FOUNDER_NAV = [
       { href: '/kaynaklar', label: 'Kaynaklar', icon: Library },
       { href: '/kutuphane', label: 'Kütüphane', icon: BookOpen },
       { href: '/kurslar', label: 'Kurslar', icon: GraduationCap },
+      { href: '/kurslar/egitmen-ol', label: 'Eğitmen Ol', icon: BookOpen },
     ]
   },
 ]
