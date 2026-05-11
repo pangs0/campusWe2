@@ -19,10 +19,14 @@ export default async function WorkspacePage({ params }: { params: { slug: string
 
   if (!startup) notFound()
 
+  // Erişim kontrolü — kurucu veya üye olmalı
   const { data: members } = await supabase
     .from('startup_members')
     .select('*, profile:profiles(id, full_name, avatar_url, username)')
     .eq('startup_id', startup.id)
+
+  const isMember = startup.founder_id === user.id || members?.some(m => m.user_id === user.id)
+  if (!isMember) redirect('/dashboard')
 
   const { data: meetings } = await supabase
     .from('meetings')
@@ -48,8 +52,6 @@ export default async function WorkspacePage({ params }: { params: { slug: string
     .eq('startup_id', startup.id)
     .order('created_at', { ascending: false })
 
-  const isMember = members?.some(m => m.profile?.id === user.id)
-
   return (
     <AppLayout user={user} profile={profile}>
       <main className="px-8 py-10">
@@ -61,7 +63,7 @@ export default async function WorkspacePage({ params }: { params: { slug: string
           notes={notes || []}
           files={files || []}
           currentUserId={user.id}
-          isMember={!!isMember}
+          isMember={true}
         />
       </main>
     </AppLayout>
