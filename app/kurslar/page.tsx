@@ -36,13 +36,9 @@ export default async function KurslarPage({ searchParams }: { searchParams: { ca
     query = query.eq('category', searchParams.category)
   }
 
-  if (searchParams.q) {
-    query = query.or(`title.ilike.%${searchParams.q}%,description.ilike.%${searchParams.q}%`)
-  }
-
   const { data: courses } = await query
 
-  // Eğitmen adında arama — client-side filtre
+  // Arama — başlık, açıklama ve eğitmen adında
   const filteredCourses = searchParams.q
     ? courses?.filter(c =>
         c.title?.toLowerCase().includes(searchParams.q!.toLowerCase()) ||
