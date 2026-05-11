@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { Search, X, TrendingUp, BookOpen, Users, FileText, ArrowRight, Clock } from 'lucide-react'
+import { Search, X, TrendingUp, BookOpen, Users, FileText, ArrowRight, Clock, Link } from 'lucide-react'
 
 type Result = {
   id: string
@@ -75,22 +75,62 @@ export default function GlobalSearch() {
     }
   }, [open])
 
+  const NAV_ITEMS = [
+    { title: 'Dashboard', href: '/dashboard', subtitle: 'Ana panel' },
+    { title: 'Akış', href: '/feed', subtitle: 'Topluluk paylaşımları' },
+    { title: 'Mesajlar', href: '/mesajlar', subtitle: 'Konuşmalar' },
+    { title: 'Harita', href: '/harita', subtitle: 'Girişimci haritası' },
+    { title: 'Startuplar', href: '/startuplar', subtitle: 'Tüm startuplar' },
+    { title: 'Co-founder', href: '/eslestirme', subtitle: 'Co-founder bul' },
+    { title: 'Garaj', href: '/garaj', subtitle: 'Etkinlikler' },
+    { title: 'Kahve Molası', href: '/kahve', subtitle: 'Biriyle tanış' },
+    { title: 'Takas', href: '/takas', subtitle: 'Karma token takası' },
+    { title: 'Mentorlar', href: '/office-hours', subtitle: 'Office hours' },
+    { title: 'Demo Day', href: '/demo-day', subtitle: 'Pitch yap' },
+    { title: 'Yatırımcılar', href: '/yatirimcilar', subtitle: 'Yatırımcı ağı' },
+    { title: 'Şirketler', href: '/sirketler', subtitle: 'Şirket ilanları' },
+    { title: 'Kaynaklar', href: '/kaynaklar', subtitle: 'Startup kaynakları' },
+    { title: 'Kütüphane', href: '/kutuphane', subtitle: 'Kütüphane' },
+    { title: 'Kurslar', href: '/kurslar', subtitle: 'Eğitim kursları' },
+    { title: 'Startup Oluştur', href: '/startup/new', subtitle: 'Yeni startup' },
+    { title: 'Çalışma Alanı', href: '/workspace', subtitle: 'Takım workspace' },
+    { title: 'Profil', href: '/profile', subtitle: 'Profilim' },
+    { title: 'Ayarlar', href: '/ayarlar', subtitle: 'Hesap ayarları' },
+    { title: 'Bildirimler', href: '/bildirimler', subtitle: 'Bildirimler' },
+    { title: 'Eğitmen Ol', href: '/kurslar/egitmen-ol', subtitle: 'Kurs oluştur kazan' },
+  ]
+
   const search = useCallback(async (q: string) => {
     if (!q.trim()) { setResults([]); return }
     setLoading(true)
 
+    // Sidebar nav linklerinde ara
+    const navResults: Result[] = NAV_ITEMS
+      .filter(item =>
+        item.title.toLowerCase().includes(q.toLowerCase()) ||
+        item.subtitle.toLowerCase().includes(q.toLowerCase())
+      )
+      .map(item => ({
+        id: item.href,
+        type: 'resource' as const,
+        title: item.title,
+        subtitle: item.subtitle,
+        href: item.href,
+      }))
+
     const [startups, users, courses, resources] = await Promise.all([
       supabase.from('startups').select('id, name, slug, sector, stage')
-        .ilike('name', `%${q}%`).eq('is_public', true).limit(4),
+        .ilike('name', `%${q}%`).eq('is_public', true).limit(3),
       supabase.from('profiles').select('id, full_name, username, university, avatar_url')
         .ilike('full_name', `%${q}%`).limit(3),
       supabase.from('courses').select('id, title, category')
         .ilike('title', `%${q}%`).eq('is_published', true).limit(3),
       supabase.from('resources').select('id, title, category')
-        .ilike('title', `%${q}%`).limit(3),
+        .ilike('title', `%${q}%`).limit(2),
     ])
 
     const all: Result[] = [
+      ...navResults,
       ...(startups.data || []).map(s => ({
         id: s.id, type: 'startup' as const,
         title: s.name,
