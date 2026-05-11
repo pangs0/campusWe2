@@ -23,7 +23,7 @@ export default async function ProfileEditPage() {
 
   return (
     <AppLayout user={user} profile={profile}>
-      <main className="px-8 py-10 max-w-2xl">
+      <main className="px-8 py-10">
         <ProfileEditClient
           userId={user.id}
           profile={profile}
