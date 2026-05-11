@@ -32,7 +32,7 @@ export default async function WorkspacePage({ params }: { params: { slug: string
 
   const { data: tasks } = await supabase
     .from('tasks')
-    .select('*, creator:profiles(full_name), assignee:profiles!tasks_assigned_to_fkey(full_name, avatar_url)')
+    .select('*')
     .eq('startup_id', startup.id)
     .order('created_at', { ascending: false })
 
