@@ -4,6 +4,9 @@ import AppLayout from '@/components/layout/AppLayout'
 import Link from 'next/link'
 import { BookOpen, Plus, Star, Users, Clock, Play, Search } from 'lucide-react'
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 const CATEGORIES = [
   { key: 'tumu', label: 'Tümü' },
   { key: 'girisimcilik', label: 'Girişimcilik' },
@@ -38,6 +41,15 @@ export default async function KurslarPage({ searchParams }: { searchParams: { ca
   }
 
   const { data: courses } = await query
+
+  // Eğitmen adında arama — client-side filtre
+  const filteredCourses = searchParams.q
+    ? courses?.filter(c =>
+        c.title?.toLowerCase().includes(searchParams.q!.toLowerCase()) ||
+        c.description?.toLowerCase().includes(searchParams.q!.toLowerCase()) ||
+        c.instructor?.full_name?.toLowerCase().includes(searchParams.q!.toLowerCase())
+      )
+    : courses
 
   const { data: myEnrollments } = await supabase
     .from('course_enrollments').select('course_id').eq('student_id', user.id)
@@ -100,14 +112,14 @@ export default async function KurslarPage({ searchParams }: { searchParams: { ca
         {/* Sonuç sayısı */}
         {searchParams.q && (
           <p className="text-sm text-ink/45 mb-4">
-            <strong>"{searchParams.q}"</strong> için {courses?.length || 0} sonuç
+            <strong>"{searchParams.q}"</strong> için {filteredCourses?.length || 0} sonuç
           </p>
         )}
 
         {/* Kurs grid */}
-        {courses && courses.length > 0 ? (
+        {filteredCourses && filteredCourses.length > 0 ? (
           <div className="grid grid-cols-3 gap-5">
-            {courses.map((course: any) => {
+            {filteredCourses.map((course: any) => {
               const rating = avgRating(course.course_reviews)
               const enrolled = enrolledIds.has(course.id)
               const studentCount = course.course_enrollments?.length || 0
