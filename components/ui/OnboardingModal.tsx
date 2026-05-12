@@ -94,7 +94,7 @@ export default function OnboardingModal({ userId, profile }: { userId: string; p
     setOpen(false)
   }
 
-  const enrichedProfile = { ...profile, _hasStartup: hasStartup }
+  const enrichedProfile = { ...(profile || {}), _hasStartup: hasStartup }
   const steps = FOUNDER_STEPS
   const completedCount = steps.filter(s => s.check(enrichedProfile)).length
   const progress = Math.round((completedCount / steps.length) * 100)

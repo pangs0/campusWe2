@@ -39,13 +39,13 @@ export default function NotificationBell({ userId }: { userId: string }) {
   async function loadNotifications() {
     const { data, error } = await supabase
       .from('notifications')
-      .select('*, sender:profiles!notifications_sender_id_fkey(full_name, avatar_url)')
+      .select('*')
       .eq('user_id', userId)
       .order('created_at', { ascending: false })
       .limit(20)
     if (data) {
       setNotifications(data)
-      setCount(data.filter(n => !n.is_read).length)
+      setCount(data.filter((n: any) => !n.is_read).length)
     }
   }
 
