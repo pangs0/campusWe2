@@ -1,10 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
-import { ArrowLeft, Calendar, MapPin, Globe, Users, Zap, CheckCircle } from 'lucide-react'
+import { ArrowLeft, Calendar, MapPin, Globe, Users, Zap, CheckCircle, X, Image } from 'lucide-react'
 
 const EVENT_TYPES = [
   { key: 'networking', label: 'Networking', emoji: '🤝', desc: 'Tanışma ve bağlantı kurma' },
@@ -16,22 +16,26 @@ const EVENT_TYPES = [
 ]
 
 const TAGS = ['Yapay Zeka', 'FinTech', 'EdTech', 'Tasarım', 'Pazarlama', 'Yazılım', 'Yatırım', 'Ürün', 'Büyüme', 'Hukuk']
-const COVER_EMOJIS = ['🚀', '💡', '🎯', '🔥', '⚡', '🌱', '🏆', '💎', '🎪', '🌍']
 const TIPS = [
   { icon: '📅', text: 'Tarih en az 3 gün ileri seç — insanlar plan yapabilsin.' },
   { icon: '✍️', text: 'Açıklama kısa ve net olsun — kim katılmalı, ne kazanacak.' },
   { icon: '👥', text: 'Katılımcı limiti koy — küçük gruplar daha verimli.' },
-  { icon: '🔗', text: 'Online ise Meet/Zoom linkini şimdiden ekle.' },
+  { icon: '🖼️', text: 'Banner ekle — görsel etkinliğin tıklanma oranını artırır.' },
 ]
 
 export default function GarajYeniClient({ userId }: { userId: string }) {
   const router = useRouter()
   const supabase = createClient()
+  const bannerRef = useRef<HTMLInputElement>(null)
+
   const [form, setForm] = useState({
     title: '', description: '', event_type: 'networking',
     event_date: '', location: '', is_online: true,
-    max_participants: '', tags: [] as string[], cover_emoji: '🚀',
+    max_participants: '', tags: [] as string[],
   })
+  const [bannerFile, setBannerFile] = useState<File | null>(null)
+  const [bannerPreview, setBannerPreview] = useState<string | null>(null)
+  const [uploading, setUploading] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -44,17 +48,52 @@ export default function GarajYeniClient({ userId }: { userId: string }) {
     setForm(prev => ({ ...prev, tags: prev.tags.includes(tag) ? prev.tags.filter(t => t !== tag) : [...prev.tags, tag] }))
   }
 
+  function handleBannerChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    if (file.size > 5 * 1024 * 1024) { setError('Görsel 5MB\'dan küçük olmalı.'); return }
+    setBannerFile(file)
+    const reader = new FileReader()
+    reader.onload = () => setBannerPreview(reader.result as string)
+    reader.readAsDataURL(file)
+    setError('')
+  }
+
+  function removeBanner() {
+    setBannerFile(null)
+    setBannerPreview(null)
+    if (bannerRef.current) bannerRef.current.value = ''
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
     setError('')
+
+    let banner_url = null
+    if (bannerFile) {
+      setUploading(true)
+      const cleanName = bannerFile.name.replace(/[^a-zA-Z0-9._-]/g, '-')
+      const path = `${userId}/${Date.now()}-${cleanName}`
+      const { error: uploadError } = await supabase.storage
+        .from('garaj-banners').upload(path, bannerFile, { upsert: true })
+      if (uploadError) {
+        setError('Banner yüklenemedi: ' + uploadError.message)
+        setLoading(false); setUploading(false); return
+      }
+      const { data: urlData } = supabase.storage.from('garaj-banners').getPublicUrl(path)
+      banner_url = urlData.publicUrl
+      setUploading(false)
+    }
+
     const { error: insertError } = await supabase.from('garaj_events').insert({
       organizer_id: userId, title: form.title, description: form.description,
       event_type: form.event_type, event_date: form.event_date, location: form.location,
       is_online: form.is_online, is_public: true,
       max_participants: form.max_participants ? parseInt(form.max_participants) : null,
-      tags: form.tags, cover_emoji: form.cover_emoji,
+      tags: form.tags, banner_url,
     })
+
     if (insertError) { setError('Hata: ' + insertError.message); setLoading(false); return }
     router.push('/garaj')
   }
@@ -97,17 +136,34 @@ export default function GarajYeniClient({ userId }: { userId: string }) {
           {/* Temel bilgiler */}
           <div className="card space-y-4">
             <p className="mono text-xs text-ink/35 tracking-widest">ETKİNLİK BİLGİLERİ</p>
+
+            {/* Banner yükleme */}
             <div>
-              <label className="label mb-2">Kapak emojisi</label>
-              <div className="flex gap-2 flex-wrap">
-                {COVER_EMOJIS.map(emoji => (
-                  <button key={emoji} type="button" onClick={() => setForm(p => ({ ...p, cover_emoji: emoji }))}
-                    className={`w-10 h-10 rounded-xl text-xl flex items-center justify-center border transition-all ${form.cover_emoji === emoji ? 'border-brand bg-brand/8 scale-110' : 'border-neutral-200 hover:border-neutral-300'}`}>
-                    {emoji}
+              <label className="label mb-2">Kapak görseli</label>
+              {bannerPreview ? (
+                <div className="relative rounded-xl overflow-hidden" style={{ height: 160 }}>
+                  <img src={bannerPreview} alt="" className="w-full h-full object-cover" />
+                  <button type="button" onClick={removeBanner}
+                    className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/60 flex items-center justify-center hover:bg-black/80 transition-colors">
+                    <X size={13} color="white" />
                   </button>
-                ))}
-              </div>
+                  <div className="absolute bottom-2 left-2 bg-black/50 rounded px-2 py-0.5">
+                    <p className="mono text-xs text-white/70">{bannerFile?.name}</p>
+                  </div>
+                </div>
+              ) : (
+                <div onClick={() => bannerRef.current?.click()}
+                  className="border-2 border-dashed border-neutral-200 rounded-xl h-36 flex flex-col items-center justify-center gap-2 cursor-pointer hover:border-brand/30 hover:bg-brand/2 transition-colors">
+                  <div className="w-10 h-10 rounded-full bg-brand/8 flex items-center justify-center">
+                    <Image size={18} className="text-brand/60" />
+                  </div>
+                  <p className="text-sm text-ink/50">Görsel seç veya sürükle bırak</p>
+                  <p className="mono text-xs text-ink/25">PNG, JPG — maks. 5MB · önerilen 1200×400px</p>
+                </div>
+              )}
+              <input ref={bannerRef} type="file" accept="image/*" className="hidden" onChange={handleBannerChange} />
             </div>
+
             <div>
               <label className="label">Etkinlik adı</label>
               <input name="title" type="text" className="input" placeholder="Pazartesi Pitch Gecesi" value={form.title} onChange={handleChange} required />
@@ -161,19 +217,25 @@ export default function GarajYeniClient({ userId }: { userId: string }) {
 
           {error && <p className="text-xs text-red-600 bg-red-50 border border-red-100 rounded px-3 py-2">{error}</p>}
 
-          <button type="submit" disabled={loading} className="btn-primary w-full justify-center py-3 disabled:opacity-60">
-            {loading ? 'Oluşturuluyor...' : 'Etkinliği yayınla →'}
+          <button type="submit" disabled={loading || uploading} className="btn-primary w-full justify-center py-3 disabled:opacity-60">
+            {uploading ? 'Görsel yükleniyor...' : loading ? 'Oluşturuluyor...' : 'Etkinliği yayınla →'}
           </button>
         </form>
 
-        {/* Sağ — önizleme + ipuçları */}
+        {/* Sağ */}
         <div className="space-y-4 sticky top-10 self-start">
           <div className="card">
             <p className="mono text-xs text-ink/35 tracking-widest mb-3">CANLI ÖNİZLEME</p>
             <div className="rounded-xl overflow-hidden border border-neutral-200">
-              <div className="h-20 flex items-center justify-center text-4xl" style={{ background: 'linear-gradient(135deg, #1a1a18, #2a1a10)' }}>
-                {form.cover_emoji}
-              </div>
+              {bannerPreview ? (
+                <div className="h-24 overflow-hidden">
+                  <img src={bannerPreview} alt="" className="w-full h-full object-cover" />
+                </div>
+              ) : (
+                <div className="h-20 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #1a1a18, #2a1a10)' }}>
+                  <Image size={20} className="text-white/20" />
+                </div>
+              )}
               <div className="p-3">
                 <div className="flex items-center gap-1.5 mb-2 flex-wrap">
                   <span className="mono text-xs bg-brand/10 text-brand border border-brand/15 rounded px-1.5 py-0.5">{selectedType?.emoji} {selectedType?.label}</span>
