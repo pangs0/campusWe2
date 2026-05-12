@@ -115,7 +115,6 @@ export default function ProfileEditClient({ userId, profile, role, skills: initi
       const path = `${userId}/banner-${Date.now()}-${cleanName}`
       const { error: uploadError } = await supabase.storage.from('avatars').upload(path, bannerFile, { upsert: true })
       if (uploadError) {
-        alert('Banner upload hatası: ' + uploadError.message)
         setLoading(false)
         return
       } else {
@@ -139,7 +138,8 @@ export default function ProfileEditClient({ userId, profile, role, skills: initi
     }).eq('id', userId)
     
     if (updateError) {
-      console.error('Profile update error:', updateError.message)
+      setLoading(false)
+      return
     }
 
     if (role === 'investor') {
