@@ -7,6 +7,9 @@ type AppLayoutProps = {
   profile?: any
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const SidebarComponent = Sidebar as any
+
 export default function AppLayout({ children, user, profile }: AppLayoutProps) {
   const sidebarUser = {
     ...user,
@@ -18,7 +21,7 @@ export default function AppLayout({ children, user, profile }: AppLayoutProps) {
 
   return (
     <div className="flex min-h-screen bg-cream">
-      <Sidebar user={sidebarUser} />
+      <SidebarComponent user={sidebarUser} />
       <div className="flex-1 md:ml-56 min-w-0 transition-none">
         {children}
       </div>
