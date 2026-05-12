@@ -10,7 +10,7 @@ export default async function GarajPage() {
 
   const { data: events } = await supabase
     .from('garaj_events')
-    .select('*, organizer:profiles(full_name, username)')
+    .select('*, organizer:profiles(full_name, username, avatar_url)')
     .eq('is_public', true)
     .order('event_date', { ascending: true })
 
@@ -77,31 +77,48 @@ export default async function GarajPage() {
         {events && events.length > 0 ? (
           <div className="grid grid-cols-2 gap-4">
             {events.map((event: any) => (
-              <div key={event.id} className="card hover:border-brand/30 transition-colors">
-                <div className="flex items-start justify-between mb-3">
-                  <span className={`mono text-xs border rounded px-2 py-0.5 ${typeColors[event.event_type] || 'bg-neutral-50 text-neutral-500 border-neutral-200'}`}>
-                    {event.event_type}
-                  </span>
-                  <span className="mono text-xs text-ink/35">{timeLeft(event.event_date)}</span>
-                </div>
-
-                <h2 className="font-serif text-lg font-bold text-ink mb-1">{event.title}</h2>
-                {event.description && (
-                  <p className="text-sm text-ink/50 line-clamp-2 leading-relaxed mb-3">
-                    {event.description}
-                  </p>
+              <div key={event.id} className="card hover:border-brand/30 transition-colors p-0 overflow-hidden">
+                {/* Banner */}
+                {event.banner_url ? (
+                  <div className="w-full h-36 overflow-hidden">
+                    <img src={event.banner_url} alt={event.title} className="w-full h-full object-cover" />
+                  </div>
+                ) : (
+                  <div className="w-full h-20 flex items-center justify-center text-2xl"
+                    style={{ background: 'linear-gradient(135deg, #1a1a18, #2a1a10)' }}>
+                    {event.cover_emoji || '🎉'}
+                  </div>
                 )}
 
-                <div className="flex items-center justify-between pt-3 border-t border-neutral-100">
-                  <div className="flex items-center gap-2">
-                    <div className="w-5 h-5 rounded-full bg-brand/15 flex items-center justify-center text-xs font-bold text-brand">
-                      {event.organizer?.full_name?.[0]}
-                    </div>
-                    <span className="text-xs text-ink/40">{event.organizer?.full_name}</span>
+                <div className="p-4">
+                  <div className="flex items-start justify-between mb-3">
+                    <span className={`mono text-xs border rounded px-2 py-0.5 ${typeColors[event.event_type] || 'bg-neutral-50 text-neutral-500 border-neutral-200'}`}>
+                      {event.event_type}
+                    </span>
+                    <span className="mono text-xs text-ink/35">{timeLeft(event.event_date)}</span>
                   </div>
-                  <div className="flex items-center gap-1.5 text-xs text-ink/35">
-                    <Calendar size={12} />
-                    {new Date(event.event_date).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' })}
+
+                  <h2 className="font-serif text-lg font-bold text-ink mb-1">{event.title}</h2>
+                  {event.description && (
+                    <p className="text-sm text-ink/50 line-clamp-2 leading-relaxed mb-3">
+                      {event.description}
+                    </p>
+                  )}
+
+                  <div className="flex items-center justify-between pt-3 border-t border-neutral-100">
+                    <div className="flex items-center gap-2">
+                      <div className="w-5 h-5 rounded-full bg-brand/15 flex items-center justify-center text-xs font-bold text-brand overflow-hidden">
+                        {event.organizer?.avatar_url
+                          ? <img src={event.organizer.avatar_url} alt="" className="w-full h-full object-cover" />
+                          : event.organizer?.full_name?.[0]
+                        }
+                      </div>
+                      <span className="text-xs text-ink/40">{event.organizer?.full_name}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5 text-xs text-ink/35">
+                      <Calendar size={12} />
+                      {new Date(event.event_date).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' })}
+                    </div>
                   </div>
                 </div>
               </div>
