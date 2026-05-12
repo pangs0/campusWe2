@@ -80,7 +80,7 @@ export default function GlobalSearch() {
     { title: 'Akış', href: '/feed', subtitle: 'Topluluk paylaşımları' },
     { title: 'Mesajlar', href: '/mesajlar', subtitle: 'Konuşmalar' },
     { title: 'Harita', href: '/harita', subtitle: 'Girişimci haritası' },
-    { title: 'Startuplar', href: '/startuplar', subtitle: 'Tüm startuplar' },
+    { title: 'Startuplar', href: '/kesfet', subtitle: 'Tüm startuplar' },
     { title: 'Co-founder', href: '/eslestirme', subtitle: 'Co-founder bul' },
     { title: 'Garaj', href: '/garaj', subtitle: 'Etkinlikler' },
     { title: 'Kahve Molası', href: '/kahve', subtitle: 'Biriyle tanış' },
@@ -92,12 +92,17 @@ export default function GlobalSearch() {
     { title: 'Kaynaklar', href: '/kaynaklar', subtitle: 'Startup kaynakları' },
     { title: 'Kütüphane', href: '/kutuphane', subtitle: 'Kütüphane' },
     { title: 'Kurslar', href: '/kurslar', subtitle: 'Eğitim kursları' },
+    { title: 'Kurslarım', href: '/kurslar/ogrencim', subtitle: 'Kayıtlı olduğum kurslar' },
+    { title: 'Eğitmen Paneli', href: '/kurslar/egitmen', subtitle: 'Kurs yönetimi ve gelir' },
+    { title: 'Eğitmen Ol', href: '/kurslar/egitmen-ol', subtitle: 'Kurs oluştur kazan' },
+    { title: 'Fırsatlar', href: '/firsatlar', subtitle: 'İş ilanları ve etkinlikler' },
+    { title: 'İş İlanları', href: '/firsatlar', subtitle: 'Şirketlerin açık pozisyonları' },
     { title: 'Startup Oluştur', href: '/startup/new', subtitle: 'Yeni startup' },
     { title: 'Çalışma Alanı', href: '/workspace', subtitle: 'Takım workspace' },
     { title: 'Profil', href: '/profile', subtitle: 'Profilim' },
+    { title: 'Profil Düzenle', href: '/profile/edit', subtitle: 'Bilgilerini güncelle' },
     { title: 'Ayarlar', href: '/ayarlar', subtitle: 'Hesap ayarları' },
     { title: 'Bildirimler', href: '/bildirimler', subtitle: 'Bildirimler' },
-    { title: 'Eğitmen Ol', href: '/kurslar/egitmen-ol', subtitle: 'Kurs oluştur kazan' },
   ]
 
   const search = useCallback(async (q: string) => {
