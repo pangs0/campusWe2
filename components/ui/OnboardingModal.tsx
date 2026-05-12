@@ -75,6 +75,8 @@ export default function OnboardingModal({ userId, profile }: { userId: string; p
     const key = `onboarding-dismissed-${userId}`
     if (localStorage.getItem(key)) return
     if (!userId) return
+    // Profil fotoğrafı VE bio varsa hiç açma
+    if (profile?.avatar_url && profile?.bio) return
 
     supabase.from('startups').select('id').eq('founder_id', userId).single()
       .then(({ data }) => {
