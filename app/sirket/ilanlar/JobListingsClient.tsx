@@ -26,7 +26,12 @@ export default function JobListingsClient({ userId, initialJobs }: { userId: str
   async function createJob(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
-    const { data } = await supabase.from('job_listings').insert({ ...form, company_id: userId, is_active: true }).select().single()
+    const { data, error } = await supabase.from('job_listings').insert({ ...form, company_id: userId, is_active: true }).select().single()
+    if (error) {
+      alert('Hata: ' + error.message + ' | Code: ' + error.code)
+      setLoading(false)
+      return
+    }
     if (data) setJobs(prev => [{ ...data, applications: [] }, ...prev])
     setShowForm(false)
     setForm({ title: '', description: '', type: 'staj', skills_needed: [], location: '', is_remote: true })
