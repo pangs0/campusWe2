@@ -25,12 +25,7 @@ export default function CompanyEventsClient({ userId, initialEvents }: { userId:
   async function createEvent(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
-    const { data, error } = await supabase.from('company_events').insert({ ...form, company_id: userId }).select().single()
-    if (error) {
-      alert('Hata: ' + error.message + ' | Code: ' + error.code)
-      setLoading(false)
-      return
-    }
+    const { data } = await supabase.from('company_events').insert({ ...form, company_id: userId }).select().single()
     if (data) setEvents(prev => [data, ...prev])
     setShowForm(false)
     setForm({ title: '', description: '', event_type: 'konferans', event_date: '', location: '', is_online: false, registration_url: '' })
