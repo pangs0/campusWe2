@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { Search, X, TrendingUp, BookOpen, Users, FileText, ArrowRight, Clock, Link } from 'lucide-react'
+import { Search, X, TrendingUp, BookOpen, Users, FileText, ArrowRight, Clock } from 'lucide-react'
 
 type Result = {
   id: string
