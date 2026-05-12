@@ -107,7 +107,7 @@ const COMPANY_NAV = [
   {
     label: 'Keşfet',
     items: [
-      { href: '/startuplar', label: 'Startuplar', icon: Compass },
+      { href: '/kesfet', label: 'Startuplar', icon: Compass },
       { href: '/kahve', label: 'Kahve Molası', icon: Coffee },
     ]
   },
