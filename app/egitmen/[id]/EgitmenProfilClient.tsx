@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { BookOpen, Users, Star, Globe, Linkedin, Youtube, Award, TrendingUp } from 'lucide-react'
+import { BookOpen, Users, Star, Globe, Linkedin, Award, TrendingUp } from 'lucide-react'
 
 type Props = {
   instructor: any
@@ -61,7 +61,7 @@ export default function EgitmenProfilClient({ instructor, courses, totalStudents
               {instructor.youtube_url && (
                 <a href={instructor.youtube_url} target="_blank" rel="noopener noreferrer"
                   className="text-ink/30 hover:text-brand transition-colors">
-                  <Youtube size={16} />
+                  <Globe size={16} />
                 </a>
               )}
               {instructor.website_url && (

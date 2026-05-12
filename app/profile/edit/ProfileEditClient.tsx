@@ -4,7 +4,7 @@ import { useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
-import { ArrowLeft, X, Plus, Check, Upload, Camera, Linkedin, Globe, Twitter } from 'lucide-react'
+import { ArrowLeft, X, Plus, Check, Camera, Linkedin, Globe } from 'lucide-react'
 import { useToast } from '@/components/ui/Toast'
 
 const SKILL_CATEGORIES = ['Teknik', 'Tasarım', 'Pazarlama', 'İş Geliştirme', 'Finans', 'Hukuk', 'Diğer']
@@ -227,7 +227,7 @@ export default function ProfileEditClient({ userId, profile, role, skills: initi
                     value={form.linkedin_url} onChange={e => setForm(p => ({ ...p, linkedin_url: e.target.value }))} />
                 </div>
                 <div className="flex items-center gap-2">
-                  <Twitter size={15} className="text-ink/30 flex-shrink-0" />
+                  <X size={15} className="text-ink/30 flex-shrink-0" />
                   <input type="url" className="input flex-1" placeholder="https://twitter.com/..."
                     value={form.twitter_url} onChange={e => setForm(p => ({ ...p, twitter_url: e.target.value }))} />
                 </div>
@@ -419,7 +419,7 @@ export default function ProfileEditClient({ userId, profile, role, skills: initi
                 {/* Sosyal linkler */}
                 <div className="flex gap-2 mt-2">
                   {form.linkedin_url && <Linkedin size={13} className="text-ink/30" />}
-                  {form.twitter_url && <Twitter size={13} className="text-ink/30" />}
+                  {form.twitter_url && <X size={13} className="text-ink/30" />}
                   {form.website_url && <Globe size={13} className="text-ink/30" />}
                 </div>
               </div>
