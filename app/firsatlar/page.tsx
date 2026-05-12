@@ -29,12 +29,16 @@ export default async function FirsatlarPage() {
     .gte('event_date', new Date().toISOString())
     .order('event_date', { ascending: true })
 
-  // Demo Day başvuruları
-  const { data: demoDays } = await supabase
-    .from('demo_day_applications')
-    .select('id')
-    .eq('applicant_id', user.id)
-    .limit(1)
+  // Demo Day başvuruları — tablo yoksa hata vermesin
+  let hasAppliedDemoDay = false
+  try {
+    const { data: demoDays } = await supabase
+      .from('demo_day_applications')
+      .select('id')
+      .eq('applicant_id', user.id)
+      .limit(1)
+    hasAppliedDemoDay = !!(demoDays && demoDays.length > 0)
+  } catch {}
 
   const userSkills = skills?.map(s => s.skill_name.toLowerCase()) || []
 
@@ -42,11 +46,11 @@ export default async function FirsatlarPage() {
     <AppLayout user={user} profile={profile}>
       <main className="px-8 py-10">
         <FirsatlarClient
-          userId={user!.id}
+          userId={user.id}
           jobs={jobs || []}
           events={events || []}
           userSkills={userSkills}
-          hasAppliedDemoDay={!!(demoDays && demoDays.length > 0)}
+          hasAppliedDemoDay={hasAppliedDemoDay}
         />
       </main>
     </AppLayout>

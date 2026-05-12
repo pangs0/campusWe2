@@ -60,14 +60,15 @@ export default async function DashboardPage() {
     .select('*', { count: 'exact', head: true })
     .or(`participant1_id.eq.${user.id},participant2_id.eq.${user.id}`)
 
-  // Günlük hedefler
+  // Günlük hedefler — tablo yoksa boş dönsün
   const today = new Date().toISOString().split('T')[0]
-  const { data: todayGoals } = await supabase
-    .from('daily_goals')
-    .select('*')
-    .eq('user_id', user.id)
-    .eq('date', today)
-    .order('created_at')
+  let todayGoals: any[] = []
+  try {
+    const { data } = await supabase
+      .from('daily_goals').select('*')
+      .eq('user_id', user.id).eq('date', today).order('created_at')
+    todayGoals = data || []
+  } catch {}
 
   const { percent, steps } = getProfileCompletion(profile, skills || [], myStartups || [])
   const isNew = (myStartups?.length || 0) === 0 && (skills?.length || 0) === 0
