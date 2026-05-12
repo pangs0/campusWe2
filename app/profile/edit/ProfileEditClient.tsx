@@ -115,7 +115,9 @@ export default function ProfileEditClient({ userId, profile, role, skills: initi
       const path = `${userId}/banner-${Date.now()}-${cleanName}`
       const { error: uploadError } = await supabase.storage.from('avatars').upload(path, bannerFile, { upsert: true })
       if (uploadError) {
-        console.error('Banner upload error:', uploadError.message)
+        alert('Banner upload hatası: ' + uploadError.message)
+        setLoading(false)
+        return
       } else {
         const { data: urlData } = supabase.storage.from('avatars').getPublicUrl(path)
         banner_url = urlData.publicUrl
