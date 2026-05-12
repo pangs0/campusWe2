@@ -114,13 +114,31 @@ export default function ProfileEditClient({ userId, profile, role, skills: initi
       const cleanName = bannerFile.name.replace(/[^a-zA-Z0-9._-]/g, '-')
       const path = `${userId}/banner-${Date.now()}-${cleanName}`
       const { error: uploadError } = await supabase.storage.from('avatars').upload(path, bannerFile, { upsert: true })
-      if (!uploadError) {
+      if (uploadError) {
+        console.error('Banner upload error:', uploadError.message)
+      } else {
         const { data: urlData } = supabase.storage.from('avatars').getPublicUrl(path)
         banner_url = urlData.publicUrl
       }
     }
 
-    await supabase.from('profiles').update({ ...form, avatar_url, banner_url }).eq('id', userId)
+    const { error: updateError } = await supabase.from('profiles').update({ 
+      full_name: form.full_name,
+      username: form.username,
+      bio: form.bio,
+      university: form.university,
+      department: form.department,
+      city: form.city,
+      linkedin_url: form.linkedin_url,
+      twitter_url: form.twitter_url,
+      website_url: form.website_url,
+      avatar_url,
+      banner_url,
+    }).eq('id', userId)
+    
+    if (updateError) {
+      console.error('Profile update error:', updateError.message)
+    }
 
     if (role === 'investor') {
       await supabase.from('investor_profiles').upsert({
