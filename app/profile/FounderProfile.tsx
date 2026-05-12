@@ -1,13 +1,21 @@
 'use client'
 
 import Link from 'next/link'
-import { Edit, TrendingUp, ArrowRight, Zap } from 'lucide-react'
+import { Edit, TrendingUp, ArrowRight, Zap, Camera } from 'lucide-react'
 import ProfilePosts from './ProfilePosts'
 import ProfileClient from './ProfileClient'
 
 type Props = {
   user: any; profile: any; skills: any[]; startups: any[]; posts: any[]
 }
+
+const BADGES = [
+  { id: 'first_startup', icon: '🚀', label: 'İlk Startup', check: (p: any, s: any[], posts: any[]) => s.length > 0 },
+  { id: 'karma_100', icon: '⚡', label: '100 Karma', check: (p: any) => (p?.karma_tokens || 0) >= 100 },
+  { id: 'social', icon: '🤝', label: 'Sosyal', check: (p: any, s: any[], posts: any[]) => posts.length >= 3 },
+  { id: 'complete_profile', icon: '✅', label: 'Tam Profil', check: (p: any) => !!(p?.avatar_url && p?.bio && p?.university) },
+  { id: 'multi_skill', icon: '🎯', label: 'Çok Yetenekli', check: (p: any, s: any[]) => s.length >= 3 },
+]
 
 export default function FounderProfile({ user, profile, skills, startups, posts = [] }: Props) {
   const stats = [
@@ -17,13 +25,37 @@ export default function FounderProfile({ user, profile, skills, startups, posts 
     { n: profile?.karma_tokens || 0, l: 'Karma Token' },
   ]
 
+  const earnedBadges = BADGES.filter(b => b.check(profile, skills, posts))
+
+  // Son aktiflik
+  const lastPost = posts[0]
+  const daysSince = lastPost
+    ? Math.floor((Date.now() - new Date(lastPost.created_at).getTime()) / 86400000)
+    : null
+  const activityLabel = daysSince === null ? null
+    : daysSince === 0 ? '🟢 Bugün aktif'
+    : daysSince <= 3 ? '🟢 Bu hafta aktif'
+    : daysSince <= 7 ? '🟡 Bu hafta aktif'
+    : '⚪ Bir süredir sessiz'
+
   return (
     <div>
-      {/* Kapak */}
-      <div style={{ height: 140, background: 'linear-gradient(135deg, #1a1a18 0%, #1a0f0a 100%)', borderRadius: '12px 12px 0 0', marginBottom: -60, position: 'relative' }}>
-        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(196,80,10,.06) 35px, rgba(196,80,10,.06) 70px)', borderRadius: '12px 12px 0 0' }} />
-        <Link href="/profile/edit" style={{ position: 'absolute', top: 16, right: 16, background: 'rgba(255,255,255,.1)', border: '1px solid rgba(255,255,255,.15)', borderRadius: 8, padding: '6px 14px', fontSize: 12, color: 'rgba(255,255,255,.7)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6 }}>
+      {/* Kapak — banner veya gradient */}
+      <div style={{ height: 160, borderRadius: '12px 12px 0 0', marginBottom: -60, position: 'relative', overflow: 'hidden' }}>
+        {profile?.banner_url ? (
+          <img src={profile.banner_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        ) : (
+          <>
+            <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, #1a1a18 0%, #1a0f0a 100%)' }} />
+            <div style={{ position: 'absolute', inset: 0, backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(196,80,10,.06) 35px, rgba(196,80,10,.06) 70px)' }} />
+          </>
+        )}
+        {/* Overlay butonlar */}
+        <Link href="/profile/edit" style={{ position: 'absolute', top: 16, right: 16, background: 'rgba(0,0,0,.4)', border: '1px solid rgba(255,255,255,.2)', borderRadius: 8, padding: '6px 14px', fontSize: 12, color: 'rgba(255,255,255,.8)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6, backdropFilter: 'blur(4px)' }}>
           <Edit size={12} /> Profili düzenle
+        </Link>
+        <Link href="/profile/edit" style={{ position: 'absolute', bottom: 16, right: 16, background: 'rgba(0,0,0,.4)', border: '1px solid rgba(255,255,255,.15)', borderRadius: 8, padding: '5px 12px', fontSize: 11, color: 'rgba(255,255,255,.6)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 5, backdropFilter: 'blur(4px)' }}>
+          <Camera size={11} /> Kapak değiştir
         </Link>
       </div>
 
@@ -37,7 +69,26 @@ export default function FounderProfile({ user, profile, skills, startups, posts 
               university={profile?.university || null} department={profile?.department || null}
               karmaTokens={profile?.karma_tokens || 0} role="founder"
             />
+            {activityLabel && (
+              <p className="mono text-xs text-ink/40 mt-2">{activityLabel}</p>
+            )}
           </div>
+
+          {/* Rozetler */}
+          {earnedBadges.length > 0 && (
+            <div className="card">
+              <p className="mono text-xs text-ink/35 tracking-widest mb-3">ROZETLER</p>
+              <div className="flex flex-wrap gap-2">
+                {earnedBadges.map(badge => (
+                  <div key={badge.id} title={badge.label}
+                    className="flex items-center gap-1.5 bg-brand/5 border border-brand/15 rounded-full px-2.5 py-1">
+                    <span style={{ fontSize: 13 }}>{badge.icon}</span>
+                    <span className="mono text-xs text-brand/70">{badge.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* İstatistikler */}
           <div className="card">

@@ -32,6 +32,9 @@ export default function ProfileEditClient({ userId, profile, role, skills: initi
   const [saved, setSaved] = useState(false)
   const [avatarFile, setAvatarFile] = useState<File | null>(null)
   const [avatarPreview, setAvatarPreview] = useState<string | null>(profile?.avatar_url || null)
+  const [bannerFile, setBannerFile] = useState<File | null>(null)
+  const [bannerPreview, setBannerPreview] = useState<string | null>(profile?.banner_url || null)
+  const bannerRef = useRef<HTMLInputElement>(null)
 
   const [form, setForm] = useState({
     full_name: profile?.full_name || '',
@@ -82,6 +85,15 @@ export default function ProfileEditClient({ userId, profile, role, skills: initi
     reader.readAsDataURL(file)
   }
 
+  function handleBannerChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setBannerFile(file)
+    const reader = new FileReader()
+    reader.onload = () => setBannerPreview(reader.result as string)
+    reader.readAsDataURL(file)
+  }
+
   async function handleSave(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
@@ -97,7 +109,18 @@ export default function ProfileEditClient({ userId, profile, role, skills: initi
       }
     }
 
-    await supabase.from('profiles').update({ ...form, avatar_url }).eq('id', userId)
+    let banner_url = profile?.banner_url
+    if (bannerFile) {
+      const cleanName = bannerFile.name.replace(/[^a-zA-Z0-9._-]/g, '-')
+      const path = `${userId}/banner-${Date.now()}-${cleanName}`
+      const { error: uploadError } = await supabase.storage.from('avatars').upload(path, bannerFile, { upsert: true })
+      if (!uploadError) {
+        const { data: urlData } = supabase.storage.from('avatars').getPublicUrl(path)
+        banner_url = urlData.publicUrl
+      }
+    }
+
+    await supabase.from('profiles').update({ ...form, avatar_url, banner_url }).eq('id', userId)
 
     if (role === 'investor') {
       await supabase.from('investor_profiles').upsert({
@@ -149,6 +172,30 @@ export default function ProfileEditClient({ userId, profile, role, skills: initi
             {/* Genel bilgiler */}
             <div className="card space-y-4">
               <p className="mono text-xs text-ink/35 tracking-widest">GENEL BİLGİLER</p>
+
+              {/* Banner yükleme */}
+              <div>
+                <label className="label mb-2">Kapak görseli</label>
+                <div onClick={() => bannerRef.current?.click()}
+                  className="relative rounded-xl overflow-hidden cursor-pointer group"
+                  style={{ height: 100 }}>
+                  {bannerPreview ? (
+                    <img src={bannerPreview} alt="" className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center gap-2"
+                      style={{ background: 'linear-gradient(135deg, #1a1a18, #2a1a10)' }}>
+                      <Camera size={16} className="text-white/30" />
+                      <span className="text-xs text-white/30">Kapak görseli ekle</span>
+                    </div>
+                  )}
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                    <Camera size={16} color="white" />
+                    <span className="text-xs text-white">Değiştir</span>
+                  </div>
+                </div>
+                <input ref={bannerRef} type="file" accept="image/*" className="hidden" onChange={handleBannerChange} />
+                <p className="mono text-xs text-ink/25 mt-1">Önerilen: 1200×400px · PNG veya JPG</p>
+              </div>
 
               {/* Avatar yükleme */}
               <div className="flex items-center gap-4">
@@ -388,8 +435,15 @@ export default function ProfileEditClient({ userId, profile, role, skills: initi
               <p className="mono text-xs text-ink/35 tracking-widest mb-3">CANLI ÖNİZLEME</p>
 
               {/* Kapak */}
-              <div style={{ height: 60, background: 'linear-gradient(135deg, #1a1a18, #2a1a10)', borderRadius: '8px 8px 0 0', marginBottom: -20, position: 'relative' }}>
-                <div style={{ position: 'absolute', inset: 0, backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(196,80,10,.06) 20px, rgba(196,80,10,.06) 40px)', borderRadius: '8px 8px 0 0' }} />
+              <div style={{ height: 60, borderRadius: '8px 8px 0 0', marginBottom: -20, position: 'relative', overflow: 'hidden' }}>
+                {bannerPreview ? (
+                  <img src={bannerPreview} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                ) : (
+                  <>
+                    <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, #1a1a18, #2a1a10)' }} />
+                    <div style={{ position: 'absolute', inset: 0, backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(196,80,10,.06) 20px, rgba(196,80,10,.06) 40px)' }} />
+                  </>
+                )}
               </div>
 
               <div style={{ padding: '0 12px 12px', paddingTop: 26 }}>
