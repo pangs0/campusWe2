@@ -103,7 +103,7 @@ export default function RegisterPage() {
     if (signUpError) { setError(signUpError.message); setLoading(false); return }
 
     if (data.user) {
-      await supabase.from('profiles').insert({
+      const { error: profileError } = await supabase.from('profiles').insert({
         id: data.user.id,
         full_name: form.full_name,
         username: form.username,
@@ -111,8 +111,13 @@ export default function RegisterPage() {
         city: form.city,
         role,
         karma_tokens: 100,
-        bio: role === 'instructor' ? form.bio : null,
       })
+
+      if (profileError) {
+        setError('Profil oluşturulamadı: ' + profileError.message)
+        setLoading(false)
+        return
+      }
 
       if (role === 'investor') {
         await supabase.from('investor_profiles').insert({ id: data.user.id, firm_name: form.firm_name })
