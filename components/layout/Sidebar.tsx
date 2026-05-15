@@ -140,7 +140,6 @@ const INSTRUCTOR_NAV = [
   {
     label: 'Kurslarım',
     items: [
-      { href: '/kurslar/egitmen', label: 'Kurslarım', icon: BookOpen },
       { href: '/kurslar/egitmen/ogrenciler', label: 'Öğrencilerim', icon: Users },
       { href: '/kurslar/egitmen/gelir', label: 'Gelir Takibi', icon: TrendingUp },
       { href: '/kurslar/egitmen/yorumlar', label: 'Değerlendirmeler', icon: Star },
