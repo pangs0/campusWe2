@@ -35,6 +35,15 @@ const ROLES = [
     bg: 'rgba(29,78,216,.06)',
     border: 'rgba(29,78,216,.3)',
   },
+  {
+    key: 'instructor',
+    emoji: '🎓',
+    label: 'Eğitmen',
+    desc: 'Kurs oluşturup gelir kazanmak istiyorum',
+    color: '#059669',
+    bg: 'rgba(5,150,105,.06)',
+    border: 'rgba(5,150,105,.3)',
+  },
 ]
 
 const LEFT_FEATURES = {
@@ -56,13 +65,19 @@ const LEFT_FEATURES = {
     { emoji: '📋', text: 'İş ilanı yayınla' },
     { emoji: '📊', text: 'İşe alım pipeline yönet' },
   ],
+  instructor: [
+    { emoji: '💰', text: 'Her satıştan %75 kazanç al' },
+    { emoji: '📚', text: 'Sınırsız kurs ve ders oluştur' },
+    { emoji: '📊', text: 'Gelir ve öğrenci takibi yap' },
+    { emoji: '🏆', text: 'Eğitmen rozeti ve profil sayfası' },
+  ],
 }
 
 export default function RegisterPage() {
   const router = useRouter()
   const supabase = createClient()
-  const [role, setRole] = useState<'founder' | 'investor' | 'company'>('founder')
-  const [form, setForm] = useState({ email: '', password: '', full_name: '', username: '', university: '', city: '', company_name: '', firm_name: '' })
+  const [role, setRole] = useState<'founder' | 'investor' | 'company' | 'instructor'>('founder')
+  const [form, setForm] = useState({ email: '', password: '', full_name: '', username: '', university: '', city: '', company_name: '', firm_name: '', expertise: '', bio: '' })
   const [error, setError] = useState('')
   const [agreed, setAgreed] = useState(false)
   const [sent, setSent] = useState(false)
@@ -104,10 +119,22 @@ export default function RegisterPage() {
       if (role === 'company') {
         await supabase.from('company_profiles').insert({ id: data.user.id, company_name: form.company_name || form.full_name })
       }
+      if (role === 'instructor') {
+        await supabase.from('instructor_profiles').insert({
+          id: data.user.id,
+          expertise: form.expertise,
+          bio: form.bio,
+          is_approved: true,
+        })
+      }
     }
 
     setSent(true)
     setLoading(false)
+    setTimeout(() => {
+      if (role === 'instructor') router.push('/kurslar/egitmen')
+      else router.push('/dashboard')
+    }, 1500)
   }
 
   return (
@@ -285,6 +312,36 @@ export default function RegisterPage() {
                 <div>
                   <label style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(26,26,24,.4)', letterSpacing: 1, display: 'block', marginBottom: 5 }}>ŞEHİR</label>
                   <input className="input-auth" placeholder="İstanbul" value={form.city} onChange={e => setForm(p => ({ ...p, city: e.target.value }))} />
+                </div>
+              </div>
+            )}
+
+            {role === 'instructor' && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                  <div>
+                    <label style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(26,26,24,.4)', letterSpacing: 1, display: 'block', marginBottom: 5 }}>UZMANLIK ALANI *</label>
+                    <select className="input-auth" value={form.expertise} onChange={e => setForm(p => ({ ...p, expertise: e.target.value }))} required style={{ appearance: 'auto' }}>
+                      <option value="">Seç</option>
+                      <option>Girişimcilik</option>
+                      <option>Teknoloji & Yazılım</option>
+                      <option>Tasarım & UI/UX</option>
+                      <option>Pazarlama & Büyüme</option>
+                      <option>Finans & Yatırım</option>
+                      <option>Yapay Zeka</option>
+                      <option>Ürün Yönetimi</option>
+                      <option>Kişisel Gelişim</option>
+                      <option>Diğer</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(26,26,24,.4)', letterSpacing: 1, display: 'block', marginBottom: 5 }}>ŞEHİR</label>
+                    <input className="input-auth" placeholder="İstanbul" value={form.city} onChange={e => setForm(p => ({ ...p, city: e.target.value }))} />
+                  </div>
+                </div>
+                <div>
+                  <label style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(26,26,24,.4)', letterSpacing: 1, display: 'block', marginBottom: 5 }}>KISA BİO</label>
+                  <textarea className="input-auth" placeholder="Kendinizi ve oluşturmayı planladığınız kursu kısaca anlatın..." value={form.bio} onChange={e => setForm(p => ({ ...p, bio: e.target.value }))} rows={2} style={{ resize: 'none' }} />
                 </div>
               </div>
             )}

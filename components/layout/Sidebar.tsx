@@ -128,6 +128,40 @@ const COMPANY_NAV = [
   },
 ]
 
+const INSTRUCTOR_NAV = [
+  {
+    label: 'Panel',
+    items: [
+      { href: '/kurslar/egitmen', label: 'Dashboard', icon: LayoutDashboard },
+      { href: '/mesajlar', label: 'Mesajlar', icon: MessageCircle },
+      { href: '/bildirimler', label: 'Bildirimler', icon: Star },
+    ]
+  },
+  {
+    label: 'Kurslarım',
+    items: [
+      { href: '/kurslar/egitmen', label: 'Kurslarım', icon: BookOpen },
+      { href: '/kurslar/egitmen/ogrenciler', label: 'Öğrencilerim', icon: Users },
+      { href: '/kurslar/egitmen/gelir', label: 'Gelir Takibi', icon: TrendingUp },
+      { href: '/kurslar/egitmen/yorumlar', label: 'Değerlendirmeler', icon: Star },
+    ]
+  },
+  {
+    label: 'Keşfet',
+    items: [
+      { href: '/kurslar', label: 'Tüm Kurslar', icon: GraduationCap },
+      { href: '/kesfet', label: 'Startuplar', icon: Compass },
+    ]
+  },
+  {
+    label: 'Hesap',
+    items: [
+      { href: '/profile', label: 'Profil', icon: User },
+      { href: '/ayarlar', label: 'Ayarlar', icon: Settings },
+    ]
+  },
+]
+
 export default function Sidebar({ user }: SidebarProps) {
   const router = useRouter()
   const pathname = usePathname()
@@ -158,9 +192,9 @@ export default function Sidebar({ user }: SidebarProps) {
   }
 
   const role = (user?.role || 'founder') as string
-  const navGroups = role === 'investor' ? INVESTOR_NAV : role === 'company' ? COMPANY_NAV : FOUNDER_NAV
-  const roleLabel = role === 'investor' ? 'Yatırımcı' : role === 'company' ? 'Şirket' : 'Girişimci'
-  const roleColor = role === 'investor' ? 'text-amber-600 bg-amber-50' : role === 'company' ? 'text-blue-600 bg-blue-50' : 'text-brand bg-brand/8'
+  const navGroups = role === 'investor' ? INVESTOR_NAV : role === 'company' ? COMPANY_NAV : role === 'instructor' ? INSTRUCTOR_NAV : FOUNDER_NAV
+  const roleLabel = role === 'investor' ? 'Yatırımcı' : role === 'company' ? 'Şirket' : role === 'instructor' ? 'Eğitmen' : 'Girişimci'
+  const roleColor = role === 'investor' ? 'text-amber-600 bg-amber-50' : role === 'company' ? 'text-blue-600 bg-blue-50' : role === 'instructor' ? 'text-green-600 bg-green-50' : 'text-brand bg-brand/8'
 
   if (!user?.id) return null
 
