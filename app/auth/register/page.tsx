@@ -249,16 +249,16 @@ export default function RegisterPage() {
           {/* Rol seçimi */}
           <div style={{ marginBottom: '1.5rem' }}>
             <p style={{ fontFamily: 'monospace', fontSize: 11, color: 'rgba(26,26,24,.4)', letterSpacing: 1, marginBottom: 8 }}>SEN KİMSİN?</p>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 8, marginBottom: 8 }}>
               {ROLES.map(r => (
                 <button key={r.key} type="button" onClick={() => setRole(r.key as any)} className="role-card"
-                  style={{ padding: '12px 8px', borderRadius: 10, border: role === r.key ? `2px solid ${r.color}` : '1.5px solid rgba(26,26,24,.12)', background: role === r.key ? r.bg : 'white', cursor: 'pointer', textAlign: 'center', position: 'relative' }}>
+                  style={{ padding: '10px 8px', borderRadius: 10, border: role === r.key ? `2px solid ${r.color}` : '1.5px solid rgba(26,26,24,.12)', background: role === r.key ? r.bg : 'white', cursor: 'pointer', textAlign: 'center', position: 'relative' }}>
                   {role === r.key && (
-                    <div style={{ position: 'absolute', top: 6, right: 6, width: 16, height: 16, borderRadius: '50%', background: r.color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <Check size={9} color="white" />
+                    <div style={{ position: 'absolute', top: 5, right: 5, width: 15, height: 15, borderRadius: '50%', background: r.color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Check size={8} color="white" />
                     </div>
                   )}
-                  <span style={{ fontSize: 20, display: 'block', marginBottom: 4 }}>{r.emoji}</span>
+                  <span style={{ fontSize: 18, display: 'block', marginBottom: 3 }}>{r.emoji}</span>
                   <p style={{ fontSize: 11, fontWeight: 600, color: role === r.key ? r.color : '#1a1a18', margin: 0 }}>{r.label}</p>
                 </button>
               ))}
