@@ -269,8 +269,7 @@ export default function Sidebar({ user }: SidebarProps) {
         ))}
       </nav>
 
-      <div className="border-t border-neutral-200 p-3 space-y-0.5 flex-shrink-0">
-        <NotificationBell userId={user.id} />
+      <div className="border-t border-neutral-200 p-3 flex-shrink-0">
         <button onClick={handleSignOut}
           className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-ink/40 hover:bg-neutral-100 hover:text-ink transition-colors">
           <LogOut size={15} />
