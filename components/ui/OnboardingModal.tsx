@@ -75,6 +75,8 @@ export default function OnboardingModal({ userId, profile }: { userId: string; p
     const key = `onboarding-dismissed-${userId}`
     if (localStorage.getItem(key)) return
     if (!userId) return
+    // Eğitmen, yatırımcı, şirket rolünde açma
+    if (profile?.role && profile.role !== 'founder') return
     // Profil fotoğrafı VE bio varsa hiç açma
     if (profile?.avatar_url && profile?.bio) return
 
