@@ -251,9 +251,7 @@ export default function Sidebar({ user }: SidebarProps) {
             <p className="mono text-xs text-ink/25 tracking-widest px-3 mb-1">{group.label.toUpperCase()}</p>
             <div className="space-y-0.5">
               {group.items.map(item => {
-                const active = pathname === item.href || 
-                  (item.href !== '/dashboard' && item.href !== '/kurslar' && pathname.startsWith(item.href)) ||
-                  (item.href === '/kurslar' && pathname === '/kurslar')
+                const active = pathname === item.href
                 return (
                   <Link key={item.href + item.label} href={item.href} prefetch={true}
                     className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors ${
