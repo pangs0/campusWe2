@@ -56,12 +56,25 @@ export default function EgitmenOlClient({ userId, profile, skills, isInstructor 
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    if (!form.bio.trim()) return
+    if (selectedAreas.length === 0) return
     setLoading(true)
 
-    // Profil bio güncelle
+    // Role instructor yap
     await supabase.from('profiles').update({
       bio: form.bio,
+      role: 'instructor',
+      linkedin_url: form.linkedin_url || null,
+      website_url: form.website_url || null,
     }).eq('id', userId)
+
+    // instructor_profiles upsert
+    await supabase.from('instructor_profiles').upsert({
+      id: userId,
+      expertise: selectedAreas.join(', '),
+      bio: form.bio,
+      is_approved: true,
+    })
 
     setSubmitted(true)
     setLoading(false)
@@ -93,7 +106,7 @@ export default function EgitmenOlClient({ userId, profile, skills, isInstructor 
                 <p className="text-xs text-ink/45">Kurslarını düzenle, yayınla, izle.</p>
               </Link>
 
-              <Link href="/kurslar/egitmen" className="card hover:border-brand/30 transition-colors group block">
+              <Link href="/kurslar/egitmen/yeni" className="card hover:border-brand/30 transition-colors group block">
                 <div className="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center mb-3">
                   <Plus size={20} className="text-green-600" />
                 </div>

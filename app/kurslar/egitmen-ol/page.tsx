@@ -17,7 +17,7 @@ export default async function EgitmenOlPage() {
   const { data: existingCourses } = await supabase
     .from('courses').select('id').eq('instructor_id', user.id).limit(1)
 
-  const isInstructor = !!(existingCourses && existingCourses.length > 0)
+  const isInstructor = profile?.role === 'instructor'
 
   return (
     <AppLayout user={user} profile={profile}>
