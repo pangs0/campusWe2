@@ -77,7 +77,7 @@ export default async function KurslarPage({ searchParams }: { searchParams: { ca
             <Link href="/kurslar/ogrencim" className="btn-secondary text-xs flex items-center gap-1.5">
               <BookOpen size={13} /> Kurslarım
             </Link>
-            <Link href="/kurslar/egitmen" className="btn-primary text-xs flex items-center gap-1.5">
+            <Link href="/kurslar/egitmen/yeni" className="btn-primary text-xs flex items-center gap-1.5">
               <Plus size={13} /> Kurs oluştur
             </Link>
           </div>
@@ -200,7 +200,7 @@ export default async function KurslarPage({ searchParams }: { searchParams: { ca
             <BookOpen size={40} className="text-brand/25 mx-auto mb-4" />
             <p className="font-serif text-2xl font-bold text-ink mb-2">Henüz kurs yok.</p>
             <p className="text-sm text-ink/45 mb-6">İlk kursu oluşturan sen ol. Topluluğa değer kat, kazanç elde et.</p>
-            <Link href="/kurslar/egitmen" className="btn-primary inline-flex items-center gap-1.5 text-sm">
+            <Link href="/kurslar/egitmen/yeni" className="btn-primary inline-flex items-center gap-1.5 text-sm">
               <Plus size={14} /> Kurs oluştur
             </Link>
           </div>

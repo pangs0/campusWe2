@@ -114,10 +114,9 @@ export default function InstructorClient({
           <p className="mono text-xs text-ink/35 tracking-widest mb-1">EĞİTMEN PANELİ</p>
           <h1 className="font-serif text-3xl font-bold text-ink" style={{ letterSpacing: -1 }}>Eğitmen Paneli.</h1>
         </div>
-        <button onClick={() => setShowForm(true)}
-          className="btn-primary flex items-center gap-2">
+        <Link href="/kurslar/egitmen/yeni" className="btn-primary flex items-center gap-2">
           <Plus size={16} /> Yeni Kurs
-        </button>
+        </Link>
       </div>
 
       {/* Tab bar */}
