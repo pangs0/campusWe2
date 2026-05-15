@@ -204,6 +204,9 @@ export default async function KursDetayPage({ params }: { params: { id: string }
               <CourseEnrollClient
                 courseId={course.id}
                 userId={user.id}
+                instructorId={course.instructor_id}
+                courseTitle={course.title}
+                studentName={profile?.full_name || 'Bir öğrenci'}
                 isEnrolled={isEnrolled}
                 isInstructor={isInstructor}
                 isFree={course.is_free}

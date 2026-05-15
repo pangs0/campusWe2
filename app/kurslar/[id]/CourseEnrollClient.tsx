@@ -8,13 +8,16 @@ import { Play, Check } from 'lucide-react'
 type Props = {
   courseId: string
   userId: string
+  instructorId: string
+  courseTitle: string
+  studentName: string
   isEnrolled: boolean
   isInstructor: boolean
   isFree: boolean
   price: number
 }
 
-export default function CourseEnrollClient({ courseId, userId, isEnrolled, isInstructor, isFree, price }: Props) {
+export default function CourseEnrollClient({ courseId, userId, instructorId, courseTitle, studentName, isEnrolled, isInstructor, isFree, price }: Props) {
   const router = useRouter()
   const supabase = createClient()
   const [enrolled, setEnrolled] = useState(isEnrolled)
@@ -27,6 +30,17 @@ export default function CourseEnrollClient({ courseId, userId, isEnrolled, isIns
       student_id: userId,
       paid_price: isFree ? 0 : price,
     })
+
+    // Eğitmene bildirim gönder
+    if (instructorId && instructorId !== userId) {
+      await supabase.from('notifications').insert({
+        user_id: instructorId,
+        type: 'enrollment',
+        message: `${studentName} "${courseTitle}" kursuna kaydoldu.`,
+        is_read: false,
+      })
+    }
+
     setEnrolled(true)
     setLoading(false)
     router.refresh()

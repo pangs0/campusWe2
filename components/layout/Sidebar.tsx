@@ -271,20 +271,6 @@ export default function Sidebar({ user }: SidebarProps) {
 
       <div className="border-t border-neutral-200 p-3 space-y-0.5 flex-shrink-0">
         <NotificationBell userId={user.id} />
-        <Link href="/profile"
-          className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors ${
-            pathname === '/profile' ? 'bg-brand/10 text-brand font-medium' : 'text-ink/55 hover:bg-neutral-100 hover:text-ink'
-          }`}>
-          <User size={15} className="text-ink/40" />
-          Profil
-        </Link>
-        <Link href="/ayarlar"
-          className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors ${
-            pathname === '/ayarlar' ? 'bg-brand/10 text-brand font-medium' : 'text-ink/55 hover:bg-neutral-100 hover:text-ink'
-          }`}>
-          <Settings size={15} className="text-ink/40" />
-          Ayarlar
-        </Link>
         <button onClick={handleSignOut}
           className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-ink/40 hover:bg-neutral-100 hover:text-ink transition-colors">
           <LogOut size={15} />
