@@ -111,6 +111,7 @@ export default function RegisterPage() {
         city: form.city,
         role,
         karma_tokens: 100,
+        bio: role === 'instructor' ? form.bio : null,
       })
 
       if (role === 'investor') {
@@ -120,12 +121,13 @@ export default function RegisterPage() {
         await supabase.from('company_profiles').insert({ id: data.user.id, company_name: form.company_name || form.full_name })
       }
       if (role === 'instructor') {
-        await supabase.from('instructor_profiles').insert({
-          id: data.user.id,
-          expertise: form.expertise,
-          bio: form.bio,
-          is_approved: true,
-        })
+        try {
+          await supabase.from('instructor_profiles').insert({
+            id: data.user.id,
+            expertise: form.expertise,
+            is_approved: true,
+          })
+        } catch {}
       }
     }
 
