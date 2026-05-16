@@ -149,7 +149,7 @@ export default function EgitmenLanding() {
   const threeYear = yearly * 3
 
   return (
-    <div style={{ fontFamily: 'Inter, sans-serif', background: '#F5F0E8', color: '#1a1a18', overflowX: 'hidden' }}>
+    <div style={{ fontFamily: 'Inter, sans-serif', background: '#F5F0E8', color: '#1a1a18', overflowX: 'hidden', backgroundImage: 'repeating-linear-gradient(0deg,transparent,transparent 79px,rgba(26,26,24,.04) 79px,rgba(26,26,24,.04) 80px)' }}>
       <style>{`
         body { background: #F5F0E8 !important; }
         @keyframes float1 { 0%,100%{transform:translateY(0) rotate(0deg);opacity:.4} 50%{transform:translateY(-22px) rotate(180deg);opacity:.7} }
@@ -162,18 +162,17 @@ export default function EgitmenLanding() {
       `}</style>
 
       {/* NAV */}
-      <nav style={{ position: 'sticky', top: 0, zIndex: 100, background: 'rgba(250,249,246,.95)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(26,26,24,.08)', padding: '0 48px', height: 64, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <Link href="/" style={{ fontFamily: 'Georgia,serif', fontSize: 20, fontWeight: 800, color: '#1a1a18', textDecoration: 'none' }}>
-          Campus<span style={{ color: '#C4500A' }}>We</span>
+      <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.2rem 4rem', borderBottom: '1px solid rgba(26,26,24,.1)', background: 'rgba(245,240,232,.95)', position: 'sticky', top: 0, zIndex: 100, backdropFilter: 'blur(8px)' }}>
+        <Link href="/" style={{ fontFamily: 'Georgia, serif', fontSize: 20, fontWeight: 800, color: '#1a1a18', textDecoration: 'none' }}>
+          Campus<em style={{ color: '#C4500A', fontStyle: 'normal' }}>We</em>
         </Link>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-          <Link href="/" style={{ fontSize: 13, color: 'rgba(26,26,24,.6)', textDecoration: 'none', padding: '8px 14px' }}>Ana Sayfa</Link>
-          <Link href="/kurslar" style={{ fontSize: 13, color: 'rgba(26,26,24,.6)', textDecoration: 'none', padding: '8px 14px' }}>Kurslar</Link>
-          <Link href="/fiyatlandirma" style={{ fontSize: 13, color: 'rgba(26,26,24,.6)', textDecoration: 'none', padding: '8px 14px' }}>Fiyatlandırma</Link>
-          <Link href="/kurumsal" style={{ fontSize: 13, color: 'rgba(26,26,24,.6)', textDecoration: 'none', padding: '8px 14px' }}>Kurumsal</Link>
-          <Link href="/egitmen" style={{ fontSize: 13, color: '#C4500A', textDecoration: 'none', padding: '8px 14px', border: '1px solid rgba(196,80,10,.3)', borderRadius: 6, marginLeft: 4 }}>Eğitmen Ol</Link>
-          <Link href="/auth/login" style={{ fontSize: 13, color: 'rgba(26,26,24,.6)', textDecoration: 'none', padding: '8px 14px', marginLeft: 4 }}>Giriş yap</Link>
-          <Link href="/auth/register" style={{ background: '#C4500A', color: 'white', fontSize: 13, fontWeight: 700, textDecoration: 'none', padding: '9px 18px', borderRadius: 8, marginLeft: 4 }}>
+        <div style={{ display: 'flex', gap: 28, alignItems: 'center' }}>
+          <Link href="/kurslar" style={{ fontSize: 13, color: 'rgba(26,26,24,.5)', textDecoration: 'none' }}>Kurslar</Link>
+          <Link href="/fiyatlandirma" style={{ fontSize: 13, color: 'rgba(26,26,24,.5)', textDecoration: 'none' }}>Fiyatlandırma</Link>
+          <Link href="/kurumsal" style={{ fontSize: 13, color: 'rgba(26,26,24,.5)', textDecoration: 'none' }}>Kurumsal</Link>
+          <Link href="/egitmen" style={{ fontSize: 13, color: '#C4500A', textDecoration: 'none', border: '1px solid rgba(196,80,10,.3)', borderRadius: 6, padding: '6px 14px' }}>Eğitmen Ol</Link>
+          <Link href="/auth/login" style={{ fontSize: 13, color: 'rgba(26,26,24,.6)', textDecoration: 'none' }}>Giriş yap</Link>
+          <Link href="/auth/register" style={{ background: '#C4500A', color: '#F5F0E8', padding: '8px 20px', borderRadius: 6, fontSize: 13, textDecoration: 'none', fontWeight: 500, display: 'inline-block' }}>
             Kayıt ol →
           </Link>
         </div>
