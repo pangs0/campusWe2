@@ -131,8 +131,8 @@ function useInView(ref: React.RefObject<Element>) {
   return inView
 }
 
-const PAD = '100px 7%'
-const PAD_SMALL = '64px 7%'
+const PAD = '100px 48px'
+const PAD_SMALL = '64px 48px'
 
 export default function EgitmenLanding() {
   const [students, setStudents] = useState(50)
@@ -158,31 +158,34 @@ export default function EgitmenLanding() {
         @keyframes bubble2 { 0%,100%{transform:translateY(0) scale(1);opacity:.4} 50%{transform:translateY(-20px) scale(0.9);opacity:.8} }
         @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
         @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
-        @keyframes shimmer { 0%{background-position:-200% center} 100%{background-position:200% center} }
       `}</style>
 
       {/* NAV */}
-      <nav style={{ position: 'sticky', top: 0, zIndex: 100, background: 'rgba(250,249,246,.95)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(26,26,24,.08)', padding: '0 7%', height: 64, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <Link href="/" style={{ fontFamily: 'Georgia,serif', fontSize: 22, fontWeight: 800, color: '#1a1a18', textDecoration: 'none' }}>
+      <nav style={{ position: 'sticky', top: 0, zIndex: 100, background: 'rgba(250,249,246,.95)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(26,26,24,.08)', padding: '0 48px', height: 64, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Link href="/" style={{ fontFamily: 'Georgia,serif', fontSize: 20, fontWeight: 800, color: '#1a1a18', textDecoration: 'none' }}>
           Campus<span style={{ color: '#C4500A' }}>We</span>
         </Link>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <Link href="/kurslar" style={{ fontSize: 13, color: 'rgba(26,26,24,.5)', textDecoration: 'none', padding: '8px 14px' }}>Kurslar</Link>
-          <Link href="/auth/login" style={{ fontSize: 13, color: 'rgba(26,26,24,.6)', textDecoration: 'none', padding: '8px 16px' }}>Giriş yap</Link>
-          <Link href="/auth/register" style={{ background: '#C4500A', color: 'white', fontSize: 13, fontWeight: 700, textDecoration: 'none', padding: '9px 20px', borderRadius: 8 }}>
-            Ücretsiz başla →
+        <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+          <Link href="/" style={{ fontSize: 13, color: 'rgba(26,26,24,.6)', textDecoration: 'none', padding: '8px 14px' }}>Ana Sayfa</Link>
+          <Link href="/kurslar" style={{ fontSize: 13, color: 'rgba(26,26,24,.6)', textDecoration: 'none', padding: '8px 14px' }}>Kurslar</Link>
+          <Link href="/fiyatlandirma" style={{ fontSize: 13, color: 'rgba(26,26,24,.6)', textDecoration: 'none', padding: '8px 14px' }}>Fiyatlandırma</Link>
+          <Link href="/kurumsal" style={{ fontSize: 13, color: 'rgba(26,26,24,.6)', textDecoration: 'none', padding: '8px 14px' }}>Kurumsal</Link>
+          <Link href="/egitmen" style={{ fontSize: 13, color: '#C4500A', textDecoration: 'none', padding: '8px 14px', border: '1px solid rgba(196,80,10,.3)', borderRadius: 6, marginLeft: 4 }}>Eğitmen Ol</Link>
+          <Link href="/auth/login" style={{ fontSize: 13, color: 'rgba(26,26,24,.6)', textDecoration: 'none', padding: '8px 14px', marginLeft: 4 }}>Giriş yap</Link>
+          <Link href="/auth/register" style={{ background: '#C4500A', color: 'white', fontSize: 13, fontWeight: 700, textDecoration: 'none', padding: '9px 18px', borderRadius: 8, marginLeft: 4 }}>
+            Kayıt ol →
           </Link>
         </div>
       </nav>
 
       {/* HERO */}
-      <section style={{ background: '#1a1a18', padding: '100px 7% 90px', position: 'relative', overflow: 'hidden' }}>
+      <section style={{ background: '#1a1a18', padding: '100px 48px 90px', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', inset: 0, backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 60px, rgba(196,80,10,.035) 60px, rgba(196,80,10,.035) 120px)', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', top: -80, right: -80, width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(196,80,10,.18), transparent 65%)', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', bottom: -100, left: -50, width: 350, height: 350, borderRadius: '50%', background: 'radial-gradient(circle, rgba(196,80,10,.08), transparent 70%)', pointerEvents: 'none' }} />
         <Particles count={8} />
 
-        <div style={{ maxWidth: 1300, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'center' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'center' }}>
           <div>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(196,80,10,.15)', border: '1px solid rgba(196,80,10,.3)', borderRadius: 100, padding: '6px 14px', marginBottom: 28 }}>
               <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#C4500A', animation: 'pulse 2s infinite' }} />
@@ -235,9 +238,9 @@ export default function EgitmenLanding() {
       </section>
 
       {/* SAYAÇLAR */}
-      <section ref={statsRef} style={{ padding: PAD_SMALL, borderBottom: '1px solid rgba(26,26,24,.06)', position: 'relative', overflow: 'hidden' }}>
+      <section ref={statsRef} style={{ padding: '64px 48px', borderBottom: '1px solid rgba(26,26,24,.06)', position: 'relative', overflow: 'hidden' }}>
         <FloatingBubbles count={4} />
-        <div style={{ maxWidth: 1300, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 32 }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 32 }}>
           {[
             { value: statsInView ? s0 : 0, suffix: '+', label: 'Aktif Eğitmen' },
             { value: statsInView ? s1 : 0, suffix: '+', label: 'Kayıtlı Öğrenci' },
@@ -255,10 +258,10 @@ export default function EgitmenLanding() {
       </section>
 
       {/* KAZANÇ SİMÜLATÖRÜ */}
-      <section style={{ padding: PAD, background: '#1a1a18', position: 'relative', overflow: 'hidden' }}>
+      <section style={{ padding: '100px 48px', background: '#1a1a18', position: 'relative', overflow: 'hidden' }}>
         <FloatingBubbles count={6} dark />
         <Particles count={6} />
-        <div style={{ maxWidth: 1300, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 80, alignItems: 'center' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 80, alignItems: 'center' }}>
           {/* Sol açıklama */}
           <div>
             <p style={{ fontFamily: 'monospace', fontSize: 11, color: '#C4500A', letterSpacing: 3, marginBottom: 16 }}>KAZANÇ SİMÜLATÖRÜ</p>
@@ -338,9 +341,9 @@ export default function EgitmenLanding() {
       </section>
 
       {/* NASIL ÇALIŞIR */}
-      <section style={{ padding: PAD, position: 'relative', overflow: 'hidden' }}>
+      <section style={{ padding: '100px 48px', position: 'relative', overflow: 'hidden' }}>
         <FloatingBubbles count={4} />
-        <div style={{ maxWidth: 1300, margin: '0 auto' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 64 }}>
             <p style={{ fontFamily: 'monospace', fontSize: 11, color: '#C4500A', letterSpacing: 3, marginBottom: 12 }}>NASIL ÇALIŞIR</p>
             <h2 style={{ fontFamily: 'Georgia,serif', fontSize: 42, fontWeight: 800, letterSpacing: -1.5, margin: 0 }}>4 adımda eğitmen ol.</h2>
@@ -362,9 +365,9 @@ export default function EgitmenLanding() {
       </section>
 
       {/* ÖZELLİKLER */}
-      <section style={{ padding: PAD, background: 'white', position: 'relative', overflow: 'hidden' }}>
+      <section style={{ padding: '100px 48px', background: 'white', position: 'relative', overflow: 'hidden' }}>
         <FloatingBubbles count={4} />
-        <div style={{ maxWidth: 1300, margin: '0 auto' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 80, alignItems: 'start' }}>
             <div style={{ position: 'sticky', top: 100 }}>
               <p style={{ fontFamily: 'monospace', fontSize: 11, color: '#C4500A', letterSpacing: 3, marginBottom: 16 }}>ÖZELLİKLER</p>
@@ -394,9 +397,9 @@ export default function EgitmenLanding() {
       </section>
 
       {/* KARŞILAŞTIRMA */}
-      <section style={{ padding: PAD, position: 'relative', overflow: 'hidden' }}>
+      <section style={{ padding: '100px 48px', position: 'relative', overflow: 'hidden' }}>
         <FloatingBubbles count={4} />
-        <div style={{ maxWidth: 1300, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 80, alignItems: 'start' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 80, alignItems: 'start' }}>
           <div style={{ position: 'sticky', top: 100 }}>
             <p style={{ fontFamily: 'monospace', fontSize: 11, color: '#C4500A', letterSpacing: 3, marginBottom: 16 }}>KARŞILAŞTIRMA</p>
             <h2 style={{ fontFamily: 'Georgia,serif', fontSize: 42, fontWeight: 800, letterSpacing: -1.5, lineHeight: 1.1, marginBottom: 20 }}>Neden CampusWe?</h2>
@@ -436,9 +439,9 @@ export default function EgitmenLanding() {
       </section>
 
       {/* YORUMLAR */}
-      <section style={{ padding: PAD, background: 'white', position: 'relative', overflow: 'hidden' }}>
+      <section style={{ padding: '100px 48px', background: 'white', position: 'relative', overflow: 'hidden' }}>
         <FloatingBubbles count={4} />
-        <div style={{ maxWidth: 1300, margin: '0 auto' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 64 }}>
             <p style={{ fontFamily: 'monospace', fontSize: 11, color: '#C4500A', letterSpacing: 3, marginBottom: 12 }}>EĞİTMEN HİKAYELERİ</p>
             <h2 style={{ fontFamily: 'Georgia,serif', fontSize: 42, fontWeight: 800, letterSpacing: -1.5, margin: 0 }}>Onlar başardı.</h2>
@@ -472,9 +475,9 @@ export default function EgitmenLanding() {
       </section>
 
       {/* SSS */}
-      <section style={{ padding: PAD, position: 'relative', overflow: 'hidden' }}>
+      <section style={{ padding: '100px 48px', position: 'relative', overflow: 'hidden' }}>
         <FloatingBubbles count={4} />
-        <div style={{ maxWidth: 1300, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 80, alignItems: 'start' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 80, alignItems: 'start' }}>
           <div style={{ position: 'sticky', top: 100 }}>
             <p style={{ fontFamily: 'monospace', fontSize: 11, color: '#C4500A', letterSpacing: 3, marginBottom: 16 }}>SSS</p>
             <h2 style={{ fontFamily: 'Georgia,serif', fontSize: 42, fontWeight: 800, letterSpacing: -1.5, lineHeight: 1.1, marginBottom: 20 }}>Aklındaki sorular.</h2>
@@ -504,13 +507,13 @@ export default function EgitmenLanding() {
       </section>
 
       {/* SON CTA */}
-      <section style={{ padding: PAD, background: '#1a1a18', position: 'relative', overflow: 'hidden' }}>
+      <section style={{ padding: '100px 48px', background: '#1a1a18', position: 'relative', overflow: 'hidden' }}>
         <FloatingBubbles count={6} dark />
         <Particles count={8} />
         <div style={{ position: 'absolute', top: -100, left: -100, width: 450, height: 450, borderRadius: '50%', background: 'radial-gradient(circle, rgba(196,80,10,.18), transparent 65%)', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', bottom: -80, right: -80, width: 350, height: 350, borderRadius: '50%', background: 'radial-gradient(circle, rgba(196,80,10,.1), transparent 70%)', pointerEvents: 'none' }} />
 
-        <div style={{ maxWidth: 1300, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'center', position: 'relative' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'center', position: 'relative' }}>
           <div>
             <p style={{ fontFamily: 'monospace', fontSize: 11, color: '#C4500A', letterSpacing: 3, marginBottom: 20 }}>HEMEN BAŞLA</p>
             <h2 style={{ fontFamily: 'Georgia,serif', fontSize: 52, fontWeight: 800, color: 'white', letterSpacing: -2, lineHeight: 1.08, marginBottom: 24 }}>
@@ -549,7 +552,7 @@ export default function EgitmenLanding() {
       </section>
 
       {/* FOOTER */}
-      <footer style={{ padding: '32px 7%', borderTop: '1px solid rgba(26,26,24,.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <footer style={{ padding: '32px 48px', borderTop: '1px solid rgba(26,26,24,.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <Link href="/" style={{ fontFamily: 'Georgia,serif', fontSize: 18, fontWeight: 800, color: '#1a1a18', textDecoration: 'none' }}>
           Campus<span style={{ color: '#C4500A' }}>We</span>
         </Link>
