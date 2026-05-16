@@ -238,7 +238,7 @@ export default function EgitmenLanding() {
       </section>
 
       {/* SAYAÇLAR */}
-      <section ref={statsRef} style={{ padding: '64px 48px', borderBottom: '1px solid rgba(26,26,24,.06)', position: 'relative', overflow: 'hidden' }}>
+      <section ref={statsRef} style={{ padding: '64px 48px', background: '#faf9f6', borderBottom: '1px solid rgba(26,26,24,.06)', position: 'relative', overflow: 'hidden' }}>
         <FloatingBubbles count={4} />
         <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 32 }}>
           {[
@@ -341,7 +341,7 @@ export default function EgitmenLanding() {
       </section>
 
       {/* NASIL ÇALIŞIR */}
-      <section style={{ padding: '100px 48px', position: 'relative', overflow: 'hidden' }}>
+      <section style={{ padding: '100px 48px', background: '#faf9f6', position: 'relative', overflow: 'hidden' }}>
         <FloatingBubbles count={4} />
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 64 }}>
@@ -397,7 +397,7 @@ export default function EgitmenLanding() {
       </section>
 
       {/* KARŞILAŞTIRMA */}
-      <section style={{ padding: '100px 48px', position: 'relative', overflow: 'hidden' }}>
+      <section style={{ padding: '100px 48px', background: '#faf9f6', position: 'relative', overflow: 'hidden' }}>
         <FloatingBubbles count={4} />
         <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 80, alignItems: 'start' }}>
           <div style={{ position: 'sticky', top: 100 }}>
@@ -475,7 +475,7 @@ export default function EgitmenLanding() {
       </section>
 
       {/* SSS */}
-      <section style={{ padding: '100px 48px', position: 'relative', overflow: 'hidden' }}>
+      <section style={{ padding: '100px 48px', background: '#faf9f6', position: 'relative', overflow: 'hidden' }}>
         <FloatingBubbles count={4} />
         <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 80, alignItems: 'start' }}>
           <div style={{ position: 'sticky', top: 100 }}>
@@ -552,7 +552,7 @@ export default function EgitmenLanding() {
       </section>
 
       {/* FOOTER */}
-      <footer style={{ padding: '32px 48px', borderTop: '1px solid rgba(26,26,24,.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <footer style={{ padding: '32px 48px', background: '#faf9f6', borderTop: '1px solid rgba(26,26,24,.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <Link href="/" style={{ fontFamily: 'Georgia,serif', fontSize: 18, fontWeight: 800, color: '#1a1a18', textDecoration: 'none' }}>
           Campus<span style={{ color: '#C4500A' }}>We</span>
         </Link>
