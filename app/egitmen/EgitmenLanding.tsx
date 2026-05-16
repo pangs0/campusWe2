@@ -167,6 +167,7 @@ export default function EgitmenLanding() {
           Campus<em style={{ color: '#C4500A', fontStyle: 'normal' }}>We</em>
         </Link>
         <div style={{ display: 'flex', gap: 28, alignItems: 'center' }}>
+          <Link href="/" style={{ fontSize: 13, color: 'rgba(26,26,24,.5)', textDecoration: 'none' }}>Ana Sayfa</Link>
           <Link href="/kurslar" style={{ fontSize: 13, color: 'rgba(26,26,24,.5)', textDecoration: 'none' }}>Kurslar</Link>
           <Link href="/fiyatlandirma" style={{ fontSize: 13, color: 'rgba(26,26,24,.5)', textDecoration: 'none' }}>Fiyatlandırma</Link>
           <Link href="/kurumsal" style={{ fontSize: 13, color: 'rgba(26,26,24,.5)', textDecoration: 'none' }}>Kurumsal</Link>
@@ -238,7 +239,7 @@ export default function EgitmenLanding() {
       </section>
 
       {/* SAYAÇLAR */}
-      <section ref={statsRef} style={{ padding: '64px 48px', background: '#F5F0E8', borderBottom: '1px solid rgba(26,26,24,.06)', position: 'relative', overflow: 'hidden' }}>
+      <section ref={statsRef} style={{ padding: '64px 48px', background: '#F5F0E8', backgroundImage: 'repeating-linear-gradient(0deg,transparent,transparent 79px,rgba(26,26,24,.04) 79px,rgba(26,26,24,.04) 80px)', borderBottom: '1px solid rgba(26,26,24,.06)', position: 'relative', overflow: 'hidden' }}>
         <FloatingBubbles count={4} />
         <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 32 }}>
           {[
@@ -341,7 +342,7 @@ export default function EgitmenLanding() {
       </section>
 
       {/* NASIL ÇALIŞIR */}
-      <section style={{ padding: '100px 48px', background: '#F5F0E8', position: 'relative', overflow: 'hidden' }}>
+      <section style={{ padding: '100px 48px', background: '#F5F0E8', backgroundImage: 'repeating-linear-gradient(0deg,transparent,transparent 79px,rgba(26,26,24,.04) 79px,rgba(26,26,24,.04) 80px)', position: 'relative', overflow: 'hidden' }}>
         <FloatingBubbles count={4} />
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 64 }}>
@@ -365,7 +366,7 @@ export default function EgitmenLanding() {
       </section>
 
       {/* ÖZELLİKLER */}
-      <section style={{ padding: '100px 48px', background: '#F5F0E8', position: 'relative', overflow: 'hidden' }}>
+      <section style={{ padding: '100px 48px', background: '#F5F0E8', backgroundImage: 'repeating-linear-gradient(0deg,transparent,transparent 79px,rgba(26,26,24,.04) 79px,rgba(26,26,24,.04) 80px)', position: 'relative', overflow: 'hidden' }}>
         <FloatingBubbles count={4} />
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 80, alignItems: 'start' }}>
@@ -397,7 +398,7 @@ export default function EgitmenLanding() {
       </section>
 
       {/* KARŞILAŞTIRMA */}
-      <section style={{ padding: '100px 48px', background: '#F5F0E8', position: 'relative', overflow: 'hidden' }}>
+      <section style={{ padding: '100px 48px', background: '#F5F0E8', backgroundImage: 'repeating-linear-gradient(0deg,transparent,transparent 79px,rgba(26,26,24,.04) 79px,rgba(26,26,24,.04) 80px)', position: 'relative', overflow: 'hidden' }}>
         <FloatingBubbles count={4} />
         <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 80, alignItems: 'start' }}>
           <div style={{ position: 'sticky', top: 100 }}>
@@ -439,7 +440,7 @@ export default function EgitmenLanding() {
       </section>
 
       {/* YORUMLAR */}
-      <section style={{ padding: '100px 48px', background: '#F5F0E8', position: 'relative', overflow: 'hidden' }}>
+      <section style={{ padding: '100px 48px', background: '#F5F0E8', backgroundImage: 'repeating-linear-gradient(0deg,transparent,transparent 79px,rgba(26,26,24,.04) 79px,rgba(26,26,24,.04) 80px)', position: 'relative', overflow: 'hidden' }}>
         <FloatingBubbles count={4} />
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 64 }}>
@@ -475,7 +476,7 @@ export default function EgitmenLanding() {
       </section>
 
       {/* SSS */}
-      <section style={{ padding: '100px 48px', background: '#F5F0E8', position: 'relative', overflow: 'hidden' }}>
+      <section style={{ padding: '100px 48px', background: '#F5F0E8', backgroundImage: 'repeating-linear-gradient(0deg,transparent,transparent 79px,rgba(26,26,24,.04) 79px,rgba(26,26,24,.04) 80px)', position: 'relative', overflow: 'hidden' }}>
         <FloatingBubbles count={4} />
         <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 80, alignItems: 'start' }}>
           <div style={{ position: 'sticky', top: 100 }}>
