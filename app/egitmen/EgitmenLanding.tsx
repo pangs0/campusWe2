@@ -30,7 +30,7 @@ const FEATURES = [
 ]
 
 const COMPARISON = [
-  { feature: 'Eğitmen gelir payı', campuswe: '%75', udemy: '%37', youtube: '%55' },
+  { feature: 'Eğitmen gelir payı', campuswe: '%75', udemy: '%37*', youtube: '%70**' },
   { feature: 'Türkçe platform', campuswe: '✅', udemy: '❌', youtube: '❌' },
   { feature: 'Girişimci topluluğu', campuswe: '✅', udemy: '❌', youtube: '❌' },
   { feature: 'Otomatik sertifika', campuswe: '✅', udemy: '✅', youtube: '❌' },
@@ -327,8 +327,8 @@ export default function EgitmenLanding() {
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
                 {[
                   { name: 'CampusWe (%75)', value: monthly, hi: true },
-                  { name: 'YouTube (%55)', value: Math.round(students * price * 0.55), hi: false },
-                  { name: 'Udemy (%37)', value: Math.round(students * price * 0.37), hi: false },
+                  { name: 'YouTube (%70)**', value: Math.round(students * price * 0.70), hi: false },
+                  { name: 'Udemy (%37)*', value: Math.round(students * price * 0.37), hi: false },
                 ].map((p, i) => (
                   <div key={i} style={{ background: p.hi ? 'rgba(196,80,10,.15)' : 'rgba(255,255,255,.03)', border: `1px solid ${p.hi ? 'rgba(196,80,10,.3)' : 'rgba(255,255,255,.06)'}`, borderRadius: 8, padding: 12, textAlign: 'center' }}>
                     <p style={{ fontFamily: 'monospace', fontSize: 9, color: p.hi ? '#C4500A' : 'rgba(255,255,255,.3)', marginBottom: 4 }}>{p.name}</p>
@@ -435,6 +435,12 @@ export default function EgitmenLanding() {
                 ))}
               </div>
             ))}
+            <div style={{ padding: '12px 24px', background: 'rgba(26,26,24,.03)', borderTop: '1px solid rgba(26,26,24,.06)' }}>
+              <p style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(26,26,24,.4)', margin: 0, lineHeight: 1.7 }}>
+                * Udemy organik satışlarda %37, abonelik modelinde 2026 itibarıyla %15'e düştü. &nbsp;
+                ** YouTube üyelik gelirinden %70 alırsın ancak kurs satışı için ayrı altyapı kurman gerekir.
+              </p>
+            </div>
           </div>
         </div>
       </section>
