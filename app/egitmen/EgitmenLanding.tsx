@@ -350,7 +350,7 @@ export default function EgitmenLanding() {
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 24 }}>
             {STEPS.map((step, i) => (
-              <div key={i} style={{ background: 'white', border: '1.5px solid rgba(26,26,24,.07)', borderRadius: 18, padding: 28, position: 'relative' }}>
+              <div key={i} style={{ background: '#faf9f6', border: '1.5px solid rgba(26,26,24,.07)', borderRadius: 18, padding: 28, position: 'relative' }}>
                 {i < STEPS.length - 1 && <div style={{ position: 'absolute', top: 36, left: '62%', width: '75%', height: 1, background: 'linear-gradient(90deg, rgba(196,80,10,.3), transparent)', zIndex: 0 }} />}
                 <div style={{ width: 48, height: 48, borderRadius: 14, background: 'rgba(196,80,10,.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16, fontSize: 22 }}>
                   {step.emoji}
@@ -365,7 +365,7 @@ export default function EgitmenLanding() {
       </section>
 
       {/* ÖZELLİKLER */}
-      <section style={{ padding: '100px 48px', background: 'white', position: 'relative', overflow: 'hidden' }}>
+      <section style={{ padding: '100px 48px', background: '#faf9f6', position: 'relative', overflow: 'hidden' }}>
         <FloatingBubbles count={4} />
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 80, alignItems: 'start' }}>
@@ -412,14 +412,14 @@ export default function EgitmenLanding() {
                 { emoji: '🇹🇷', text: 'Tamamen Türkçe platform' },
                 { emoji: '🤝', text: '1200+ girişimci topluluğu' },
               ].map((item, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'white', border: '1.5px solid rgba(26,26,24,.07)', borderRadius: 10, padding: '10px 14px' }}>
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, background: '#faf9f6', border: '1.5px solid rgba(26,26,24,.07)', borderRadius: 10, padding: '10px 14px' }}>
                   <span style={{ fontSize: 16 }}>{item.emoji}</span>
                   <span style={{ fontSize: 13, color: 'rgba(26,26,24,.7)' }}>{item.text}</span>
                 </div>
               ))}
             </div>
           </div>
-          <div style={{ background: 'white', borderRadius: 20, overflow: 'hidden', border: '1.5px solid rgba(26,26,24,.08)' }}>
+          <div style={{ background: '#faf9f6', borderRadius: 20, overflow: 'hidden', border: '1.5px solid rgba(26,26,24,.08)' }}>
             <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', background: '#1a1a18', padding: '16px 24px' }}>
               <div />
               {['CampusWe', 'Udemy', 'YouTube'].map((p, i) => (
@@ -427,7 +427,7 @@ export default function EgitmenLanding() {
               ))}
             </div>
             {COMPARISON.map((row, i) => (
-              <div key={i} style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', padding: '14px 24px', borderBottom: i < COMPARISON.length - 1 ? '1px solid rgba(26,26,24,.05)' : 'none', background: i % 2 === 0 ? 'white' : '#faf9f6' }}>
+              <div key={i} style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', padding: '14px 24px', borderBottom: i < COMPARISON.length - 1 ? '1px solid rgba(26,26,24,.05)' : 'none', background: i % 2 === 0 ? '#faf9f6' : '#f3f1ec' }}>
                 <p style={{ fontSize: 13, color: 'rgba(26,26,24,.7)', margin: 0 }}>{row.feature}</p>
                 {[row.campuswe, row.udemy, row.youtube].map((val, j) => (
                   <p key={j} style={{ textAlign: 'center', fontSize: 13, fontWeight: j === 0 ? 700 : 400, color: j === 0 ? '#C4500A' : val === '❌' ? 'rgba(26,26,24,.2)' : 'rgba(26,26,24,.55)', margin: 0 }}>{val}</p>
@@ -439,7 +439,7 @@ export default function EgitmenLanding() {
       </section>
 
       {/* YORUMLAR */}
-      <section style={{ padding: '100px 48px', background: 'white', position: 'relative', overflow: 'hidden' }}>
+      <section style={{ padding: '100px 48px', background: '#faf9f6', position: 'relative', overflow: 'hidden' }}>
         <FloatingBubbles count={4} />
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 64 }}>
@@ -490,7 +490,7 @@ export default function EgitmenLanding() {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {FAQS.map((faq, i) => (
-              <div key={i} style={{ background: 'white', border: `1.5px solid ${openFaq === i ? 'rgba(196,80,10,.25)' : 'rgba(26,26,24,.07)'}`, borderRadius: 14, overflow: 'hidden', transition: 'border-color .2s' }}>
+              <div key={i} style={{ background: '#faf9f6', border: `1.5px solid ${openFaq === i ? 'rgba(196,80,10,.25)' : 'rgba(26,26,24,.07)'}`, borderRadius: 14, overflow: 'hidden', transition: 'border-color .2s' }}>
                 <button onClick={() => setOpenFaq(openFaq === i ? null : i)} style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '18px 20px', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left' }}>
                   <p style={{ fontSize: 14, fontWeight: 600, color: '#1a1a18', margin: 0 }}>{faq.q}</p>
                   <ChevronDown size={16} color="rgba(26,26,24,.4)" style={{ transform: openFaq === i ? 'rotate(180deg)' : 'none', transition: 'transform .2s', flexShrink: 0 }} />
