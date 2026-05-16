@@ -106,6 +106,15 @@ export default function EgitmenLanding() {
   return (
     <div style={{ fontFamily: 'Inter, sans-serif', background: '#faf9f6', color: '#1a1a18' }}>
 
+      {/* ── CSS ── */}
+      <style>{`
+        @keyframes float1 { 0%,100% { transform: translateY(0px) rotate(0deg); opacity: .3; } 50% { transform: translateY(-20px) rotate(180deg); opacity: .6; } }
+        @keyframes float2 { 0%,100% { transform: translateY(0px) rotate(0deg); opacity: .2; } 50% { transform: translateY(-30px) rotate(-180deg); opacity: .5; } }
+        @keyframes float3 { 0%,100% { transform: translateY(0px); opacity: .15; } 50% { transform: translateY(-15px); opacity: .4; } }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+      `}</style>
+
       {/* ── NAV ── */}
       <nav style={{ position: 'sticky', top: 0, zIndex: 100, background: 'rgba(250,249,246,.92)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(26,26,24,.08)', padding: '0 48px', height: 64, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <Link href="/" style={{ fontFamily: 'Georgia, serif', fontSize: 22, fontWeight: 800, color: '#1a1a18', textDecoration: 'none' }}>
@@ -124,6 +133,24 @@ export default function EgitmenLanding() {
         {/* Arka plan desen */}
         <div style={{ position: 'absolute', inset: 0, backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 60px, rgba(196,80,10,.04) 60px, rgba(196,80,10,.04) 120px)', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', top: -100, right: -100, width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(196,80,10,.15), transparent 70%)', pointerEvents: 'none' }} />
+
+        {/* Animasyonlu partiküller */}
+        {[
+          { top: '10%', left: '3%', size: 6, anim: 'float1 4s infinite' },
+          { top: '25%', left: '8%', size: 4, anim: 'float2 5s infinite 1s' },
+          { top: '60%', left: '5%', size: 8, anim: 'float3 6s infinite 2s' },
+          { top: '80%', left: '12%', size: 3, anim: 'float1 4s infinite 3s' },
+          { top: '15%', right: '5%', size: 5, anim: 'float2 5s infinite' },
+          { top: '45%', right: '3%', size: 7, anim: 'float3 6s infinite 1s' },
+          { top: '70%', right: '8%', size: 4, anim: 'float1 4s infinite 2s' },
+          { top: '35%', left: '50%', size: 5, anim: 'float2 7s infinite 0.5s' },
+        ].map((p, i) => (
+          <div key={i} style={{
+            position: 'absolute', top: p.top, left: (p as any).left, right: (p as any).right,
+            width: p.size, height: p.size, borderRadius: '50%',
+            background: '#C4500A', animation: p.anim, pointerEvents: 'none'
+          }} />
+        ))}
 
         <div style={{ maxWidth: 1100, margin: '0 auto', position: 'relative' }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}>
@@ -210,7 +237,7 @@ export default function EgitmenLanding() {
 
       {/* ── KAZANÇ SİMÜLATÖRÜ ── */}
       <section style={{ padding: '100px 48px', background: '#1a1a18' }}>
-        <div style={{ maxWidth: 900, margin: '0 auto' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 56 }}>
             <p style={{ fontFamily: 'monospace', fontSize: 11, color: '#C4500A', letterSpacing: 3, marginBottom: 12 }}>KAZANÇ SİMÜLATÖRÜ</p>
             <h2 style={{ fontFamily: 'Georgia, serif', fontSize: 40, fontWeight: 800, color: 'white', letterSpacing: -1.5, margin: 0 }}>
@@ -339,7 +366,7 @@ export default function EgitmenLanding() {
 
       {/* ── KARŞILAŞTIRMA TABLOSU ── */}
       <section style={{ padding: '100px 48px' }}>
-        <div style={{ maxWidth: 900, margin: '0 auto' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 56 }}>
             <p style={{ fontFamily: 'monospace', fontSize: 11, color: '#C4500A', letterSpacing: 3, marginBottom: 12 }}>KARŞILAŞTIRMA</p>
             <h2 style={{ fontFamily: 'Georgia, serif', fontSize: 40, fontWeight: 800, letterSpacing: -1.5, margin: 0 }}>
@@ -408,7 +435,7 @@ export default function EgitmenLanding() {
 
       {/* ── SSS ── */}
       <section style={{ padding: '100px 48px' }}>
-        <div style={{ maxWidth: 720, margin: '0 auto' }}>
+        <div style={{ maxWidth: 900, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 56 }}>
             <p style={{ fontFamily: 'monospace', fontSize: 11, color: '#C4500A', letterSpacing: 3, marginBottom: 12 }}>SIKÇA SORULAN SORULAR</p>
             <h2 style={{ fontFamily: 'Georgia, serif', fontSize: 40, fontWeight: 800, letterSpacing: -1.5, margin: 0 }}>
@@ -437,8 +464,20 @@ export default function EgitmenLanding() {
       <section style={{ padding: '100px 48px', background: '#1a1a18', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: -150, left: -150, width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(196,80,10,.2), transparent 70%)', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', bottom: -100, right: -100, width: 300, height: 300, borderRadius: '50%', background: 'radial-gradient(circle, rgba(196,80,10,.1), transparent 70%)', pointerEvents: 'none' }} />
+        {[
+          { top: '20%', left: '5%', size: 5, anim: 'float1 4s infinite' },
+          { top: '70%', left: '10%', size: 3, anim: 'float2 5s infinite 1s' },
+          { top: '30%', right: '5%', size: 6, anim: 'float3 6s infinite 0.5s' },
+          { top: '60%', right: '12%', size: 4, anim: 'float1 4s infinite 2s' },
+        ].map((p, i) => (
+          <div key={i} style={{
+            position: 'absolute', top: p.top, left: (p as any).left, right: (p as any).right,
+            width: p.size, height: p.size, borderRadius: '50%',
+            background: '#C4500A', animation: p.anim, pointerEvents: 'none'
+          }} />
+        ))}
 
-        <div style={{ maxWidth: 700, margin: '0 auto', textAlign: 'center', position: 'relative' }}>
+        <div style={{ maxWidth: 900, margin: '0 auto', textAlign: 'center', position: 'relative' }}>
           <p style={{ fontFamily: 'monospace', fontSize: 11, color: '#C4500A', letterSpacing: 3, marginBottom: 20 }}>HEMEN BAŞLA</p>
           <h2 style={{ fontFamily: 'Georgia, serif', fontSize: 52, fontWeight: 800, color: 'white', letterSpacing: -2, lineHeight: 1.1, marginBottom: 20 }}>
             İlk kursunu bu<br />
