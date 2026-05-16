@@ -323,19 +323,23 @@ export default function EgitmenLanding() {
               ))}
             </div>
             <div style={{ borderTop: '1px solid rgba(255,255,255,.06)', paddingTop: 20 }}>
-              <p style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(255,255,255,.25)', letterSpacing: 2, marginBottom: 12 }}>DİĞER PLATFORMLAR</p>
+              <p style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(255,255,255,.25)', letterSpacing: 2, marginBottom: 12 }}>DİĞER PLATFORMLARLA KARŞILAŞTIR</p>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
                 {[
-                  { name: 'CampusWe (%75)', value: monthly, hi: true },
-                  { name: 'YouTube (%70)**', value: Math.round(students * price * 0.70), hi: false },
-                  { name: 'Udemy (%37)*', value: Math.round(students * price * 0.37), hi: false },
+                  { name: 'CampusWe (%75)', value: monthly, hi: true, note: '' },
+                  { name: 'Udemy (%37)', value: Math.round(students * price * 0.37), hi: false, note: 'Organik satış' },
+                  { name: 'Udemy (%15)', value: Math.round(students * price * 0.15), hi: false, note: 'Abonelik (2026)' },
                 ].map((p, i) => (
                   <div key={i} style={{ background: p.hi ? 'rgba(196,80,10,.15)' : 'rgba(255,255,255,.03)', border: `1px solid ${p.hi ? 'rgba(196,80,10,.3)' : 'rgba(255,255,255,.06)'}`, borderRadius: 8, padding: 12, textAlign: 'center' }}>
-                    <p style={{ fontFamily: 'monospace', fontSize: 9, color: p.hi ? '#C4500A' : 'rgba(255,255,255,.3)', marginBottom: 4 }}>{p.name}</p>
+                    <p style={{ fontFamily: 'monospace', fontSize: 9, color: p.hi ? '#C4500A' : 'rgba(255,255,255,.3)', marginBottom: 2 }}>{p.name}</p>
+                    {p.note && <p style={{ fontFamily: 'monospace', fontSize: 8, color: 'rgba(255,255,255,.2)', marginBottom: 4 }}>{p.note}</p>}
                     <p style={{ fontFamily: 'Georgia,serif', fontSize: 16, fontWeight: 700, color: p.hi ? '#C4500A' : 'rgba(255,255,255,.35)', margin: 0 }}>₺{p.value.toLocaleString('tr-TR')}</p>
                   </div>
                 ))}
               </div>
+              <p style={{ fontFamily: 'monospace', fontSize: 9, color: 'rgba(255,255,255,.2)', marginTop: 10, lineHeight: 1.6 }}>
+                * YouTube kurs satışı desteklemiyor — reklam/membership ile farklı model. Udemy abonelik payı 2026'da %15'e düştü.
+              </p>
             </div>
           </div>
         </div>
