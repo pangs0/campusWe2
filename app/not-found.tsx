@@ -103,7 +103,7 @@ export default function NotFound() {
           display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap',
           animation: 'fadeUp 0.6s ease 0.4s both',
         }}>
-          <Link href="/dashboard" style={{
+          <Link href="/" style={{
             background: '#C4500A', color: 'white',
             padding: '12px 28px', borderRadius: 8,
             fontSize: 14, textDecoration: 'none', fontWeight: 600,
@@ -111,13 +111,13 @@ export default function NotFound() {
           }}>
             Ana sayfaya dön →
           </Link>
-          <Link href="/feed" style={{
+          <Link href="/kurslar" style={{
             background: 'white', color: 'rgba(26,26,24,.6)',
             padding: '12px 28px', borderRadius: 8, fontSize: 14,
             textDecoration: 'none', border: '1px solid rgba(26,26,24,.12)',
             fontFamily: 'Inter, sans-serif',
           }}>
-            Akışa git
+            Kurslara git
           </Link>
         </div>
 
