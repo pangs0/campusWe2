@@ -271,7 +271,13 @@ export default async function KursDetayPage({ params }: { params: { id: string }
     </main>
   )
 
-  if (user) return <AppLayout user={user} profile={profile}>{content}</AppLayout>
+  if (user) {
+    if (profile?.role === 'student') {
+      const OgrenciLayout = (await import('@/app/ogrenci/OgrenciLayout')).default
+      return <OgrenciLayout user={user} profile={profile}>{content}</OgrenciLayout>
+    }
+    return <AppLayout user={user} profile={profile}>{content}</AppLayout>
+  }
 
   return (
     <div style={{ fontFamily: 'Inter, sans-serif', background: '#F5F0E8', minHeight: '100vh' }}>

@@ -346,6 +346,10 @@ export default async function KurslarPage({
   )
 
   if (user) {
+    if (profile?.role === 'student') {
+      const OgrenciLayout = (await import('@/app/ogrenci/OgrenciLayout')).default
+      return <OgrenciLayout user={user} profile={profile}>{content}</OgrenciLayout>
+    }
     return <AppLayout user={user} profile={profile}>{content}</AppLayout>
   }
 
