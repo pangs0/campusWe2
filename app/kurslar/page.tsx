@@ -333,8 +333,12 @@ export default async function KurslarPage({
           <h2 className="font-serif text-xl font-bold text-ink mb-2">Kurslara kayıt olmak için hesap oluştur</h2>
           <p className="text-sm text-ink/50 mb-6 max-w-sm mx-auto">Ücretsiz hesap aç, istediğin kurslara kayıt ol, sertifika kazan.</p>
           <div className="flex gap-3 justify-center">
-            <Link href="/auth/register" className="btn-primary px-8">Ücretsiz kayıt ol →</Link>
-            <Link href="/auth/login" className="btn-secondary px-6">Giriş yap</Link>
+            <Link href="/auth/register/ogrenci" className="btn-primary w-full justify-center py-3 block text-center">
+                  Ücretsiz kayıt ol ve başla →
+                </Link>
+                <Link href="/auth/login" className="btn-secondary w-full justify-center py-2.5 block text-center text-sm">
+                  Zaten hesabın var mı? Giriş yap
+                </Link>
           </div>
         </div>
       )}

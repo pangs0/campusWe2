@@ -27,9 +27,15 @@ export default function LoginPage() {
     e.preventDefault()
     setLoading(true)
     setError('')
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) { setError('E-posta veya şifre hatalı.'); setLoading(false); return }
-    router.push('/dashboard')
+    // Role göre yönlendirme
+    const { data: profile } = await supabase.from('profiles').select('role').eq('id', data.user!.id).single()
+    if (profile?.role === 'student') {
+      router.push('/ogrenci')
+    } else {
+      router.push('/dashboard')
+    }
     router.refresh()
   }
 

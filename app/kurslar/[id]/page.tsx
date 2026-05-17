@@ -225,7 +225,7 @@ export default async function KursDetayPage({ params }: { params: { id: string }
               />
             ) : (
               <div className="space-y-2">
-                <Link href="/auth/register" className="btn-primary w-full justify-center py-3 block text-center">
+                <Link href={`/auth/register/ogrenci?redirect=/kurslar/${course.id}`} className="btn-primary w-full justify-center py-3 block text-center">
                   Kayıt ol ve başla →
                 </Link>
                 <Link href="/auth/login" className="btn-secondary w-full justify-center py-2.5 block text-center text-sm">
