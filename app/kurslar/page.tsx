@@ -78,11 +78,13 @@ export default async function KurslarPage({
     return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
   })
 
-  // Kayıtlı kurslar
-  const { data: myEnrollments } = user
-    ? await supabase.from('course_enrollments').select('course_id').eq('student_id', user.id)
-    : { data: [] }
-  const enrolledIds = new Set(myEnrollments?.map(e => e.course_id) || [])
+  // Kayıtlı kurslar — sadece login olmuşsa
+  let enrolledIds = new Set<string>()
+  if (user) {
+    const { data: myEnrollments } = await supabase
+      .from('course_enrollments').select('course_id').eq('student_id', user.id)
+    enrolledIds = new Set(myEnrollments?.map(e => e.course_id) || [])
+  }
 
   // Öne çıkan kurslar (en çok kayıt)
   const featuredCourses = [...(allCourses || [])].sort((a, b) =>
@@ -220,15 +222,22 @@ export default async function KurslarPage({
           </div>
           <div className="flex items-center gap-1.5 ml-auto">
             <span className="mono text-xs text-ink/30">Sırala:</span>
-            <select onChange={(e) => { window.location.href = buildUrl({ sort: e.target.value }) }}
-              defaultValue={searchParams.sort || 'yeni'}
-              className="mono text-xs border border-neutral-200 rounded-lg px-2 py-1 bg-white text-ink/60">
-              <option value="yeni">En Yeni</option>
-              <option value="populer">En Popüler</option>
-              <option value="puan">En Yüksek Puan</option>
-              <option value="fiyat_artan">Fiyat ↑</option>
-              <option value="fiyat_azalan">Fiyat ↓</option>
-            </select>
+            {[
+              { key: 'yeni', label: 'En Yeni' },
+              { key: 'populer', label: 'En Popüler' },
+              { key: 'puan', label: 'En Yüksek Puan' },
+              { key: 'fiyat_artan', label: 'Fiyat ↑' },
+              { key: 'fiyat_azalan', label: 'Fiyat ↓' },
+            ].map(s => (
+              <Link key={s.key} href={buildUrl({ sort: s.key })}
+                className={`mono text-xs px-2.5 py-1 rounded-lg border transition-colors ${
+                  (searchParams.sort || 'yeni') === s.key
+                    ? 'bg-brand text-white border-brand'
+                    : 'bg-white text-ink/50 border-neutral-200 hover:border-brand/30'
+                }`}>
+                {s.label}
+              </Link>
+            ))}
           </div>
         </div>
       </div>
@@ -309,7 +318,7 @@ export default async function KurslarPage({
           })}
         </div>
       ) : (
-        <div className="py-20 text-center" style={{ background: '#faf9f6', borderRadius: 12, border: '1.5px dashed rgba(26,26,24,.12)' }}>
+        <div className="py-20 text-center" style={{ background: '#F5F0E8', borderRadius: 12, border: '1.5px dashed rgba(26,26,24,.12)' }}>
           <BookOpen size={40} className="text-brand/25 mx-auto mb-4" />
           <p className="font-serif text-2xl font-bold text-ink mb-2">Kurs bulunamadı.</p>
           <p className="text-sm text-ink/45 mb-6">Farklı filtreler deneyin.</p>
