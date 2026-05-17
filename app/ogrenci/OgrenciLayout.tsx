@@ -1,10 +1,9 @@
 'use client'
 
-import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { BookOpen, Home, Award, Settings, LogOut, Menu, X, Search, Bell } from 'lucide-react'
+import { BookOpen, Home, Award, Settings, LogOut, Search } from 'lucide-react'
 
 const NAV = [
   { href: '/ogrenci', label: 'Ana Sayfa', icon: Home },
@@ -18,7 +17,6 @@ export default function OgrenciLayout({ user, profile, children }: { user: any; 
   const pathname = usePathname()
   const router = useRouter()
   const supabase = createClient()
-  const [mobileOpen, setMobileOpen] = useState(false)
 
   async function handleSignOut() {
     await supabase.auth.signOut()
@@ -61,7 +59,7 @@ export default function OgrenciLayout({ user, profile, children }: { user: any; 
         {/* Nav */}
         <nav style={{ flex: 1, padding: '12px 12px', overflowY: 'auto' }}>
           {NAV.map(item => {
-            const active = pathname === item.href
+            const active = pathname === item.href || (item.href === '/kurslar' && pathname.startsWith('/kurslar'))
             return (
               <Link key={item.href} href={item.href} style={{
                 display: 'flex', alignItems: 'center', gap: 10, padding: '9px 12px', borderRadius: 8,

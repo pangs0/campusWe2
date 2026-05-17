@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { BookOpen, Award, TrendingUp, Clock, Play, ChevronRight } from 'lucide-react'
+import { BookOpen, Award, TrendingUp, Play, ChevronRight } from 'lucide-react'
 
 export default function OgrenciDashboard({ profile, enrollments, completionMap }: {
   profile: any; enrollments: any[]; completionMap: Record<string, number>

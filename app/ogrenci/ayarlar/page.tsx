@@ -27,11 +27,11 @@ export default function AyarlarPage() {
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
-      if (!user) { router.push('/auth/register/ogrenci'); return }
+      if (!user) return
       setUser(user)
       setForm(p => ({ ...p, email: user.email || '' }))
       supabase.from('profiles').select('*').eq('id', user.id).single().then(({ data }) => {
-        if (data?.role !== 'student') { router.push('/dashboard'); return }
+        if (!data) return
         setProfile(data)
         setForm(p => ({ ...p, full_name: data.full_name || '' }))
         setAvatarPreview(data.avatar_url || null)
