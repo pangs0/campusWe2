@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { BookOpen, Home, Award, Settings, LogOut, Search } from 'lucide-react'
 
@@ -15,12 +15,11 @@ const NAV = [
 
 export default function OgrenciLayout({ user, profile, children }: { user: any; profile: any; children: React.ReactNode }) {
   const pathname = usePathname()
-  const router = useRouter()
   const supabase = createClient()
 
   async function handleSignOut() {
     await supabase.auth.signOut()
-    router.push('/kurslar')
+    window.location.href = '/kurslar'
   }
 
   return (
