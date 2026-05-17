@@ -32,7 +32,7 @@ export default function OgrenciLayout({ user, profile, children }: { user: any; 
       <aside style={{
         width: 240, flexShrink: 0, background: 'rgba(245,240,232,.98)', borderRight: '1px solid rgba(26,26,24,.08)',
         display: 'flex', flexDirection: 'column', position: 'sticky', top: 0, height: '100vh',
-        transition: 'transform .2s',
+        willChange: 'transform', transform: 'translateZ(0)',
       }}>
         {/* Logo */}
         <div style={{ padding: '20px 20px 16px', borderBottom: '1px solid rgba(26,26,24,.06)' }}>
