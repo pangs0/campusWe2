@@ -2,13 +2,18 @@ import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import AppLayout from '@/components/layout/AppLayout'
 import Link from 'next/link'
-import { ArrowLeft, Plus, Users, Zap, Layout } from 'lucide-react'
+import { ArrowLeft, Users, Zap, Layout } from 'lucide-react'
 import AddUpdateForm from '@/app/startup/[slug]/AddUpdateForm'
 import type { StartupUpdate, StartupMember } from '@/types'
 
 export default async function StartupPage({ params }: { params: { slug: string } }) {
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
+
+  // Profile fetch — sidebar rolü için gerekli
+  const { data: profile } = user
+    ? await supabase.from('profiles').select('id, full_name, avatar_url, role, karma_tokens').eq('id', user.id).single()
+    : { data: null }
 
   const { data: startup } = await supabase
     .from('startups')
@@ -58,7 +63,7 @@ export default async function StartupPage({ params }: { params: { slug: string }
   const stageProgress = Math.round(((stageIndex + 1) / STAGES.length) * 100)
 
   return (
-    <AppLayout user={user}>
+    <AppLayout user={user} profile={profile}>
       <main className="px-8 py-10">
         <Link
           href="/dashboard"
@@ -110,7 +115,6 @@ export default async function StartupPage({ params }: { params: { slug: string }
                 </p>
               )}
 
-              {/* İlerleme çubuğu */}
               <div className="mt-4 pt-4 border-t border-neutral-100">
                 <div className="flex items-center justify-between mb-2">
                   <p className="mono text-xs text-ink/35 tracking-widest">STARTUP AŞAMASI</p>
