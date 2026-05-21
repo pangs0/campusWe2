@@ -4,7 +4,7 @@ import { useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
-import { ArrowLeft, Upload, X, BookOpen, Users, Star, DollarSign, Eye, EyeOff, Zap, CheckCircle } from 'lucide-react'
+import { ArrowLeft, Upload, X, BookOpen, Eye, EyeOff, Zap, CheckCircle } from 'lucide-react'
 
 const CATEGORIES = [
   { key: 'girisimcilik', label: 'Girişimcilik', emoji: '🚀' },
@@ -95,7 +95,7 @@ export default function KursYeniClient({ userId }: { userId: string }) {
       is_free: form.is_free,
       price: form.is_free ? 0 : form.price,
       thumbnail_url,
-      is_published: false,
+      is_published: form.is_published, // ← DÜZELTİLDİ: artık formdan geliyor
     }).select().single()
 
     if (insertError) {
@@ -104,7 +104,6 @@ export default function KursYeniClient({ userId }: { userId: string }) {
       return
     }
 
-    // Kurs oluşturuldu, editöre yönlendir
     router.push(`/kurslar/egitmen/${data.id}/duzenle`)
   }
 
@@ -123,12 +122,8 @@ export default function KursYeniClient({ userId }: { userId: string }) {
         <p className="text-sm text-ink/45 mt-1">Bilgini paylaş, pasif gelir kazan.</p>
       </div>
 
-      {/* Adım indikatörü */}
       <div className="flex items-center gap-3 mb-8">
-        {[
-          { n: 1, label: 'Kurs Bilgileri' },
-          { n: 2, label: 'Fiyat & Yayın' },
-        ].map((s, i) => (
+        {[{ n: 1, label: 'Kurs Bilgileri' }, { n: 2, label: 'Fiyat & Yayın' }].map((s, i) => (
           <div key={s.n} className="flex items-center gap-2">
             <div className={`w-7 h-7 rounded-full flex items-center justify-center mono text-xs font-bold transition-colors ${
               step === s.n ? 'bg-brand text-white' : step > s.n ? 'bg-green-500 text-white' : 'bg-neutral-200 text-ink/40'
@@ -143,10 +138,8 @@ export default function KursYeniClient({ userId }: { userId: string }) {
 
       <div className="grid grid-cols-3 gap-6 items-start">
         <form onSubmit={handleSubmit} className="col-span-2 space-y-5">
-
           {step === 1 && (
             <>
-              {/* Thumbnail */}
               <div className="card">
                 <p className="mono text-xs text-ink/35 tracking-widest mb-3">KAPAK GÖRSELİ</p>
                 {thumbnailPreview ? (
@@ -173,7 +166,6 @@ export default function KursYeniClient({ userId }: { userId: string }) {
                 <input ref={thumbnailRef} type="file" accept="image/*" className="hidden" onChange={handleThumbnailChange} />
               </div>
 
-              {/* Temel bilgiler */}
               <div className="card space-y-4">
                 <p className="mono text-xs text-ink/35 tracking-widest">KURS BİLGİLERİ</p>
                 <div>
@@ -192,7 +184,7 @@ export default function KursYeniClient({ userId }: { userId: string }) {
                 <div>
                   <label className="label">Bu kurstan ne öğrenecekler?</label>
                   <textarea className="input resize-none" rows={3}
-                    placeholder="• React hooks kullanmayı öğrenecekler&#10;• Supabase ile backend kuracaklar&#10;• Gerçek bir proje deploy edecekler"
+                    placeholder="• React hooks kullanmayı öğrenecekler&#10;• Supabase ile backend kuracaklar"
                     value={form.what_you_learn} onChange={e => setForm(p => ({ ...p, what_you_learn: e.target.value }))} />
                 </div>
                 <div>
@@ -203,7 +195,6 @@ export default function KursYeniClient({ userId }: { userId: string }) {
                 </div>
               </div>
 
-              {/* Kategori */}
               <div className="card">
                 <p className="mono text-xs text-ink/35 tracking-widest mb-3">KATEGORİ *</p>
                 <div className="grid grid-cols-3 gap-2">
@@ -219,7 +210,6 @@ export default function KursYeniClient({ userId }: { userId: string }) {
                 </div>
               </div>
 
-              {/* Seviye & Dil */}
               <div className="card space-y-4">
                 <p className="mono text-xs text-ink/35 tracking-widest">SEVİYE & DİL</p>
                 <div>
@@ -260,10 +250,8 @@ export default function KursYeniClient({ userId }: { userId: string }) {
 
           {step === 2 && (
             <>
-              {/* Fiyat */}
               <div className="card space-y-4">
                 <p className="mono text-xs text-ink/35 tracking-widest">FİYATLANDIRMA</p>
-
                 <div className="flex items-center gap-3 p-3 rounded-xl border border-neutral-200 bg-neutral-50/50">
                   <input type="checkbox" id="is_free" checked={form.is_free}
                     onChange={e => setForm(p => ({ ...p, is_free: e.target.checked }))}
@@ -273,7 +261,6 @@ export default function KursYeniClient({ userId }: { userId: string }) {
                     <p className="text-xs text-ink/40">Daha fazla öğrenciye ulaş, topluluğunu büyüt</p>
                   </label>
                 </div>
-
                 {!form.is_free && (
                   <div>
                     <label className="label">Kurs Fiyatı (₺)</label>
@@ -287,7 +274,6 @@ export default function KursYeniClient({ userId }: { userId: string }) {
                       <p className="font-serif text-2xl font-bold text-green-700">₺{estimatedMonthly.toLocaleString('tr-TR')}</p>
                       <p className="mono text-xs text-green-600/60 mt-0.5">20 öğrenci × ₺{form.price} × %75 = ₺{estimatedMonthly.toLocaleString('tr-TR')}</p>
                     </div>
-                    {/* Fiyat önerileri */}
                     <div className="flex gap-2 mt-3">
                       {[99, 199, 299, 499, 799].map(p => (
                         <button key={p} type="button" onClick={() => setForm(prev => ({ ...prev, price: p }))}
@@ -302,7 +288,6 @@ export default function KursYeniClient({ userId }: { userId: string }) {
                 )}
               </div>
 
-              {/* Yayın durumu */}
               <div className="card">
                 <p className="mono text-xs text-ink/35 tracking-widest mb-3">YAYIN DURUMU</p>
                 <div className="grid grid-cols-2 gap-3">
@@ -328,9 +313,7 @@ export default function KursYeniClient({ userId }: { userId: string }) {
               {error && <p className="text-xs text-red-600 bg-red-50 border border-red-100 rounded px-3 py-2">{error}</p>}
 
               <div className="flex gap-3">
-                <button type="button" onClick={() => setStep(1)} className="btn-secondary px-6 py-3">
-                  ← Geri
-                </button>
+                <button type="button" onClick={() => setStep(1)} className="btn-secondary px-6 py-3">← Geri</button>
                 <button type="submit" disabled={loading} className="btn-primary flex-1 justify-center py-3 disabled:opacity-60">
                   {loading ? 'Oluşturuluyor...' : 'Kurs oluştur ve içerik ekle →'}
                 </button>
@@ -339,9 +322,7 @@ export default function KursYeniClient({ userId }: { userId: string }) {
           )}
         </form>
 
-        {/* Sağ — önizleme + ipuçları */}
         <div className="space-y-4 sticky top-10 self-start">
-          {/* Canlı önizleme */}
           <div className="card">
             <p className="mono text-xs text-ink/35 tracking-widest mb-3">CANLI ÖNİZLEME</p>
             <div className="rounded-xl overflow-hidden border border-neutral-200">
@@ -357,27 +338,20 @@ export default function KursYeniClient({ userId }: { userId: string }) {
                     {selectedCategory.emoji} {selectedCategory.label}
                   </span>
                 )}
-                <p className="font-serif font-bold text-ink text-sm mt-1 mb-1">
-                  {form.title || 'Kurs adı...'}
-                </p>
-                {form.description && (
-                  <p className="text-xs text-ink/50 leading-relaxed line-clamp-2 mb-2">{form.description}</p>
-                )}
+                <p className="font-serif font-bold text-ink text-sm mt-1 mb-1">{form.title || 'Kurs adı...'}</p>
+                {form.description && <p className="text-xs text-ink/50 leading-relaxed line-clamp-2 mb-2">{form.description}</p>}
                 <div className="flex items-center gap-2 mt-2">
                   <span className="mono text-xs text-ink/30">{form.level}</span>
                   <span className="text-ink/20">·</span>
                   <span className="mono text-xs text-ink/30">{form.language}</span>
                 </div>
                 <div className="mt-2 pt-2 border-t border-neutral-100">
-                  <span className="font-serif font-bold text-brand">
-                    {form.is_free ? 'Ücretsiz' : `₺${form.price}`}
-                  </span>
+                  <span className="font-serif font-bold text-brand">{form.is_free ? 'Ücretsiz' : `₺${form.price}`}</span>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* İpuçları */}
           <div className="card">
             <div className="flex items-center gap-2 mb-3">
               <Zap size={13} className="text-brand" />
@@ -393,7 +367,6 @@ export default function KursYeniClient({ userId }: { userId: string }) {
             </div>
           </div>
 
-          {/* Kazanç modeli */}
           <div className="card bg-green-50 border-green-100">
             <p className="mono text-xs text-green-600/60 tracking-widest mb-2">GELİR PAYI</p>
             <div className="flex items-center gap-3">
