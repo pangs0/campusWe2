@@ -106,7 +106,7 @@ export default function InstructorClient({
         <div className="space-y-6">
           <div className="grid grid-cols-5 gap-4">
             {[
-              { icon: BookOpen, label: 'Kurs', value: courses.length, color: 'text-brand', bg: 'bg-brand/8' },
+              { icon: BookOpen, label: 'Yayında/Toplam', value: `${publishedCount}/${courses.length}`, color: 'text-brand', bg: 'bg-brand/8' },
               { icon: Users, label: 'Öğrenci', value: totalStudents, color: 'text-blue-600', bg: 'bg-blue-50' },
               { icon: Star, label: 'Ort. Puan', value: avgRating > 0 ? `${avgRating}/5` : '—', color: 'text-amber-500', bg: 'bg-amber-50' },
               { icon: Award, label: 'Sertifika', value: totalCertificates, color: 'text-green-600', bg: 'bg-green-50' },
