@@ -18,11 +18,15 @@ export default async function EgitmenPage() {
   // Admin client — RLS bypass, eğitmenin tüm kurslarını çeker
   const admin = createAdminClient()
 
-  const { data: courses } = await admin
+  const { data: courses, error: coursesError } = await admin
     .from('courses')
     .select('*, course_enrollments(id, created_at), course_reviews(id, rating, review, created_at)')
     .eq('instructor_id', user.id)
     .order('created_at', { ascending: false })
+
+  console.log('DEBUG instructor_id:', user.id)
+  console.log('DEBUG courses count:', courses?.length)
+  console.log('DEBUG courses error:', coursesError?.message)
 
   const { data: recentEnrollments } = await admin
     .from('course_enrollments')
