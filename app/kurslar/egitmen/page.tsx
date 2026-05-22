@@ -17,32 +17,11 @@ export default async function EgitmenPage() {
 
   const admin = createAdminClient()
 
-  const { data: courses, error: coursesError } = await admin
+  const { data: courses } = await admin
     .from('courses')
-    .select('*, course_enrollments(id, created_at), course_reviews(id, rating, review, created_at)')
+    .select('*, course_enrollments(id, created_at), course_reviews(id, rating, comment, created_at)')
     .eq('instructor_id', user.id)
     .order('created_at', { ascending: false })
-
-  console.log('DEBUG service_role exists:', !!process.env.SUPABASE_SERVICE_ROLE_KEY)
-  console.log('DEBUG courses count:', courses?.length)
-  console.log('DEBUG error:', coursesError?.message)
-
-  // Geçici debug — ekranda göster
-  if (coursesError || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
-    return (
-      <AppLayout user={user} profile={profile}>
-        <main className="px-8 py-10">
-          <div className="card bg-red-50 border-red-200 p-6">
-            <p className="font-bold text-red-700 mb-2">DEBUG BİLGİSİ</p>
-            <p className="text-sm text-red-600">Service Role Key: {process.env.SUPABASE_SERVICE_ROLE_KEY ? '✅ VAR' : '❌ YOK'}</p>
-            <p className="text-sm text-red-600">Courses: {courses?.length ?? 'null'}</p>
-            <p className="text-sm text-red-600">Hata: {coursesError?.message || 'yok'}</p>
-            <p className="text-sm text-red-600">User ID: {user.id}</p>
-          </div>
-        </main>
-      </AppLayout>
-    )
-  }
 
   const { data: recentEnrollments } = await admin
     .from('course_enrollments')

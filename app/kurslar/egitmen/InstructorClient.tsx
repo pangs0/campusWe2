@@ -411,7 +411,7 @@ export default function InstructorClient({
                       {new Date(r.created_at).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })}
                     </span>
                   </div>
-                  {r.review && <p className="text-sm text-ink/60 leading-relaxed">{r.review}</p>}
+                  {r.comment && <p className="text-sm text-ink/60 leading-relaxed">{r.comment}</p>}
                 </div>
               ))
             )
