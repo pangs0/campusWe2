@@ -15,7 +15,6 @@ export default async function EgitmenPage() {
 
   if (profile?.role !== 'instructor') redirect('/kurslar/egitmen-ol')
 
-  // Admin client — RLS bypass, eğitmenin tüm kurslarını çeker
   const admin = createAdminClient()
 
   const { data: courses, error: coursesError } = await admin
@@ -24,9 +23,26 @@ export default async function EgitmenPage() {
     .eq('instructor_id', user.id)
     .order('created_at', { ascending: false })
 
-  console.log('DEBUG instructor_id:', user.id)
+  console.log('DEBUG service_role exists:', !!process.env.SUPABASE_SERVICE_ROLE_KEY)
   console.log('DEBUG courses count:', courses?.length)
-  console.log('DEBUG courses error:', coursesError?.message)
+  console.log('DEBUG error:', coursesError?.message)
+
+  // Geçici debug — ekranda göster
+  if (coursesError || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    return (
+      <AppLayout user={user} profile={profile}>
+        <main className="px-8 py-10">
+          <div className="card bg-red-50 border-red-200 p-6">
+            <p className="font-bold text-red-700 mb-2">DEBUG BİLGİSİ</p>
+            <p className="text-sm text-red-600">Service Role Key: {process.env.SUPABASE_SERVICE_ROLE_KEY ? '✅ VAR' : '❌ YOK'}</p>
+            <p className="text-sm text-red-600">Courses: {courses?.length ?? 'null'}</p>
+            <p className="text-sm text-red-600">Hata: {coursesError?.message || 'yok'}</p>
+            <p className="text-sm text-red-600">User ID: {user.id}</p>
+          </div>
+        </main>
+      </AppLayout>
+    )
+  }
 
   const { data: recentEnrollments } = await admin
     .from('course_enrollments')
