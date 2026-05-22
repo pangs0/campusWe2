@@ -1,6 +1,8 @@
 import { createServerClient } from '@supabase/ssr'
+import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 import { cookies } from 'next/headers'
 
+// Normal client — auth ile, RLS aktif
 export function createClient() {
   const cookieStore = cookies()
 
@@ -20,6 +22,21 @@ export function createClient() {
           } catch {}
         },
       },
+    }
+  )
+}
+
+// Admin client — service_role key, RLS bypass eder
+// SADECE server component'lerde kullan, client'a asla gönderme
+export function createAdminClient() {
+  return createSupabaseClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false,
+      }
     }
   )
 }

@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createAdminClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import AppLayout from '@/components/layout/AppLayout'
 import InstructorClient from '@/app/kurslar/egitmen/InstructorClient'
@@ -15,13 +15,16 @@ export default async function EgitmenPage() {
 
   if (profile?.role !== 'instructor') redirect('/kurslar/egitmen-ol')
 
-  const { data: courses } = await supabase
+  // Admin client — RLS bypass, eğitmenin tüm kurslarını çeker
+  const admin = createAdminClient()
+
+  const { data: courses } = await admin
     .from('courses')
     .select('*, course_enrollments(id, created_at), course_reviews(id, rating, review, created_at)')
     .eq('instructor_id', user.id)
     .order('created_at', { ascending: false })
 
-  const { data: recentEnrollments } = await supabase
+  const { data: recentEnrollments } = await admin
     .from('course_enrollments')
     .select('*, student:profiles(id, full_name, avatar_url), course:courses(title, price, is_free)')
     .in('course_id', courses?.map(c => c.id) || ['none'])
