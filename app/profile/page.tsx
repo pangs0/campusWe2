@@ -1,9 +1,10 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createAdminClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import AppLayout from '@/components/layout/AppLayout'
 import InvestorProfile from './InvestorProfile'
 import CompanyProfile from './CompanyProfile'
 import FounderProfile from './FounderProfile'
+import InstructorProfile from './InstructorProfile'
 
 export default async function ProfilePage() {
   const supabase = createClient()
@@ -54,6 +55,27 @@ export default async function ProfilePage() {
     ? await supabase.from('company_watchlist').select('*, startup:startups(name, slug, stage)').eq('company_id', user.id)
     : { data: null }
 
+  // Instructor — admin client ile RLS bypass
+  let instructorCourses: any[] = []
+  let totalStudents = 0
+  let avgRating = 0
+
+  if (role === 'instructor') {
+    const admin = createAdminClient()
+    const { data: courses } = await admin
+      .from('courses')
+      .select('*, course_enrollments(id), course_reviews(id, rating)')
+      .eq('instructor_id', user.id)
+      .order('created_at', { ascending: false })
+
+    instructorCourses = courses || []
+    totalStudents = instructorCourses.reduce((sum, c) => sum + (c.course_enrollments?.length || 0), 0)
+    const allReviews = instructorCourses.flatMap(c => c.course_reviews || [])
+    avgRating = allReviews.length > 0
+      ? Math.round((allReviews.reduce((s, r) => s + r.rating, 0) / allReviews.length) * 10) / 10
+      : 0
+  }
+
   return (
     <AppLayout user={user} profile={profile}>
       <main className="px-8 py-10">
@@ -83,6 +105,14 @@ export default async function ProfilePage() {
             skills={skills || []}
             startups={startups || []}
             posts={posts || []}
+          />
+        )}
+        {role === 'instructor' && (
+          <InstructorProfile
+            user={user} profile={profile}
+            courses={instructorCourses}
+            totalStudents={totalStudents}
+            avgRating={avgRating}
           />
         )}
       </main>
