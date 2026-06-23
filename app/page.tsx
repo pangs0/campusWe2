@@ -83,7 +83,7 @@ export default function HomePage() {
   const selectedRole = ROLES.find(r => r.key === activeRole)!
 
   return (
-    <div style={{ background: '#F5F0E8', minHeight: '100vh', fontFamily: 'Inter, sans-serif', overflowX: 'hidden', backgroundImage: 'repeating-linear-gradient(0deg,transparent,transparent 79px,rgba(26,26,24,.04) 79px,rgba(26,26,24,.04) 80px)' }}>
+    <div style={{ background: '#F5F0E8', minHeight: '100vh', fontFamily: 'Inter, sans-serif', overflowX: 'hidden', maxWidth: '100vw', backgroundImage: 'repeating-linear-gradient(0deg,transparent,transparent 79px,rgba(26,26,24,.04) 79px,rgba(26,26,24,.04) 80px)' }}>
       <style>{`
         @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -105,6 +105,7 @@ export default function HomePage() {
         .shimmer-text { background: linear-gradient(90deg, #C4500A, #ff8c4b, #C4500A); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shimmer 3s linear infinite; }
 
         /* ── MOBİL RESPONSIVE ── */
+        .landing-nav { padding: 1.2rem 4rem; }
         .landing-nav-links { display: flex; gap: 28px; align-items: center; }
         .landing-nav-mobile { display: none; }
         .hero-grid { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid rgba(26,26,24,.1); }
@@ -179,7 +180,7 @@ export default function HomePage() {
       `}</style>
 
       {/* Nav */}
-      <nav className="landing-nav" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.2rem 4rem', borderBottom: '1px solid rgba(26,26,24,.1)', background: 'rgba(245,240,232,.95)', position: 'sticky', top: 0, zIndex: 100, backdropFilter: 'blur(8px)' }}>
+      <nav className="landing-nav" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(26,26,24,.1)', background: 'rgba(245,240,232,.95)', position: 'sticky', top: 0, zIndex: 100, backdropFilter: 'blur(8px)' }}>
         <span style={{ fontFamily: 'Georgia, serif', fontSize: 20, fontWeight: 800, color: '#1a1a18' }}>
           Campus<em style={{ color: '#C4500A', fontStyle: 'normal' }}>We</em>
         </span>
