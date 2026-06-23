@@ -28,18 +28,19 @@ export default function InstructorProfile({ user, profile, courses, totalStudent
 
   return (
     <div className="max-w-4xl mx-auto">
+      {/* Profil kartı — mobilde dikey */}
       <div className="card mb-6">
-        <div className="flex items-start gap-6">
-          <div className="w-24 h-24 rounded-2xl overflow-hidden bg-brand/10 flex items-center justify-center flex-shrink-0">
+        <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
+          <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-2xl overflow-hidden bg-brand/10 flex items-center justify-center flex-shrink-0">
             {profile?.avatar_url
               ? <img src={profile.avatar_url} alt="" className="w-full h-full object-cover" />
-              : <span className="font-serif text-3xl font-bold text-brand">{profile?.full_name?.[0]}</span>
+              : <span className="font-serif text-2xl sm:text-3xl font-bold text-brand">{profile?.full_name?.[0]}</span>
             }
           </div>
-          <div className="flex-1 min-w-0">
-            <div className="flex items-start justify-between">
+          <div className="flex-1 min-w-0 w-full">
+            <div className="flex items-start justify-between gap-2">
               <div>
-                <h1 className="font-serif text-2xl font-bold text-ink">{profile?.full_name}</h1>
+                <h1 className="font-serif text-xl sm:text-2xl font-bold text-ink">{profile?.full_name}</h1>
                 <p className="mono text-xs text-ink/40 mt-0.5">@{profile?.username}</p>
                 {profile?.university && (
                   <p className="text-sm text-ink/50 mt-1 flex items-center gap-1">
@@ -47,10 +48,10 @@ export default function InstructorProfile({ user, profile, courses, totalStudent
                   </p>
                 )}
               </div>
-              <div className="flex items-center gap-2">
-                <span className="mono text-xs bg-green-50 text-green-700 border border-green-200 rounded-full px-3 py-1">Eğitmen</span>
-                <Link href="/kurslar/egitmen" className="btn-secondary text-xs px-3 py-1.5 flex items-center gap-1.5">
-                  <BookOpen size={12} /> Panel
+              <div className="flex flex-col sm:flex-row items-end sm:items-center gap-2">
+                <span className="mono text-xs bg-green-50 text-green-700 border border-green-200 rounded-full px-2.5 py-1">Eğitmen</span>
+                <Link href="/kurslar/egitmen" className="btn-secondary text-xs px-2.5 py-1.5 flex items-center gap-1">
+                  <BookOpen size={11} /> Panel
                 </Link>
               </div>
             </div>
@@ -60,20 +61,14 @@ export default function InstructorProfile({ user, profile, courses, totalStudent
                   <textarea className="input resize-none text-sm w-full" rows={3}
                     value={bio} onChange={e => setBio(e.target.value)} placeholder="Kendini tanıt..." />
                   <div className="flex gap-2">
-                    <button onClick={saveBio} disabled={saving} className="btn-primary text-xs px-4 py-1.5">
-                      {saving ? 'Kaydediliyor...' : 'Kaydet'}
-                    </button>
+                    <button onClick={saveBio} disabled={saving} className="btn-primary text-xs px-4 py-1.5">{saving ? 'Kaydediliyor...' : 'Kaydet'}</button>
                     <button onClick={() => setEditing(false)} className="btn-secondary text-xs px-4 py-1.5">İptal</button>
                   </div>
                 </div>
               ) : (
                 <div className="flex items-start gap-2">
-                  <p className="text-sm text-ink/60 leading-relaxed flex-1">
-                    {profile?.bio || 'Henüz bir bio eklenmemiş.'}
-                  </p>
-                  <button onClick={() => setEditing(true)} className="text-ink/30 hover:text-brand flex-shrink-0">
-                    <Edit size={14} />
-                  </button>
+                  <p className="text-sm text-ink/60 leading-relaxed flex-1">{profile?.bio || 'Henüz bir bio eklenmemiş.'}</p>
+                  <button onClick={() => setEditing(true)} className="text-ink/30 hover:text-brand flex-shrink-0"><Edit size={14} /></button>
                 </div>
               )}
             </div>
@@ -81,25 +76,27 @@ export default function InstructorProfile({ user, profile, courses, totalStudent
         </div>
       </div>
 
-      <div className="grid grid-cols-4 gap-4 mb-6">
+      {/* İstatistikler — mobilde 2 kolon */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4 mb-6">
         {[
           { icon: BookOpen, label: 'Yayında Kurs', value: publishedCourses.length, color: 'text-brand', bg: 'bg-brand/8' },
-          { icon: Users, label: 'Toplam Öğrenci', value: totalStudents, color: 'text-blue-600', bg: 'bg-blue-50' },
+          { icon: Users, label: 'Öğrenci', value: totalStudents, color: 'text-blue-600', bg: 'bg-blue-50' },
           { icon: Star, label: 'Ort. Puan', value: avgRating > 0 ? `${avgRating}/5` : '—', color: 'text-amber-500', bg: 'bg-amber-50' },
-          { icon: TrendingUp, label: 'Toplam Kazanç', value: `₺${Math.round(totalEarnings).toLocaleString('tr-TR')}`, color: 'text-green-600', bg: 'bg-green-50' },
+          { icon: TrendingUp, label: 'Kazanç', value: `₺${Math.round(totalEarnings).toLocaleString('tr-TR')}`, color: 'text-green-600', bg: 'bg-green-50' },
         ].map((s, i) => (
-          <div key={i} className="card flex items-center gap-3">
-            <div className={`w-10 h-10 rounded-xl ${s.bg} flex items-center justify-center flex-shrink-0`}>
-              <s.icon size={18} className={s.color} />
+          <div key={i} className="card flex items-center gap-2 md:gap-3 p-3">
+            <div className={`w-8 h-8 md:w-10 md:h-10 rounded-xl ${s.bg} flex items-center justify-center flex-shrink-0`}>
+              <s.icon size={15} className={s.color} />
             </div>
-            <div>
-              <p className={`font-serif text-xl font-bold ${s.color}`}>{s.value}</p>
-              <p className="mono text-xs text-ink/35">{s.label}</p>
+            <div className="min-w-0">
+              <p className={`font-serif text-base md:text-xl font-bold ${s.color} truncate`}>{s.value}</p>
+              <p className="mono text-xs text-ink/35 truncate">{s.label}</p>
             </div>
           </div>
         ))}
       </div>
 
+      {/* Kurslar */}
       <div className="card">
         <div className="flex items-center justify-between mb-4">
           <p className="mono text-xs text-ink/35 tracking-widest">KURSLARIM ({publishedCourses.length})</p>
@@ -110,26 +107,21 @@ export default function InstructorProfile({ user, profile, courses, totalStudent
             {publishedCourses.map((c: any) => {
               const students = c.course_enrollments?.length || 0
               const reviews = c.course_reviews || []
-              const rating = reviews.length > 0
-                ? (reviews.reduce((s: number, r: any) => s + r.rating, 0) / reviews.length).toFixed(1)
-                : null
+              const rating = reviews.length > 0 ? (reviews.reduce((s: number, r: any) => s + r.rating, 0) / reviews.length).toFixed(1) : null
               return (
-                <div key={c.id} className="flex items-center gap-4 p-3 rounded-xl bg-neutral-50/50 hover:bg-brand/3 transition-colors">
-                  <div className="w-16 h-12 rounded-lg overflow-hidden bg-brand/8 flex items-center justify-center flex-shrink-0">
-                    {c.thumbnail_url
-                      ? <img src={c.thumbnail_url} alt="" className="w-full h-full object-cover" />
-                      : <BookOpen size={16} className="text-brand/30" />
-                    }
+                <div key={c.id} className="flex items-center gap-3 p-3 rounded-xl bg-neutral-50/50 hover:bg-brand/3 transition-colors">
+                  <div className="w-12 h-10 sm:w-16 sm:h-12 rounded-lg overflow-hidden bg-brand/8 flex items-center justify-center flex-shrink-0">
+                    {c.thumbnail_url ? <img src={c.thumbnail_url} alt="" className="w-full h-full object-cover" /> : <BookOpen size={14} className="text-brand/30" />}
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-ink truncate">{c.title}</p>
-                    <div className="flex items-center gap-3 mt-0.5">
+                    <div className="flex items-center gap-2 mt-0.5 flex-wrap">
                       <span className="mono text-xs text-ink/35 flex items-center gap-1"><Users size={10} /> {students}</span>
                       {rating && <span className="mono text-xs text-amber-500 flex items-center gap-1"><Star size={10} className="fill-amber-400" /> {rating}</span>}
                       <span className="mono text-xs text-ink/30">{c.is_free ? 'Ücretsiz' : `₺${c.price}`}</span>
                     </div>
                   </div>
-                  <Link href={`/kurslar/egitmen/${c.id}/duzenle`} className="btn-secondary text-xs px-3 py-1.5 flex-shrink-0">Düzenle</Link>
+                  <Link href={`/kurslar/egitmen/${c.id}/duzenle`} className="btn-secondary text-xs px-2.5 py-1.5 flex-shrink-0">Düzenle</Link>
                 </div>
               )
             })}
