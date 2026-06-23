@@ -3,56 +3,35 @@ import { redirect } from 'next/navigation'
 import AppLayout from '@/components/layout/AppLayout'
 import FeedClient from '@/app/feed/FeedClient'
 import Link from 'next/link'
-import { Users, Calendar, TrendingUp, Zap, ArrowRight } from 'lucide-react'
+import { Zap, ArrowRight } from 'lucide-react'
 
 export default async function FeedPage() {
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/auth/login')
 
-  const { data: profile } = await supabase
-    .from('profiles').select('*').eq('id', user.id).single()
-
-  const { data: startups } = await supabase
-    .from('startups').select('id, name').eq('founder_id', user.id)
-
-  const { data: posts } = await supabase
-    .from('posts')
+  const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).single()
+  const { data: startups } = await supabase.from('startups').select('id, name').eq('founder_id', user.id)
+  const { data: posts } = await supabase.from('posts')
     .select(`*, author:profiles(full_name, avatar_url, username), startup:startups(name, slug), post_likes(user_id), post_comments(*, author:profiles(full_name, avatar_url))`)
-    .order('created_at', { ascending: false })
-    .limit(30)
+    .order('created_at', { ascending: false }).limit(30)
 
-  // Önerilen kullanıcılar — aynı üniversiteden veya yüksek karma
-  const { data: suggested } = await supabase
-    .from('profiles')
+  const { data: suggested } = await supabase.from('profiles')
     .select('id, full_name, avatar_url, university, karma_tokens, user_skills(skill_name)')
-    .neq('id', user.id)
-    .order('karma_tokens', { ascending: false })
-    .limit(5)
+    .neq('id', user.id).order('karma_tokens', { ascending: false }).limit(5)
 
-  // Yaklaşan etkinlikler
-  const { data: events } = await supabase
-    .from('garaj_events')
+  const { data: events } = await supabase.from('garaj_events')
     .select('id, title, event_type, event_date, organizer:profiles(full_name)')
-    .eq('is_public', true)
-    .gte('event_date', new Date().toISOString())
-    .order('event_date', { ascending: true })
-    .limit(4)
+    .eq('is_public', true).gte('event_date', new Date().toISOString())
+    .order('event_date', { ascending: true }).limit(4)
 
-  // Trend startuplar — en fazla güncelleme yapan
-  const { data: trendStartups } = await supabase
-    .from('startups')
+  const { data: trendStartups } = await supabase.from('startups')
     .select('id, name, slug, stage, sector, founder:profiles(full_name)')
-    .eq('is_public', true)
-    .order('created_at', { ascending: false })
-    .limit(4)
+    .eq('is_public', true).order('created_at', { ascending: false }).limit(4)
 
-  // Karma liderlik tablosu
-  const { data: leaderboard } = await supabase
-    .from('profiles')
+  const { data: leaderboard } = await supabase.from('profiles')
     .select('id, full_name, avatar_url, karma_tokens, university')
-    .order('karma_tokens', { ascending: false })
-    .limit(5)
+    .order('karma_tokens', { ascending: false }).limit(5)
 
   function timeLeft(date: string) {
     const diff = new Date(date).getTime() - Date.now()
@@ -72,16 +51,18 @@ export default async function FeedPage() {
 
   return (
     <AppLayout user={user} profile={profile}>
-      <main className="px-8 py-10">
-        <div className="grid grid-cols-3 gap-6">
+      <main className="px-4 py-6 md:px-8 md:py-10">
+        {/* Başlık */}
+        <div className="mb-6">
+          <p className="mono text-xs text-ink/35 tracking-widest mb-1">TOPLULUK</p>
+          <h1 className="font-serif text-2xl md:text-3xl font-bold text-ink">Akış</h1>
+        </div>
 
-          {/* Sol — Ana akış */}
-          <div className="col-span-2">
-            <div className="mb-6">
-              <p className="mono text-xs text-ink/35 tracking-widest mb-1">TOPLULUK</p>
-              <h1 className="font-serif text-3xl font-bold text-ink">Akış</h1>
-            </div>
+        {/* Mobilde tek kolon, masaüstünde 3 kolon */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
+          {/* Ana akış — mobilde tam genişlik */}
+          <div className="lg:col-span-2">
             <FeedClient
               userId={user.id}
               avatarUrl={profile?.avatar_url || null}
@@ -91,8 +72,8 @@ export default async function FeedPage() {
             />
           </div>
 
-          {/* Sağ sidebar */}
-          <div className="space-y-5">
+          {/* Sağ sidebar — mobilde akışın altında */}
+          <div className="space-y-4">
 
             {/* Önerilen kullanıcılar */}
             <div className="card">
@@ -110,9 +91,7 @@ export default async function FeedPage() {
                       <p className="text-sm font-medium text-ink truncate">{u.full_name}</p>
                       <p className="mono text-xs text-ink/35 truncate">{u.university || 'Girişimci'}</p>
                     </div>
-                    <Link href="/eslestirme" className="text-xs text-brand hover:underline flex-shrink-0">
-                      Bağlan
-                    </Link>
+                    <Link href="/eslestirme" className="text-xs text-brand hover:underline flex-shrink-0">Bağlan</Link>
                   </div>
                 )) : (
                   <p className="text-xs text-ink/35 text-center py-2">Henüz kullanıcı yok.</p>
@@ -130,11 +109,9 @@ export default async function FeedPage() {
                 <div className="space-y-2.5">
                   {events.map((ev: any) => (
                     <div key={ev.id} className="flex items-start gap-2.5">
-                      <div className="flex-shrink-0 mt-0.5">
-                        <span className={`mono text-xs rounded px-1.5 py-0.5 ${typeColors[ev.event_type] || 'bg-neutral-50 text-neutral-500'}`}>
-                          {ev.event_type}
-                        </span>
-                      </div>
+                      <span className={`mono text-xs rounded px-1.5 py-0.5 flex-shrink-0 mt-0.5 ${typeColors[ev.event_type] || 'bg-neutral-50 text-neutral-500'}`}>
+                        {ev.event_type}
+                      </span>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-ink line-clamp-1">{ev.title}</p>
                         <p className="mono text-xs text-ink/35">{timeLeft(ev.event_date)} sonra</p>
@@ -159,13 +136,12 @@ export default async function FeedPage() {
               {trendStartups && trendStartups.length > 0 ? (
                 <div className="space-y-2.5">
                   {trendStartups.map((s: any) => (
-                    <Link key={s.id} href={`/startup/${s.slug}`}
-                      className="flex items-center justify-between group">
+                    <Link key={s.id} href={`/startup/${s.slug}`} className="flex items-center justify-between group">
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-ink group-hover:text-brand transition-colors truncate">{s.name}</p>
                         <p className="mono text-xs text-ink/35">{s.stage}{s.sector && ` · ${s.sector}`}</p>
                       </div>
-                      <ArrowRight size={12} className="text-ink/20 group-hover:text-brand transition-colors flex-shrink-0" />
+                      <ArrowRight size={12} className="text-ink/20 group-hover:text-brand transition-colors flex-shrink-0 ml-2" />
                     </Link>
                   ))}
                 </div>
