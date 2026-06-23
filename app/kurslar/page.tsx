@@ -41,21 +41,13 @@ export default async function KurslarPage({
     .select('*, instructor:profiles(id, full_name, avatar_url, username), course_enrollments(id), course_reviews(rating)')
     .eq('is_published', true)
 
-  if (searchParams.category && searchParams.category !== 'tumu') {
-    query = query.eq('category', searchParams.category)
-  }
-  if (searchParams.level && searchParams.level !== 'tumu') {
-    query = query.eq('level', searchParams.level)
-  }
-  if (searchParams.price === 'ucretsiz') {
-    query = query.eq('is_free', true)
-  } else if (searchParams.price === 'ucretli') {
-    query = query.eq('is_free', false)
-  }
+  if (searchParams.category && searchParams.category !== 'tumu') query = query.eq('category', searchParams.category)
+  if (searchParams.level && searchParams.level !== 'tumu') query = query.eq('level', searchParams.level)
+  if (searchParams.price === 'ucretsiz') query = query.eq('is_free', true)
+  else if (searchParams.price === 'ucretli') query = query.eq('is_free', false)
 
   const { data: allCourses } = await query
 
-  // Arama filtresi
   let filteredCourses = searchParams.q
     ? allCourses?.filter(c =>
         c.title?.toLowerCase().includes(searchParams.q!.toLowerCase()) ||
@@ -64,29 +56,25 @@ export default async function KurslarPage({
       )
     : allCourses
 
-  // Sıralama
   const sort = searchParams.sort || 'yeni'
   filteredCourses = [...(filteredCourses || [])].sort((a, b) => {
     if (sort === 'populer') return (b.course_enrollments?.length || 0) - (a.course_enrollments?.length || 0)
     if (sort === 'puan') {
-      const aRating = a.course_reviews?.length ? a.course_reviews.reduce((s: number, r: any) => s + r.rating, 0) / a.course_reviews.length : 0
-      const bRating = b.course_reviews?.length ? b.course_reviews.reduce((s: number, r: any) => s + r.rating, 0) / b.course_reviews.length : 0
-      return bRating - aRating
+      const aR = a.course_reviews?.length ? a.course_reviews.reduce((s: number, r: any) => s + r.rating, 0) / a.course_reviews.length : 0
+      const bR = b.course_reviews?.length ? b.course_reviews.reduce((s: number, r: any) => s + r.rating, 0) / b.course_reviews.length : 0
+      return bR - aR
     }
     if (sort === 'fiyat_artan') return (a.price || 0) - (b.price || 0)
     if (sort === 'fiyat_azalan') return (b.price || 0) - (a.price || 0)
     return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
   })
 
-  // Kayıtlı kurslar — sadece login olmuşsa
   let enrolledIds = new Set<string>()
   if (user) {
-    const { data: myEnrollments } = await supabase
-      .from('course_enrollments').select('course_id').eq('student_id', user.id)
+    const { data: myEnrollments } = await supabase.from('course_enrollments').select('course_id').eq('student_id', user.id)
     enrolledIds = new Set(myEnrollments?.map(e => e.course_id) || [])
   }
 
-  // Öne çıkan kurslar (en çok kayıt)
   const featuredCourses = [...(allCourses || [])].sort((a, b) =>
     (b.course_enrollments?.length || 0) - (a.course_enrollments?.length || 0)
   ).slice(0, 3)
@@ -109,12 +97,12 @@ export default async function KurslarPage({
   }
 
   const content = (
-    <main className="px-8 py-10">
+    <main className="px-4 py-6 md:px-8 md:py-10">
       {/* Başlık */}
-      <div className="flex items-start justify-between mb-8">
+      <div className="flex flex-col gap-3 mb-6 md:flex-row md:items-start md:justify-between md:mb-8">
         <div>
           <p className="mono text-xs text-ink/35 tracking-widest mb-1">EĞİTİM PLATFORMU</p>
-          <h1 className="font-serif text-3xl font-bold text-ink" style={{ letterSpacing: -1 }}>Kurslar.</h1>
+          <h1 className="font-serif text-2xl md:text-3xl font-bold text-ink" style={{ letterSpacing: -1 }}>Kurslar.</h1>
           <p className="text-sm text-ink/45 mt-1">{allCourses?.length || 0} kurs · Topluluğun oluşturduğu içerikler</p>
         </div>
         <div className="flex gap-2">
@@ -136,14 +124,14 @@ export default async function KurslarPage({
         </div>
       </div>
 
-      {/* Öne çıkan kurslar — sadece ana sayfada, filtre yokken */}
+      {/* Öne çıkan kurslar */}
       {!searchParams.q && !searchParams.category && featuredCourses.length > 0 && (
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-4">
             <TrendingUp size={14} className="text-brand" />
             <p className="mono text-xs text-ink/35 tracking-widest">EN POPÜLER KURSLAR</p>
           </div>
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {featuredCourses.map((course: any, i: number) => (
               <Link key={course.id} href={`/kurslar/${course.id}`}
                 className="card p-0 overflow-hidden hover:border-brand/30 transition-colors group block relative">
@@ -192,9 +180,9 @@ export default async function KurslarPage({
           ))}
         </div>
 
-        {/* Seviye + Fiyat + Sıralama */}
-        <div className="flex items-center gap-3 flex-wrap">
-          <div className="flex items-center gap-1.5">
+        {/* Seviye + Fiyat + Sıralama — mobilde alt alta */}
+        <div className="flex flex-col gap-2 md:flex-row md:items-center md:gap-3">
+          <div className="flex items-center gap-1.5 flex-wrap">
             <span className="mono text-xs text-ink/30">Seviye:</span>
             {LEVELS.map(l => (
               <Link key={l} href={buildUrl({ level: l })}
@@ -207,7 +195,7 @@ export default async function KurslarPage({
               </Link>
             ))}
           </div>
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5 flex-wrap">
             <span className="mono text-xs text-ink/30">Fiyat:</span>
             {PRICE_FILTERS.map(p => (
               <Link key={p.key} href={buildUrl({ price: p.key })}
@@ -220,14 +208,14 @@ export default async function KurslarPage({
               </Link>
             ))}
           </div>
-          <div className="flex items-center gap-1.5 ml-auto">
+          <div className="flex items-center gap-1.5 flex-wrap md:ml-auto">
             <span className="mono text-xs text-ink/30">Sırala:</span>
             {[
               { key: 'yeni', label: 'En Yeni' },
-              { key: 'populer', label: 'En Popüler' },
-              { key: 'puan', label: 'En Yüksek Puan' },
-              { key: 'fiyat_artan', label: 'Fiyat ↑' },
-              { key: 'fiyat_azalan', label: 'Fiyat ↓' },
+              { key: 'populer', label: 'Popüler' },
+              { key: 'puan', label: 'En Yüksek' },
+              { key: 'fiyat_artan', label: '₺↑' },
+              { key: 'fiyat_azalan', label: '₺↓' },
             ].map(s => (
               <Link key={s.key} href={buildUrl({ sort: s.key })}
                 className={`mono text-xs px-2.5 py-1 rounded-lg border transition-colors ${
@@ -249,9 +237,9 @@ export default async function KurslarPage({
         </p>
       )}
 
-      {/* Kurs grid */}
+      {/* Kurs grid — mobilde 1, tablet 2, masaüstü 3 kolon */}
       {filteredCourses && filteredCourses.length > 0 ? (
-        <div className="grid grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
           {filteredCourses.map((course: any) => {
             const rating = avgRating(course.course_reviews)
             const enrolled = enrolledIds.has(course.id)
@@ -259,35 +247,29 @@ export default async function KurslarPage({
             return (
               <Link key={course.id} href={`/kurslar/${course.id}`}
                 className="card p-0 overflow-hidden hover:border-brand/30 transition-all hover:-translate-y-0.5 group block">
-                <div className="w-full h-40 bg-gradient-to-br from-brand/10 to-brand/5 flex items-center justify-center relative overflow-hidden">
+                <div className="w-full h-36 md:h-40 bg-gradient-to-br from-brand/10 to-brand/5 flex items-center justify-center relative overflow-hidden">
                   {course.thumbnail_url
                     ? <img src={course.thumbnail_url} alt={course.title} className="w-full h-full object-cover" />
                     : <BookOpen size={40} className="text-brand/30" />
                   }
                   {course.is_free && (
-                    <span className="absolute top-3 left-3 bg-green-500 text-white mono text-xs px-2 py-0.5 rounded font-bold">
-                      ÜCRETSİZ
-                    </span>
+                    <span className="absolute top-3 left-3 bg-green-500 text-white mono text-xs px-2 py-0.5 rounded font-bold">ÜCRETSİZ</span>
                   )}
                   {enrolled && (
-                    <span className="absolute top-3 right-3 bg-brand text-white mono text-xs px-2 py-0.5 rounded">
-                      KAYITLI
-                    </span>
+                    <span className="absolute top-3 right-3 bg-brand text-white mono text-xs px-2 py-0.5 rounded">KAYITLI</span>
                   )}
                   {!enrolled && studentCount > 10 && (
-                    <span className="absolute bottom-3 left-3 bg-black/60 text-white mono text-xs px-2 py-0.5 rounded backdrop-blur-sm">
-                      🔥 Popüler
-                    </span>
+                    <span className="absolute bottom-3 left-3 bg-black/60 text-white mono text-xs px-2 py-0.5 rounded backdrop-blur-sm">🔥 Popüler</span>
                   )}
                 </div>
-                <div className="p-4">
+                <div className="p-3 md:p-4">
                   <div className="flex items-center gap-2 mb-2">
                     <span className={`mono text-xs border rounded px-1.5 py-0.5 ${levelColors[course.level] || 'bg-neutral-50 text-neutral-500 border-neutral-200'}`}>
                       {course.level}
                     </span>
                     {course.category && <span className="mono text-xs text-ink/30">{course.category}</span>}
                   </div>
-                  <h3 className="font-serif font-bold text-ink mb-1 group-hover:text-brand transition-colors line-clamp-2">
+                  <h3 className="font-serif font-bold text-ink mb-1 group-hover:text-brand transition-colors line-clamp-2 text-sm md:text-base">
                     {course.title}
                   </h3>
                   <div className="flex items-center gap-1.5 mb-3">
@@ -318,9 +300,9 @@ export default async function KurslarPage({
           })}
         </div>
       ) : (
-        <div className="py-20 text-center" style={{ background: '#F5F0E8', borderRadius: 12, border: '1.5px dashed rgba(26,26,24,.12)' }}>
+        <div className="py-16 md:py-20 text-center" style={{ background: '#F5F0E8', borderRadius: 12, border: '1.5px dashed rgba(26,26,24,.12)' }}>
           <BookOpen size={40} className="text-brand/25 mx-auto mb-4" />
-          <p className="font-serif text-2xl font-bold text-ink mb-2">Kurs bulunamadı.</p>
+          <p className="font-serif text-xl md:text-2xl font-bold text-ink mb-2">Kurs bulunamadı.</p>
           <p className="text-sm text-ink/45 mb-6">Farklı filtreler deneyin.</p>
           <Link href="/kurslar" className="btn-secondary text-sm">Filtreleri temizle</Link>
         </div>
@@ -328,17 +310,17 @@ export default async function KurslarPage({
 
       {/* Login olmayan kullanıcıya CTA */}
       {!user && (
-        <div className="mt-12 card text-center py-10" style={{ background: 'linear-gradient(135deg, rgba(196,80,10,.04), rgba(196,80,10,.08))' }}>
+        <div className="mt-10 card text-center py-8 md:py-10" style={{ background: 'linear-gradient(135deg, rgba(196,80,10,.04), rgba(196,80,10,.08))' }}>
           <Award size={36} className="text-brand mx-auto mb-3" />
-          <h2 className="font-serif text-xl font-bold text-ink mb-2">Kurslara kayıt olmak için hesap oluştur</h2>
+          <h2 className="font-serif text-lg md:text-xl font-bold text-ink mb-2">Kurslara kayıt olmak için hesap oluştur</h2>
           <p className="text-sm text-ink/50 mb-6 max-w-sm mx-auto">Ücretsiz hesap aç, istediğin kurslara kayıt ol, sertifika kazan.</p>
-          <div className="flex gap-3 justify-center">
-            <Link href="/auth/register/ogrenci" className="btn-primary w-full justify-center py-3 block text-center">
-                  Ücretsiz kayıt ol ve başla →
-                </Link>
-                <Link href="/auth/login" className="btn-secondary w-full justify-center py-2.5 block text-center text-sm">
-                  Zaten hesabın var mı? Giriş yap
-                </Link>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-sm mx-auto">
+            <Link href="/auth/register/ogrenci" className="btn-primary flex-1 justify-center py-3 block text-center">
+              Ücretsiz kayıt ol →
+            </Link>
+            <Link href="/auth/login" className="btn-secondary flex-1 justify-center py-2.5 block text-center text-sm">
+              Giriş yap
+            </Link>
           </div>
         </div>
       )}
@@ -356,17 +338,13 @@ export default async function KurslarPage({
   // Login olmayan kullanıcılar için minimal layout
   return (
     <div style={{ fontFamily: 'Inter, sans-serif', background: '#F5F0E8', minHeight: '100vh', backgroundImage: 'repeating-linear-gradient(0deg,transparent,transparent 79px,rgba(26,26,24,.04) 79px,rgba(26,26,24,.04) 80px)' }}>
-      <nav style={{ background: 'rgba(245,240,232,.95)', borderBottom: '1px solid rgba(26,26,24,.1)', padding: '1.2rem 4rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 100, backdropFilter: 'blur(8px)' }}>
+      <nav style={{ background: 'rgba(245,240,232,.95)', borderBottom: '1px solid rgba(26,26,24,.1)', padding: '1rem 1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 100, backdropFilter: 'blur(8px)' }}>
         <Link href="/" style={{ fontFamily: 'Georgia,serif', fontSize: 20, fontWeight: 800, color: '#1a1a18', textDecoration: 'none' }}>
           Campus<em style={{ color: '#C4500A', fontStyle: 'normal' }}>We</em>
         </Link>
-        <div style={{ display: 'flex', gap: 28, alignItems: 'center' }}>
-          <Link href="/kurslar" style={{ fontSize: 13, color: '#C4500A', textDecoration: 'none', fontWeight: 500 }}>Kurslar</Link>
-          <Link href="/fiyatlandirma" style={{ fontSize: 13, color: 'rgba(26,26,24,.5)', textDecoration: 'none' }}>Fiyatlandırma</Link>
-          <Link href="/kurumsal" style={{ fontSize: 13, color: 'rgba(26,26,24,.5)', textDecoration: 'none' }}>Kurumsal</Link>
-          <Link href="/egitmen" style={{ fontSize: 13, color: '#C4500A', textDecoration: 'none', border: '1px solid rgba(196,80,10,.3)', borderRadius: 6, padding: '6px 14px' }}>Eğitmen Ol</Link>
+        <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
           <Link href="/auth/login" style={{ fontSize: 13, color: 'rgba(26,26,24,.6)', textDecoration: 'none' }}>Giriş yap</Link>
-          <Link href="/auth/register" style={{ background: '#C4500A', color: '#F5F0E8', padding: '8px 20px', borderRadius: 6, fontSize: 13, textDecoration: 'none', fontWeight: 500 }}>Kayıt ol →</Link>
+          <Link href="/auth/register" style={{ background: '#C4500A', color: '#F5F0E8', padding: '8px 16px', borderRadius: 6, fontSize: 13, textDecoration: 'none', fontWeight: 500 }}>Kayıt ol →</Link>
         </div>
       </nav>
       {content}
