@@ -10,7 +10,6 @@ import {
   Rss, MessageCircle, Users, Library, Settings,
   TrendingUp, Building2, Heart, Briefcase, CalendarDays, GraduationCap, MonitorPlay, Menu, X
 } from 'lucide-react'
-import NotificationBell from '@/components/layout/NotificationBell'
 import GlobalSearch from '@/components/ui/GlobalSearch'
 
 type SidebarProps = { user?: any }
@@ -168,10 +167,8 @@ export default function Sidebar({ user }: SidebarProps) {
   const navRef = useRef<HTMLElement>(null)
   const [mobileOpen, setMobileOpen] = useState(false)
 
-  // Sayfa değişince mobil menüyü kapat
   useEffect(() => { setMobileOpen(false) }, [pathname])
 
-  // Scroll pozisyonunu kaydet
   useEffect(() => {
     const nav = navRef.current
     if (!nav) return
@@ -186,8 +183,7 @@ export default function Sidebar({ user }: SidebarProps) {
 
   async function handleSignOut() {
     await supabase.auth.signOut()
-    router.push('/')
-    router.refresh()
+    window.location.href = '/'
   }
 
   const role = (user?.role || 'founder') as string
@@ -199,81 +195,85 @@ export default function Sidebar({ user }: SidebarProps) {
 
   return (
     <>
-      {/* Mobil hamburger butonu */}
-      <button
-        onClick={() => setMobileOpen(true)}
-        className="fixed top-4 left-4 z-50 md:hidden bg-white border border-neutral-200 rounded-lg p-2 shadow-sm"
-      >
-        <Menu size={18} className="text-ink/60" />
-      </button>
-
-      {/* Mobil overlay */}
-      {mobileOpen && (
-        <div
-          className="fixed inset-0 bg-black/40 z-40 md:hidden"
-          onClick={() => setMobileOpen(false)}
-        />
-      )}
-
-      <aside className={`fixed top-0 left-0 h-screen w-56 bg-cream border-r border-neutral-200 flex flex-col z-50 transition-transform duration-300
-        ${mobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
-      `}>
-      <style>{`
-        .sidebar-nav::-webkit-scrollbar { width: 3px; }
-        .sidebar-nav::-webkit-scrollbar-track { background: transparent; }
-        .sidebar-nav::-webkit-scrollbar-thumb { background: rgba(196,80,10,.2); border-radius: 99px; }
-        .sidebar-nav::-webkit-scrollbar-thumb:hover { background: rgba(196,80,10,.4); }
-        .sidebar-nav { scrollbar-width: thin; scrollbar-color: rgba(196,80,10,.2) transparent; }
-      `}</style>
-
-      <div className="px-5 py-4 border-b border-neutral-200 flex-shrink-0 flex items-center justify-between">
-        <div>
-          <Link href="/" className="font-serif text-xl font-bold text-ink block mb-2">
-            Campus<em className="text-brand not-italic">We</em>
-          </Link>
+      {/* Mobil üst bar — hamburger + logo */}
+      <div className="fixed top-0 left-0 right-0 h-14 bg-cream border-b border-neutral-200 flex items-center justify-between px-4 z-40 md:hidden">
+        <Link href="/" className="font-serif text-lg font-bold text-ink">
+          Campus<em className="text-brand not-italic">We</em>
+        </Link>
+        <div className="flex items-center gap-2">
           <span className={`mono text-xs px-2 py-0.5 rounded-full font-medium ${roleColor}`}>
             {roleLabel}
           </span>
+          <button onClick={() => setMobileOpen(true)}
+            className="w-9 h-9 flex items-center justify-center rounded-lg border border-neutral-200 bg-white">
+            <Menu size={18} className="text-ink/60" />
+          </button>
         </div>
-        {/* Mobil kapat butonu */}
-        <button onClick={() => setMobileOpen(false)} className="md:hidden text-ink/30 hover:text-ink">
-          <X size={18} />
-        </button>
       </div>
 
-      <nav ref={navRef} className="sidebar-nav flex-1 overflow-y-auto py-3 px-3">
-        {/* Arama */}
-        <div className="mb-3">
-          <GlobalSearch />
-        </div>
-        {navGroups.map(group => (
-          <div key={group.label} className="mb-4">
-            <p className="mono text-xs text-ink/25 tracking-widest px-3 mb-1">{group.label.toUpperCase()}</p>
-            <div className="space-y-0.5">
-              {group.items.map(item => {
-                const active = pathname === item.href
-                return (
-                  <Link key={item.href + item.label} href={item.href} prefetch={true}
-                    className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors ${
-                      active ? 'bg-brand/10 text-brand font-medium' : 'text-ink/55 hover:bg-neutral-100 hover:text-ink'
-                    }`}>
-                    <item.icon size={15} className={active ? 'text-brand' : 'text-ink/40'} />
-                    {item.label}
-                  </Link>
-                )
-              })}
-            </div>
+      {/* Mobil overlay */}
+      {mobileOpen && (
+        <div className="fixed inset-0 bg-black/40 z-40 md:hidden" onClick={() => setMobileOpen(false)} />
+      )}
+
+      {/* Sidebar */}
+      <aside className={`fixed top-0 left-0 h-screen w-56 bg-cream border-r border-neutral-200 flex flex-col z-50 transition-transform duration-300
+        ${mobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+      `}>
+        <style>{`
+          .sidebar-nav::-webkit-scrollbar { width: 3px; }
+          .sidebar-nav::-webkit-scrollbar-track { background: transparent; }
+          .sidebar-nav::-webkit-scrollbar-thumb { background: rgba(196,80,10,.2); border-radius: 99px; }
+          .sidebar-nav::-webkit-scrollbar-thumb:hover { background: rgba(196,80,10,.4); }
+          .sidebar-nav { scrollbar-width: thin; scrollbar-color: rgba(196,80,10,.2) transparent; }
+        `}</style>
+
+        <div className="px-5 py-4 border-b border-neutral-200 flex-shrink-0 flex items-center justify-between">
+          <div>
+            <Link href="/" className="font-serif text-xl font-bold text-ink block mb-2">
+              Campus<em className="text-brand not-italic">We</em>
+            </Link>
+            <span className={`mono text-xs px-2 py-0.5 rounded-full font-medium ${roleColor}`}>
+              {roleLabel}
+            </span>
           </div>
-        ))}
-      </nav>
+          <button onClick={() => setMobileOpen(false)} className="md:hidden text-ink/30 hover:text-ink">
+            <X size={18} />
+          </button>
+        </div>
 
-      <div className="border-t border-neutral-200 p-3 flex-shrink-0">
-        <button onClick={handleSignOut}
-          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-ink/40 hover:bg-neutral-100 hover:text-ink transition-colors">
-          <LogOut size={15} />
-          Çıkış yap
-        </button>
-      </div>
+        <nav ref={navRef} className="sidebar-nav flex-1 overflow-y-auto py-3 px-3">
+          <div className="mb-3">
+            <GlobalSearch />
+          </div>
+          {navGroups.map(group => (
+            <div key={group.label} className="mb-4">
+              <p className="mono text-xs text-ink/25 tracking-widest px-3 mb-1">{group.label.toUpperCase()}</p>
+              <div className="space-y-0.5">
+                {group.items.map(item => {
+                  const active = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href))
+                  return (
+                    <Link key={item.href + item.label} href={item.href} prefetch={true}
+                      className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors ${
+                        active ? 'bg-brand/10 text-brand font-medium' : 'text-ink/55 hover:bg-neutral-100 hover:text-ink'
+                      }`}>
+                      <item.icon size={15} className={active ? 'text-brand' : 'text-ink/40'} />
+                      {item.label}
+                    </Link>
+                  )
+                })}
+              </div>
+            </div>
+          ))}
+        </nav>
+
+        <div className="border-t border-neutral-200 p-3 flex-shrink-0">
+          <button onClick={handleSignOut}
+            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-ink/40 hover:bg-neutral-100 hover:text-ink transition-colors">
+            <LogOut size={15} />
+            Çıkış yap
+          </button>
+        </div>
       </aside>
     </>
   )

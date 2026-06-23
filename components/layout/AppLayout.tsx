@@ -7,7 +7,6 @@ type AppLayoutProps = {
   profile?: any
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const SidebarComponent = Sidebar as any
 
 export default function AppLayout({ children, user, profile }: AppLayoutProps) {
@@ -22,7 +21,8 @@ export default function AppLayout({ children, user, profile }: AppLayoutProps) {
   return (
     <div className="flex min-h-screen bg-cream">
       <SidebarComponent user={sidebarUser} />
-      <div className="flex-1 md:ml-56 min-w-0 transition-none">
+      {/* Mobilde pt-16 — hamburger butonunun altına içerik gelsin */}
+      <div className="flex-1 md:ml-56 min-w-0 pt-14 md:pt-0">
         {children}
       </div>
       {isFounder && user?.id && (
